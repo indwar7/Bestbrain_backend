@@ -21,10 +21,21 @@ Built with **Node.js + Express + TypeScript + MongoDB + Socket.IO**.
 ```bash
 npm install
 cp .env.example .env      # fill in MONGODB_URI + the two JWT secrets
+npm run seed              # create demo student/parent/teacher accounts
 npm run dev               # dev with auto-reload (http://localhost:4000)
 
 npm run build && npm start  # production
 ```
+
+### Demo accounts (after `npm run seed`)
+
+All use password **`Demo@2024`**:
+
+| Role | Email | Sees |
+|------|-------|------|
+| Student | `student@edulearn.com` | Own streak, minutes, badges, chapters |
+| Parent | `parent@edulearn.com` | Linked child (Aarav)'s progress summary |
+| Teacher | `teacher@edulearn.com` | Class 7 roster + class averages |
 
 ## Auth model
 
@@ -41,10 +52,15 @@ When the access token expires, call **`POST /api/auth/refresh`** to get a new on
 | Method | Route | Auth | Description |
 |--------|-------|------|-------------|
 | POST | `/api/auth/signup` | – | `{ name, email, password, role? }` → access token + sets refresh cookie |
-| POST | `/api/auth/login` | – | `{ email, password }` → access token + sets refresh cookie |
+| POST | `/api/auth/login` | – | `{ email, password, role? }` → access token + refresh cookie. If `role` is sent (student/parent/teacher door), it must match the account. |
 | POST | `/api/auth/refresh` | cookie | New access token (rotates refresh cookie) |
 | POST | `/api/auth/logout` | – | Clears refresh cookie |
 | GET  | `/api/auth/me` | ✅ | Hydrate current user session |
+
+### Dashboard (role-specific)
+| Method | Route | Auth | Returns |
+|--------|-------|------|---------|
+| GET | `/api/dashboard` | ✅ | Branches by role: **student** → own stats; **parent** → children's summaries; **teacher** → class roster + averages |
 
 ### Progress
 | Method | Route | Auth | Description |

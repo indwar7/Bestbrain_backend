@@ -59,7 +59,7 @@ export async function signup(req: Request, res: Response): Promise<void> {
 // POST /api/auth/login
 export async function login(req: Request, res: Response): Promise<void> {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       res.status(400).json({ error: "email and password are required" });
@@ -69,6 +69,15 @@ export async function login(req: Request, res: Response): Promise<void> {
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+
+    // Role-aware login: if the login form specifies a role (student/parent/
+    // teacher door), it must match the account's actual role.
+    if (role && role !== user.role) {
+      res.status(403).json({
+        error: `This account is registered as a ${user.role}, not a ${role}. Please use the ${user.role} login.`,
+      });
       return;
     }
 
