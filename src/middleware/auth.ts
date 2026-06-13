@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken, JwtPayload } from "../utils/token";
+import { verifyAccessToken, JwtPayload } from "../utils/token";
 
 // Extend Express Request to carry the authenticated user.
 export interface AuthRequest extends Request {
   user?: JwtPayload;
 }
 
+// Guards routes by requiring a valid access token in the Authorization header.
 export function requireAuth(
   req: AuthRequest,
   res: Response,
@@ -21,9 +22,9 @@ export function requireAuth(
   const token = header.split(" ")[1];
 
   try {
-    req.user = verifyToken(token);
+    req.user = verifyAccessToken(token);
     next();
   } catch {
-    res.status(401).json({ error: "Invalid or expired token" });
+    res.status(401).json({ error: "Invalid or expired access token" });
   }
 }
