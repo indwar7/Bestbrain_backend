@@ -20,22 +20,31 @@ Built with **Node.js + Express + TypeScript + MongoDB + Socket.IO**.
 
 ```bash
 npm install
-cp .env.example .env      # fill in MONGODB_URI + the two JWT secrets
-npm run seed              # create demo student/parent/teacher accounts
-npm run dev               # dev with auto-reload (http://localhost:4000)
 
-npm run build && npm start  # production
+# Easiest: run with a zero-setup in-memory database (no MongoDB needed)
+USE_MEMORY_DB=true npm run seed   # create demo accounts
+USE_MEMORY_DB=true npm run dev    # http://localhost:4000
+
+# Or with a real database:
+cp .env.example .env              # fill in MONGODB_URI + JWT secrets
+npm run seed && npm run dev
+
+npm run build && npm start        # production
 ```
+
+> **In-memory mode**: if `MONGODB_URI` is empty or `USE_MEMORY_DB=true`, the app
+> spins up a temporary MongoDB in memory — great for demos. Data resets on restart.
 
 ### Demo accounts (after `npm run seed`)
 
 All use password **`Demo@2024`**:
 
-| Role | Email | Sees |
-|------|-------|------|
-| Student | `student@edulearn.com` | Own streak, minutes, badges, chapters |
-| Parent | `parent@edulearn.com` | Linked child (Aarav)'s progress summary |
-| Teacher | `teacher@edulearn.com` | Class 7 roster + class averages |
+| Role | Email | Identity |
+|------|-------|----------|
+| Student | `student@edulearn.com` | roll `EDU-7A-021`, Class 7-A, CBSE |
+| Student | `student2@edulearn.com` | roll `EDU-7B-008`, Class 7-B |
+| Parent | `parent@edulearn.com` | linked to Aarav (`EDU-7A-021`) |
+| Teacher | `teacher@edulearn.com` | id `TCH-104`, teaches Class 7-A Science/Maths |
 
 ## Auth model
 
@@ -48,14 +57,25 @@ When the access token expires, call **`POST /api/auth/refresh`** to get a new on
 
 ## API Endpoints
 
-### Auth
-| Method | Route | Auth | Description |
-|--------|-------|------|-------------|
-| POST | `/api/auth/signup` | – | `{ name, email, password, role? }` → access token + sets refresh cookie |
-| POST | `/api/auth/login` | – | `{ email, password, role? }` → access token + refresh cookie. If `role` is sent (student/parent/teacher door), it must match the account. |
+### Auth — three separate role-based signups + one role-aware login
+| Method | Route | Auth | Body |
+|--------|-------|------|------|
+| POST | `/api/auth/signup/student` | – | `{ name, email, password, rollNumber, className, section, board?, subjects? }` |
+| POST | `/api/auth/signup/teacher` | – | `{ name, email, password, teacherId, className, section, subject? }` |
+| POST | `/api/auth/signup/parent` | – | `{ name, email, password, childRollNumber, childName, childClass }` |
+| POST | `/api/auth/login` | – | `{ email, password, role }` — `role` is the tab the user picked; must match the account |
 | POST | `/api/auth/refresh` | cookie | New access token (rotates refresh cookie) |
 | POST | `/api/auth/logout` | – | Clears refresh cookie |
-| GET  | `/api/auth/me` | ✅ | Hydrate current user session |
+| GET  | `/api/auth/me` | ✅ | Hydrate current user session (role-specific profile) |
+
+**Per-role signup fields**
+- **Student** → `rollNumber`, `className`, `section`, `board` (+ optional `subjects`). Roll number must be unique.
+- **Teacher** → `teacherId`, `className`, `section`, `subject`. Teacher ID must be unique.
+- **Parent** → links to an existing student by `childRollNumber` + `childName` + `childClass`.
+  The student must exist **and** name + class must match the roll number (verification), else the signup is rejected.
+
+Signup returns the access token + a **role-specific user object** (student gets roll/class/section/board;
+teacher gets teacherId/teaches; parent gets their linked children).
 
 ### Dashboard (role-specific)
 | Method | Route | Auth | Returns |

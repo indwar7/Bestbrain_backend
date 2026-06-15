@@ -13,11 +13,20 @@ function required(name: string, fallback?: string): string {
 export const env = {
   port: Number(process.env.PORT ?? 4000),
   nodeEnv: process.env.NODE_ENV ?? "development",
-  mongoUri: required("MONGODB_URI"),
+  // Optional: if absent (or USE_MEMORY_DB=true), an in-memory MongoDB is used.
+  mongoUri: process.env.MONGODB_URI ?? "",
+  useMemoryDb: process.env.USE_MEMORY_DB === "true",
 
   // Two-token auth: short-lived access + long-lived refresh.
-  accessSecret: required("JWT_ACCESS_SECRET", process.env.JWT_SECRET),
-  refreshSecret: required("JWT_REFRESH_SECRET", process.env.JWT_SECRET),
+  // Dev fallbacks so the app boots with no .env; OVERRIDE these in production.
+  accessSecret:
+    process.env.JWT_ACCESS_SECRET ??
+    process.env.JWT_SECRET ??
+    "dev-access-secret-change-me",
+  refreshSecret:
+    process.env.JWT_REFRESH_SECRET ??
+    process.env.JWT_SECRET ??
+    "dev-refresh-secret-change-me",
   accessTtl: process.env.ACCESS_TTL ?? "15m",
   refreshTtl: process.env.REFRESH_TTL ?? "7d",
   refreshCookieName: "edulearn_refresh",

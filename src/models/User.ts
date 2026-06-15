@@ -10,11 +10,19 @@ export interface IProgress {
   pal: Record<string, unknown>;
 }
 
-// A single class a teacher is assigned to teach.
+// A class a teacher is assigned to teach.
 export interface ITeachingAssignment {
-  className: string; // e.g. "Class 7"
-  section: string; // e.g. "A"
-  subject: string; // e.g. "Science"
+  className: string;
+  section: string;
+  subject: string;
+}
+
+// A parent's link to one of their children.
+export interface IChildLink {
+  studentId: mongoose.Types.ObjectId;
+  rollNumber: string; // the roll number the parent used to claim the child
+  relation: "father" | "mother" | "guardian";
+  status: "verified"; // (kept simple for v1: link is verified on a successful match)
 }
 
 export interface IUser extends Document {
@@ -23,18 +31,21 @@ export interface IUser extends Document {
   password: string;
   role: "student" | "parent" | "teacher";
 
-  // ----- Student enrollment -----
+  // ---------- STUDENT fields ----------
+  rollNumber?: string; // unique student roll number, e.g. "EDU-7A-021"
   className?: string; // e.g. "Class 7"
   section?: string; // e.g. "A"
-  subjects: string[]; // subjects the student takes, e.g. ["Science", "Maths"]
-  classLabel?: string; // human label e.g. "Class 7 · A" (kept for dashboards)
+  board?: string; // e.g. "CBSE" / "ICSE" / "State"
+  subjects: string[];
+  classLabel?: string; // display label, e.g. "Class 7 · A"
   progress: IProgress;
 
-  // ----- Teacher -----
-  teaches: ITeachingAssignment[]; // class+section+subject combos this teacher teaches
+  // ---------- TEACHER fields ----------
+  teacherId?: string; // unique teacher code, e.g. "TCH-104"
+  teaches: ITeachingAssignment[];
 
-  // ----- Parent -----
-  childIds: mongoose.Types.ObjectId[];
+  // ---------- PARENT fields ----------
+  childLinks: IChildLink[];
 
   createdAt: Date;
 }
@@ -42,26 +53,21 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>(
   {
     name: { type: String, required: true, trim: true },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     role: {
       type: String,
       enum: ["student", "parent", "teacher"],
-      default: "student",
+      required: true,
     },
 
-    // Student enrollment
+    // STUDENT
+    rollNumber: { type: String, sparse: true, index: true },
     className: { type: String, default: "" },
     section: { type: String, default: "" },
+    board: { type: String, default: "" },
     subjects: { type: [String], default: [] },
     classLabel: { type: String, default: "" },
-
     progress: {
       lang: { type: String, default: "en" },
       minutes: { type: Number, default: 0 },
@@ -71,7 +77,8 @@ const userSchema = new Schema<IUser>(
       pal: { type: Schema.Types.Mixed, default: {} },
     },
 
-    // Teacher assignments
+    // TEACHER
+    teacherId: { type: String, sparse: true, index: true },
     teaches: {
       type: [
         {
@@ -83,8 +90,22 @@ const userSchema = new Schema<IUser>(
       default: [],
     },
 
-    // Parent → children
-    childIds: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    // PARENT
+    childLinks: {
+      type: [
+        {
+          studentId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+          rollNumber: { type: String, required: true },
+          relation: {
+            type: String,
+            enum: ["father", "mother", "guardian"],
+            default: "guardian",
+          },
+          status: { type: String, enum: ["verified"], default: "verified" },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

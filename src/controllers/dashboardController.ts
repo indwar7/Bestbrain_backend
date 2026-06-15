@@ -43,8 +43,9 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
 
   // ---------- PARENT ----------
   if (user.role === "parent") {
+    const childIds = user.childLinks.map((l) => l.studentId);
     const children = await User.find({
-      _id: { $in: user.childIds },
+      _id: { $in: childIds },
       role: "student",
     });
     res.json({
