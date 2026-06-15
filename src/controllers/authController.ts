@@ -25,6 +25,7 @@ function publicUser(user: IUser) {
     id: String(user._id),
     name: user.name,
     email: user.email,
+    phone: user.phone,
     role: user.role,
   };
   if (user.role === "student") {
@@ -54,13 +55,13 @@ async function emailTaken(email: string): Promise<boolean> {
 // =====================================================================
 export async function signupStudent(req: Request, res: Response): Promise<void> {
   try {
-    const { name, email, password, rollNumber, className, section, board, subjects } =
+    const { name, email, phone, password, rollNumber, className, section, board, subjects } =
       req.body;
 
-    if (!name || !email || !password || !rollNumber || !className || !section) {
+    if (!name || !email || !phone || !password || !rollNumber || !className || !section) {
       res.status(400).json({
         error:
-          "name, email, password, rollNumber, className and section are required",
+          "name, email, phone, password, rollNumber, className and section are required",
       });
       return;
     }
@@ -77,6 +78,7 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
     const user = await User.create({
       name,
       email,
+      phone,
       password: hashed,
       role: "student",
       rollNumber,
@@ -105,13 +107,13 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
 // =====================================================================
 export async function signupTeacher(req: Request, res: Response): Promise<void> {
   try {
-    const { name, email, password, teacherId, className, section, subject } =
+    const { name, email, phone, password, teacherId, className, section, subject } =
       req.body;
 
-    if (!name || !email || !password || !teacherId || !className || !section) {
+    if (!name || !email || !phone || !password || !teacherId || !className || !section) {
       res.status(400).json({
         error:
-          "name, email, password, teacherId, className and section are required",
+          "name, email, phone, password, teacherId, className and section are required",
       });
       return;
     }
@@ -128,6 +130,7 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
     const user = await User.create({
       name,
       email,
+      phone,
       password: hashed,
       role: "teacher",
       teacherId,
@@ -159,13 +162,13 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
 // =====================================================================
 export async function signupParent(req: Request, res: Response): Promise<void> {
   try {
-    const { name, email, password, childRollNumber, childName, childClass } =
+    const { name, email, phone, password, childRollNumber, childName, childClass } =
       req.body;
 
-    if (!name || !email || !password || !childRollNumber || !childName || !childClass) {
+    if (!name || !email || !phone || !password || !childRollNumber || !childName || !childClass) {
       res.status(400).json({
         error:
-          "name, email, password, childRollNumber, childName and childClass are required",
+          "name, email, phone, password, childRollNumber, childName and childClass are required",
       });
       return;
     }
@@ -200,6 +203,7 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
     const user = await User.create({
       name,
       email,
+      phone,
       password: hashed,
       role: "parent",
       childLinks: [

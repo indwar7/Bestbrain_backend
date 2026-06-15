@@ -24,6 +24,7 @@ async function seed() {
   const student = await User.create({
     name: "Aarav Sharma",
     email: "student@edulearn.com",
+    phone: "+91-9000000000",
     password: hash,
     role: "student",
     rollNumber: "EDU-7A-021",
@@ -48,6 +49,7 @@ async function seed() {
   await User.create({
     name: "Diya Mehta",
     email: "student2@edulearn.com",
+    phone: "+91-9000000000",
     password: hash,
     role: "student",
     rollNumber: "EDU-7B-008",
@@ -63,6 +65,7 @@ async function seed() {
   await User.create({
     name: "Meera Sharma",
     email: "parent@edulearn.com",
+    phone: "+91-9000000000",
     password: hash,
     role: "parent",
     childLinks: [
@@ -79,6 +82,7 @@ async function seed() {
   await User.create({
     name: "Mr. Verma",
     email: "teacher@edulearn.com",
+    phone: "+91-9000000000",
     password: hash,
     role: "teacher",
     teacherId: "TCH-104",
