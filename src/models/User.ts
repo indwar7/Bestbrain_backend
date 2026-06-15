@@ -10,19 +10,31 @@ export interface IProgress {
   pal: Record<string, unknown>;
 }
 
+// A single class a teacher is assigned to teach.
+export interface ITeachingAssignment {
+  className: string; // e.g. "Class 7"
+  section: string; // e.g. "A"
+  subject: string; // e.g. "Science"
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
   role: "student" | "parent" | "teacher";
 
-  // Student-facing profile fields shown on dashboards.
-  classLabel?: string; // e.g. "Class 7 · CBSE"
+  // ----- Student enrollment -----
+  className?: string; // e.g. "Class 7"
+  section?: string; // e.g. "A"
+  subjects: string[]; // subjects the student takes, e.g. ["Science", "Maths"]
+  classLabel?: string; // human label e.g. "Class 7 · A" (kept for dashboards)
   progress: IProgress;
 
-  // Relationships
-  childIds: mongoose.Types.ObjectId[]; // parent → their children (students)
-  classIds: string[]; // teacher → classes they teach, e.g. ["Class 7", "Class 8"]
+  // ----- Teacher -----
+  teaches: ITeachingAssignment[]; // class+section+subject combos this teacher teaches
+
+  // ----- Parent -----
+  childIds: mongoose.Types.ObjectId[];
 
   createdAt: Date;
 }
@@ -43,7 +55,13 @@ const userSchema = new Schema<IUser>(
       enum: ["student", "parent", "teacher"],
       default: "student",
     },
+
+    // Student enrollment
+    className: { type: String, default: "" },
+    section: { type: String, default: "" },
+    subjects: { type: [String], default: [] },
     classLabel: { type: String, default: "" },
+
     progress: {
       lang: { type: String, default: "en" },
       minutes: { type: Number, default: 0 },
@@ -52,8 +70,21 @@ const userSchema = new Schema<IUser>(
       chapters: { type: Schema.Types.Mixed, default: {} },
       pal: { type: Schema.Types.Mixed, default: {} },
     },
+
+    // Teacher assignments
+    teaches: {
+      type: [
+        {
+          className: { type: String, required: true },
+          section: { type: String, required: true },
+          subject: { type: String, required: true },
+        },
+      ],
+      default: [],
+    },
+
+    // Parent → children
     childIds: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
-    classIds: { type: [String], default: [] },
   },
   { timestamps: true }
 );

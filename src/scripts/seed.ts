@@ -1,36 +1,35 @@
-// Seeds demo student / parent / teacher accounts with linked relationships.
-// Run with: npm run seed
+// Seeds demo accounts with class/section/subject data so live-class
+// targeting can be demonstrated. Run with: npm run seed
 import bcrypt from "bcryptjs";
 import { connectDB } from "../config/db";
 import { User } from "../models/User";
 import mongoose from "mongoose";
 
 const PASSWORD = "Demo@2024";
-const CLASS = "Class 7";
 
 async function seed() {
   await connectDB();
 
-  // Clear previous demo accounts (idempotent re-seed).
-  await User.deleteMany({
-    email: {
-      $in: [
-        "student@edulearn.com",
-        "parent@edulearn.com",
-        "teacher@edulearn.com",
-      ],
-    },
-  });
+  const emails = [
+    "student@edulearn.com", // Class 7-A, Science+Maths
+    "student2@edulearn.com", // Class 7-B (different section)
+    "parent@edulearn.com",
+    "teacher@edulearn.com",
+  ];
+  await User.deleteMany({ email: { $in: emails } });
 
   const hash = await bcrypt.hash(PASSWORD, 10);
 
-  // 1. Student — with some progress so the dashboard isn't empty.
+  // 1. Student in Class 7, Section A — takes Science & Maths.
   const student = await User.create({
     name: "Aarav Sharma",
     email: "student@edulearn.com",
     password: hash,
     role: "student",
-    classLabel: CLASS,
+    className: "Class 7",
+    section: "A",
+    subjects: ["Science", "Maths"],
+    classLabel: "Class 7 · A",
     progress: {
       lang: "en",
       minutes: 420,
@@ -44,7 +43,20 @@ async function seed() {
     },
   });
 
-  // 2. Parent — linked to the student above.
+  // 2. Another student in Class 7, Section B — should NOT see 7-A's live class.
+  await User.create({
+    name: "Diya Mehta",
+    email: "student2@edulearn.com",
+    password: hash,
+    role: "student",
+    className: "Class 7",
+    section: "B",
+    subjects: ["Science"],
+    classLabel: "Class 7 · B",
+    progress: { lang: "en", minutes: 120, streak: 2, badges: [], chapters: {}, pal: {} },
+  });
+
+  // 3. Parent — linked to Aarav.
   await User.create({
     name: "Meera Sharma",
     email: "parent@edulearn.com",
@@ -53,19 +65,23 @@ async function seed() {
     childIds: [student._id],
   });
 
-  // 3. Teacher — teaches Class 7, so the student appears in their roster.
+  // 4. Teacher — teaches Science for Class 7 Section A only.
   await User.create({
     name: "Mr. Verma",
     email: "teacher@edulearn.com",
     password: hash,
     role: "teacher",
-    classIds: [CLASS],
+    teaches: [
+      { className: "Class 7", section: "A", subject: "Science" },
+      { className: "Class 7", section: "A", subject: "Maths" },
+    ],
   });
 
   console.log("✅ Seeded demo accounts (password for all: " + PASSWORD + ")");
-  console.log("   student@edulearn.com   (student)");
-  console.log("   parent@edulearn.com    (parent → linked to Aarav)");
-  console.log("   teacher@edulearn.com   (teacher → Class 7 roster)");
+  console.log("   student@edulearn.com   → Class 7-A, Science+Maths");
+  console.log("   student2@edulearn.com  → Class 7-B, Science (won't see 7-A live)");
+  console.log("   parent@edulearn.com    → linked to Aarav");
+  console.log("   teacher@edulearn.com   → teaches Science/Maths for Class 7-A");
 
   await mongoose.connection.close();
   process.exit(0);

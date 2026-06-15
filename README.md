@@ -88,14 +88,22 @@ Re-sending the same `clientEventId` is safe — already-applied events are skipp
 
 Set `GROQ_API_KEY` for real LLM replies; otherwise returns a stub so the flow works in dev.
 
-### Live classes (REST)
+### Live classes (REST) — class + section + subject targeting
 | Method | Route | Auth | Description |
 |--------|-------|------|-------------|
-| GET  | `/api/live` | ✅ | List active sessions |
-| POST | `/api/live` | ✅ teacher | Create a live session |
+| GET  | `/api/live` | ✅ | Eligible live sessions (student → own class+section+subjects; teacher → own) |
+| POST | `/api/live` | ✅ teacher | Create `{ title, className, section, subject }` — teacher must be assigned to it |
+| POST | `/api/live/:id/join` | ✅ | **Eligibility-checked** join → returns room info |
 | POST | `/api/live/:id/end` | ✅ teacher | End a session |
 
-Teacher-only routes use the `requireRole("teacher")` middleware.
+**Targeting rules** ([`liveEligibility.ts`](src/services/liveEligibility.ts)): a student can join only if their
+`className` **and** `section` match the session **and** they take the `subject`. The owning teacher can always
+join. Parents and other teachers are denied. Same rules are enforced in `POST /:id/join` **and** in the
+Socket.IO `join-session` event (which emits `join-ok` / `join-denied`).
+
+> Video is intentionally provider-agnostic for now. `LiveSession` has empty `videoProvider` / `videoRoom`
+> fields ready to be filled when a video SDK (LiveKit / 100ms) is wired in. Socket.IO already handles the
+> realtime room + attention monitoring.
 
 ### Live classes (Socket.IO)
 Connect with the access token on the handshake:

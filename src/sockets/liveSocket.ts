@@ -2,6 +2,9 @@ import { Server, Socket } from "socket.io";
 import type { Server as HttpServer } from "http";
 import { env } from "../config/env";
 import { verifyAccessToken, JwtPayload } from "../utils/token";
+import { User } from "../models/User";
+import { LiveSession } from "../models/LiveSession";
+import { canJoinSession } from "../services/liveEligibility";
 
 interface AuthedSocket extends Socket {
   user?: JwtPayload;
@@ -33,13 +36,32 @@ export function initLiveSocket(httpServer: HttpServer): Server {
     const user = socket.user!;
 
     // join-session: a participant enters a live class room.
-    socket.on("join-session", ({ sessionId }: { sessionId: string }) => {
+    // Eligibility is enforced against class+section+subject before joining.
+    socket.on("join-session", async ({ sessionId }: { sessionId: string }) => {
       if (!sessionId) return;
-      socket.join(room(sessionId));
-      socket.to(room(sessionId)).emit("participant-joined", {
-        userId: user.id,
-        role: user.role,
-      });
+      try {
+        const [dbUser, session] = await Promise.all([
+          User.findById(user.id),
+          LiveSession.findById(sessionId),
+        ]);
+        if (!dbUser || !session) {
+          socket.emit("join-denied", { reason: "Session not found" });
+          return;
+        }
+        const verdict = canJoinSession(dbUser, session);
+        if (!verdict.allowed) {
+          socket.emit("join-denied", { reason: verdict.reason });
+          return;
+        }
+        socket.join(room(sessionId));
+        socket.emit("join-ok", { sessionId });
+        socket.to(room(sessionId)).emit("participant-joined", {
+          userId: user.id,
+          role: user.role,
+        });
+      } catch {
+        socket.emit("join-denied", { reason: "Could not join session" });
+      }
     });
 
     // leave-session: explicit leave.

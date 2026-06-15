@@ -57,11 +57,20 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
 
   // ---------- TEACHER ----------
   if (user.role === "teacher") {
-    // Roster = all students whose classLabel matches a class the teacher teaches.
-    const roster = await User.find({
-      role: "student",
-      classLabel: { $in: user.classIds },
+    // Distinct class+section pairs this teacher is assigned to.
+    const classKeys = Array.from(
+      new Set(user.teaches.map((t) => `${t.className}||${t.section}`))
+    );
+    const orFilters = classKeys.map((k) => {
+      const [className, section] = k.split("||");
+      return { className, section };
     });
+
+    // Roster = all students in any class+section the teacher teaches.
+    const roster =
+      orFilters.length > 0
+        ? await User.find({ role: "student", $or: orFilters })
+        : [];
 
     const summaries = roster.map(studentSummary);
     const count = summaries.length || 1;
@@ -79,7 +88,7 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
 
     res.json({
       role: "teacher",
-      profile: { id: String(user._id), name: user.name, classes: user.classIds },
+      profile: { id: String(user._id), name: user.name, teaches: user.teaches },
       studentCount: summaries.length,
       classAverage,
       roster: summaries,
