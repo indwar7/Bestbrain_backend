@@ -47,6 +47,14 @@ export interface IUser extends Document {
   // ---------- PARENT fields ----------
   childLinks: IChildLink[];
 
+  // ---------- Preferences (all roles) ----------
+  preferences: {
+    language: string; // "en" | "hi"
+    theme: string; // "light" | "dark" | "system"
+    emailNotifications: boolean;
+    [key: string]: unknown;
+  };
+
   createdAt: Date;
 }
 
@@ -105,6 +113,13 @@ const userSchema = new Schema<IUser>(
         },
       ],
       default: [],
+    },
+
+    // Preferences (all roles)
+    preferences: {
+      language: { type: String, default: "en" },
+      theme: { type: String, default: "system" },
+      emailNotifications: { type: Boolean, default: true },
     },
   },
   { timestamps: true }

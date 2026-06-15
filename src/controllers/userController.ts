@@ -36,3 +36,45 @@ export async function saveProgress(req: AuthRequest, res: Response): Promise<voi
 
   res.json({ progress: user.progress });
 }
+
+// Editable profile fields per role (everything else is ignored for safety).
+const EDITABLE_BY_ROLE: Record<string, string[]> = {
+  student: ["name", "className", "section", "board"],
+  teacher: ["name"],
+  parent: ["name"],
+};
+
+// PUT /api/users/me/profile — update own profile + preferences (role-aware).
+// Body: { name?, className?, ..., preferences?: { language, theme, emailNotifications } }
+export async function updateProfile(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+
+  const allowed = EDITABLE_BY_ROLE[user.role] || ["name"];
+  const updates = req.body || {};
+
+  // Apply only whitelisted top-level fields.
+  for (const key of allowed) {
+    if (updates[key] !== undefined && typeof updates[key] === "string") {
+      (user as unknown as Record<string, unknown>)[key] = updates[key];
+    }
+  }
+  // Keep the student display label in sync.
+  if (user.role === "student") {
+    user.classLabel = `${user.className} · ${user.section}`;
+  }
+
+  // Merge preferences (partial update).
+  if (updates.preferences && typeof updates.preferences === "object") {
+    user.preferences = { ...user.preferences, ...updates.preferences };
+  }
+
+  await user.save();
+
+  const safe = user.toObject() as unknown as Record<string, unknown>;
+  delete safe.password;
+  res.json({ user: safe });
+}
