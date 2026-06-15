@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env";
+import { requestLogger } from "./middleware/logger";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import progressRoutes from "./routes/progressRoutes";
@@ -11,16 +12,25 @@ import dashboardRoutes from "./routes/dashboardRoutes";
 
 export const app = express();
 
-// Allow the EduLearn frontend (Vercel + localhost) to call this API with cookies.
+// CORS: allow the configured origins, plus any localhost port and file:// (null)
+// origin in development so the demo works however the frontend is opened.
 app.use(
   cors({
-    origin: env.clientOrigins,
+    origin(origin, cb) {
+      if (!origin) return cb(null, true); // file:// or same-origin/curl
+      if (env.clientOrigins.includes(origin)) return cb(null, true);
+      if (!env.isProd && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        return cb(null, true);
+      }
+      return cb(null, false);
+    },
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(requestLogger);
 
 // Health check
 app.get("/", (_req, res) => {
