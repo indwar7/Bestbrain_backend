@@ -9,6 +9,7 @@ import progressRoutes from "./routes/progressRoutes";
 import palRoutes from "./routes/palRoutes";
 import liveRoutes from "./routes/liveRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
+import adminRoutes from "./routes/adminRoutes";
 
 export const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api/progress", progressRoutes);
 app.use("/api/pal", palRoutes);
 app.use("/api/live", liveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/admin", adminRoutes);
 
 // 404 fallback
 app.use((_req, res) => {
