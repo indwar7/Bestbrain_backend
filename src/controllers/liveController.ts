@@ -1,8 +1,10 @@
 import { Response } from "express";
+import { AccessToken } from "livekit-server-sdk";
 import { AuthRequest } from "../middleware/auth";
 import { LiveSession } from "../models/LiveSession";
 import { User } from "../models/User";
 import { canJoinSession } from "../services/liveEligibility";
+import { env } from "../config/env";
 
 // Generate a short, readable join code, e.g. "SCI-7A-4821".
 function makeJoinCode(subject: string, className: string, section: string): string {
@@ -126,6 +128,62 @@ export async function joinSession(req: AuthRequest, res: Response): Promise<void
       videoProvider: session.videoProvider || null,
       videoRoom: session.videoRoom || null,
     },
+  });
+}
+
+// POST /api/live/:id/token — issue a LiveKit access token for the video room.
+// Eligibility is the SAME as joinSession. Teacher (owner) can publish;
+// students can only subscribe (watch).
+export async function getVideoToken(req: AuthRequest, res: Response): Promise<void> {
+  if (!env.livekitConfigured) {
+    res.status(503).json({ error: "Live video is not configured (LiveKit keys missing)" });
+    return;
+  }
+
+  const [user, session] = await Promise.all([
+    User.findById(req.user!.id),
+    LiveSession.findById(req.params.id),
+  ]);
+  if (!user || !session) {
+    res.status(404).json({ error: "User or session not found" });
+    return;
+  }
+
+  const verdict = canJoinSession(user, session);
+  if (!verdict.allowed) {
+    res.status(403).json({ error: verdict.reason });
+    return;
+  }
+
+  const isOwner =
+    user.role === "teacher" && String(session.teacherId) === String(user._id);
+
+  const roomName = `session-${session.id}`;
+  const at = new AccessToken(env.livekitApiKey, env.livekitApiSecret, {
+    identity: String(user._id),
+    name: user.name,
+  });
+  at.addGrant({
+    roomJoin: true,
+    room: roomName,
+    canPublish: isOwner, // only the teacher streams
+    canSubscribe: true, // everyone can watch
+  });
+
+  // Persist provider info on the session (first time).
+  if (!session.videoProvider) {
+    session.videoProvider = "livekit";
+    session.videoRoom = roomName;
+    await session.save();
+  }
+
+  res.json({
+    token: await at.toJwt(),
+    url: env.livekitUrl,
+    room: roomName,
+    role: isOwner ? "host" : "viewer",
+    identity: String(user._id),
+    name: user.name,
   });
 }
 

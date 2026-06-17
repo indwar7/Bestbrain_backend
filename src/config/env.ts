@@ -34,6 +34,15 @@ export const env = {
   // Optional LLM key for PAL chat (falls back to a stub reply if unset).
   groqApiKey: process.env.GROQ_API_KEY ?? "",
 
+  // LiveKit (live video). If unset, the live-video endpoints return a clear
+  // "not configured" error instead of crashing.
+  livekitUrl: process.env.LIVEKIT_URL ?? "",
+  livekitApiKey: process.env.LIVEKIT_API_KEY ?? "",
+  livekitApiSecret: process.env.LIVEKIT_API_SECRET ?? "",
+  get livekitConfigured() {
+    return !!(this.livekitUrl && this.livekitApiKey && this.livekitApiSecret);
+  },
+
   // Allowed CORS origins, split into an array.
   clientOrigins: (process.env.CLIENT_ORIGIN ?? "http://localhost:8000")
     .split(",")

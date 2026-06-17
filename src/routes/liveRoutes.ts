@@ -5,6 +5,7 @@ import {
   createSession,
   listSessions,
   joinSession,
+  getVideoToken,
   endSession,
 } from "../controllers/liveController";
 
@@ -15,6 +16,7 @@ router.use(requireAuth);
 router.get("/", listSessions); // eligible sessions for the current user
 router.post("/", requireRole("teacher"), createSession); // teacher only
 router.post("/:id/join", joinSession); // eligibility-checked join
+router.post("/:id/token", getVideoToken); // LiveKit video token (eligibility-checked)
 router.post("/:id/end", requireRole("teacher"), endSession); // teacher only
 
 export default router;
