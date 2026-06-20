@@ -4,6 +4,8 @@ import { AuthRequest } from "../middleware/auth";
 import { LiveSession } from "../models/LiveSession";
 import { User } from "../models/User";
 import { canJoinSession } from "../services/liveEligibility";
+import { deleteLiveKitRoom } from "../services/liveVideo";
+import { endSessionRoom, getPresentUserIds } from "../sockets/liveSocket";
 import { env } from "../config/env";
 
 // Generate a short, readable join code, e.g. "SCI-7A-4821".
@@ -187,7 +189,49 @@ export async function getVideoToken(req: AuthRequest, res: Response): Promise<vo
   });
 }
 
+// GET /api/live/:id/roster — the full eligible class for a session, each
+// student marked present (joined) or not. Teacher (owner) only: this is the
+// "who's in / who's missing" panel for the live classroom.
+export async function getRoster(req: AuthRequest, res: Response): Promise<void> {
+  const session = await LiveSession.findOne({
+    _id: req.params.id,
+    teacherId: req.user!.id,
+  });
+  if (!session) {
+    res.status(404).json({ error: "Session not found or not yours" });
+    return;
+  }
+
+  // Every student eligible for this class+section+subject is on the roster,
+  // whether or not they've joined yet.
+  const students = await User.find({
+    role: "student",
+    className: session.className,
+    section: session.section,
+    subjects: session.subject,
+  })
+    .select("name rollNumber")
+    .sort({ name: 1 });
+
+  const present = new Set(getPresentUserIds(String(session._id)));
+
+  const roster = students.map((s) => ({
+    userId: String(s._id),
+    name: s.name,
+    rollNumber: s.rollNumber || "",
+    present: present.has(String(s._id)),
+  }));
+
+  res.json({
+    roster,
+    joined: roster.filter((r) => r.present).length,
+    total: roster.length,
+  });
+}
+
 // POST /api/live/:id/end  (teacher only) — end the owning teacher's session.
+// Full teardown: flips DB status, tears down the LiveKit room (disconnecting
+// all participants server-side), and broadcasts `session-ended` over Socket.IO.
 export async function endSession(req: AuthRequest, res: Response): Promise<void> {
   const session = await LiveSession.findOne({
     _id: req.params.id,
@@ -197,8 +241,29 @@ export async function endSession(req: AuthRequest, res: Response): Promise<void>
     res.status(404).json({ error: "Session not found or not yours" });
     return;
   }
+
+  if (session.status === "ended") {
+    res.json({ session, alreadyEnded: true });
+    return;
+  }
+
   session.status = "ended";
   session.endedAt = new Date();
   await session.save();
-  res.json({ session });
+
+  // Tear down the video room so no participant can keep streaming/watching.
+  // Best-effort: a LiveKit failure must not prevent the session from ending.
+  let videoTornDown = false;
+  if (session.videoRoom) {
+    try {
+      videoTornDown = await deleteLiveKitRoom(session.videoRoom);
+    } catch (err) {
+      console.error(`Failed to delete LiveKit room ${session.videoRoom}:`, err);
+    }
+  }
+
+  // Tell everyone still in the Socket.IO room that the class is over.
+  endSessionRoom(session.id, req.user!.id);
+
+  res.json({ session, videoTornDown });
 }
