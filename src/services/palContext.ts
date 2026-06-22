@@ -1,5 +1,32 @@
 import { User, IUser } from "../models/User";
+import { Subject } from "../models/Subject";
+import { Chapter } from "../models/Chapter";
 import { getProgressInsights } from "./progressInsights";
+
+// Using the curriculum, find the next unfinished published chapter for a student
+// (by subject order) so PAL can say "next up: X" with a real chapter name.
+// Returns null when there's no curriculum for the class or nothing left to do.
+async function nextChapterHint(user: IUser): Promise<string | null> {
+  if (!user.className) return null;
+  const subjects = await Subject.find({ className: user.className }).select("_id name").lean();
+  if (subjects.length === 0) return null;
+
+  const completedSlugs = new Set(
+    Object.entries(user.progress.chapters ?? {})
+      .filter(([, v]) => (v as Record<string, unknown>)?.completed)
+      .map(([slug]) => slug)
+  );
+
+  for (const subject of subjects) {
+    const chapters = await Chapter.find({ subjectId: subject._id, isPublished: true })
+      .sort({ order: 1, createdAt: 1 })
+      .select("title slug")
+      .lean();
+    const next = chapters.find((c) => !completedSlugs.has(c.slug));
+    if (next) return `${next.title} (${subject.name})`;
+  }
+  return null;
+}
 
 // Builds a compact, human-readable summary of a user's REAL learning data so
 // PAL can reference it in answers. Returned as plain text that gets appended to
@@ -19,8 +46,9 @@ async function studentContextLines(user: IUser, now: Date): Promise<string[]> {
   const insights = await getProgressInsights(String(user._id), now);
   const { started, completed } = countChapters(user);
   const w = insights.thisWeek;
+  const nextChapter = await nextChapterHint(user);
 
-  return [
+  const lines = [
     `- Class: ${user.classLabel || user.className || "n/a"}`,
     `- Day streak: ${insights.dayStreak} day(s)${insights.activeToday ? " (active today)" : ""}`,
     `- Total learning time: ${p.minutes} min`,
@@ -28,6 +56,8 @@ async function studentContextLines(user: IUser, now: Date): Promise<string[]> {
     `- Badges earned: ${p.badges.length > 0 ? p.badges.join(", ") : "none yet"}`,
     `- This week: ${w.minutes} min, ${w.lessons} lessons, ${w.exercises} exercises, active ${w.activeDays}/7 days`,
   ];
+  if (nextChapter) lines.push(`- Next chapter to study: ${nextChapter}`);
+  return lines;
 }
 
 export async function buildPalContext(

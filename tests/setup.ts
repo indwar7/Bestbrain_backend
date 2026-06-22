@@ -37,3 +37,18 @@ export function uniqueStudent() {
     section: "A",
   };
 }
+
+export function uniqueTeacher() {
+  counter += 1;
+  const n = `${Date.now()}-${counter}`;
+  return {
+    name: "Test Teacher",
+    email: `teacher-${n}@ex.com`,
+    phone: "8888888888",
+    password: "Passw0rd!",
+    teacherId: `TCH-${n}`,
+    className: "Class 7",
+    section: "A",
+    subject: "Maths",
+  };
+}

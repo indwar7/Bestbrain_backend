@@ -11,6 +11,7 @@ import liveRoutes from "./routes/liveRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import videoRoutes from "./routes/videoRoutes";
+import curriculumRoutes from "./routes/curriculumRoutes";
 
 export const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/live", liveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/curriculum", curriculumRoutes);
 
 // 404 fallback
 app.use((_req, res) => {
