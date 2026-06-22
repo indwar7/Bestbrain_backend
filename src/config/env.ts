@@ -53,6 +53,10 @@ export const env = {
     return !!(this.livekitUrl && this.livekitApiKey && this.livekitApiSecret);
   },
 
+  // Admin API key — guards the user-listing endpoint (which exposes PII). When
+  // unset, the admin endpoint is disabled in production and open only in dev.
+  adminApiKey: process.env.ADMIN_API_KEY ?? "",
+
   // Allowed CORS origins, split into an array.
   clientOrigins: (process.env.CLIENT_ORIGIN ?? "http://localhost:8000")
     .split(",")
