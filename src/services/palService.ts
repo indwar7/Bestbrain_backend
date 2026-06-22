@@ -35,19 +35,32 @@ const MAX_RETRIES = 2; // total attempts = 1 + MAX_RETRIES
 // Reject prompts longer than this so a single request can't blow up token cost.
 export const MAX_MESSAGE_LENGTH = 4000;
 
-// Lazily build a single Vertex client (the SDK reads the service-account JSON
-// referenced by GOOGLE_APPLICATION_CREDENTIALS, resolved to an absolute path).
+// Lazily build a single Vertex client. Credentials come from EITHER an inline
+// JSON env var (preferred for hosting — no filesystem needed) OR a file path
+// (convenient for local dev). See env.ts for the two supported variables.
 let client: GoogleGenAI | null = null;
 function getClient(): GoogleGenAI {
   if (!client) {
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = path.resolve(
-      env.googleCredentialsFile
-    );
-    client = new GoogleGenAI({
-      vertexai: true,
+    const base = {
+      vertexai: true as const,
       project: env.vertexProject,
       location: env.vertexLocation,
-    });
+    };
+
+    if (env.googleCredentialsJson) {
+      // Parse the service-account JSON straight from the env var.
+      const credentials = JSON.parse(env.googleCredentialsJson);
+      client = new GoogleGenAI({
+        ...base,
+        googleAuthOptions: { credentials },
+      });
+    } else {
+      // Fall back to the file path the Google auth library reads from this env var.
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = path.resolve(
+        env.googleCredentialsFile
+      );
+      client = new GoogleGenAI(base);
+    }
   }
   return client;
 }

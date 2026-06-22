@@ -1,10 +1,11 @@
 import http from "http";
 import { app } from "./app";
 import { connectDB } from "./config/db";
-import { env } from "./config/env";
+import { env, warnInsecureConfig } from "./config/env";
 import { initLiveSocket } from "./sockets/liveSocket";
 
 async function start() {
+  warnInsecureConfig(); // flag insecure/missing secrets in production
   await connectDB();
 
   const server = http.createServer(app);
