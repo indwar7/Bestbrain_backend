@@ -9,6 +9,7 @@ export interface IChatMessage {
 export interface IChatSession extends Document {
   userId: mongoose.Types.ObjectId;
   palRole: "student" | "parent" | "teacher"; // which PAL persona this session uses
+  title?: string; // optional user-set name (defaults to first message preview)
   messages: IChatMessage[];
   createdAt: Date;
   updatedAt: Date;
@@ -22,6 +23,7 @@ const chatSessionSchema = new Schema<IChatSession>(
       enum: ["student", "parent", "teacher"],
       required: true,
     },
+    title: { type: String, default: "" },
     messages: {
       type: [
         {

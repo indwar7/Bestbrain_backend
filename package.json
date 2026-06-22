@@ -8,7 +8,8 @@
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
     "demo": "USE_MEMORY_DB=true tsx src/scripts/demo.ts",
-    "test": "echo \"No tests yet\" && exit 0"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "Abhaydeep Indwar",
@@ -21,6 +22,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "jsonwebtoken": "^9.0.3",
     "livekit-server-sdk": "^2.15.4",
     "mongoose": "^9.7.0",
@@ -35,8 +37,11 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
     "@types/node": "^25.9.3",
+    "@types/supertest": "^7.2.0",
     "mongodb-memory-server": "^11.2.0",
+    "supertest": "^7.2.2",
     "tsx": "^4.22.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
