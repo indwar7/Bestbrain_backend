@@ -2,26 +2,23 @@ import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { ChatSession } from "../models/ChatSession";
 import { generatePalReply } from "../services/palService";
-
-type PalRole = "student" | "parent" | "teacher";
+import { buildPalContext } from "../services/palContext";
 
 // POST /api/pal/chat
-// Body: { role, message, sessionId?, history? }
+// Body: { message, sessionId? }
+// - The PAL persona is derived from the authenticated user's own role, so a
+//   student can't pose as a teacher. (A `role` in the body is ignored.)
 // - sessionId omitted → starts a new session.
-// - history is optional; the server is the source of truth and persists messages.
+// - The server is the source of truth and persists messages.
 export async function chat(req: AuthRequest, res: Response): Promise<void> {
   try {
     const userId = req.user!.id;
-    const { role, message, sessionId } = req.body as {
-      role: PalRole;
+    const role = req.user!.role; // trust the account, not the request body
+    const { message, sessionId } = req.body as {
       message: string;
       sessionId?: string;
     };
 
-    if (!role || !["student", "parent", "teacher"].includes(role)) {
-      res.status(400).json({ error: "valid role is required" });
-      return;
-    }
     if (!message || typeof message !== "string") {
       res.status(400).json({ error: "message is required" });
       return;
@@ -35,7 +32,17 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
       session = await ChatSession.create({ userId, palRole: role, messages: [] });
     }
 
-    const reply = await generatePalReply(role, session.messages, message);
+    // Ground PAL in the user's REAL EduLearn data (own progress for a student,
+    // child's for a parent, class snapshot for a teacher). Best-effort: if it
+    // fails, PAL still answers without the data rather than erroring.
+    let context = "";
+    try {
+      context = await buildPalContext(userId, role);
+    } catch (ctxErr) {
+      console.error("pal context build failed:", ctxErr);
+    }
+
+    const reply = await generatePalReply(role, session.messages, message, context);
 
     // Persist both turns so context survives across requests.
     session.messages.push({ role: "user", content: message, at: new Date() });

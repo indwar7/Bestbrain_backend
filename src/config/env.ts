@@ -34,6 +34,16 @@ export const env = {
   // Optional LLM key for PAL chat (falls back to a stub reply if unset).
   groqApiKey: process.env.GROQ_API_KEY ?? "",
 
+  // Vertex AI (Gemini) — powers PAL chat. Point GOOGLE_APPLICATION_CREDENTIALS
+  // at the service-account JSON file. If unset, PAL falls back to a stub reply.
+  vertexProject: process.env.VERTEX_PROJECT ?? "apt-momentum-449405-b4",
+  vertexLocation: process.env.VERTEX_LOCATION ?? "global",
+  vertexModel: process.env.VERTEX_MODEL ?? "gemini-2.5-flash",
+  googleCredentialsFile: process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "",
+  get vertexConfigured() {
+    return !!this.googleCredentialsFile;
+  },
+
   // LiveKit (live video). If unset, the live-video endpoints return a clear
   // "not configured" error instead of crashing.
   livekitUrl: process.env.LIVEKIT_URL ?? "",
