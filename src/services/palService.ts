@@ -32,6 +32,9 @@ const MAX_HISTORY_TURNS = 20; // last N messages sent as context (keeps it fast)
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_RETRIES = 2; // total attempts = 1 + MAX_RETRIES
 
+// Reject prompts longer than this so a single request can't blow up token cost.
+export const MAX_MESSAGE_LENGTH = 4000;
+
 // Lazily build a single Vertex client (the SDK reads the service-account JSON
 // referenced by GOOGLE_APPLICATION_CREDENTIALS, resolved to an absolute path).
 let client: GoogleGenAI | null = null;
@@ -141,4 +144,48 @@ export async function generatePalReply(
   }
 
   throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
+}
+
+// Streaming variant: yields text chunks as Gemini produces them. The caller is
+// responsible for accumulating the full reply (e.g. to persist it). No retry
+// here — once bytes start flowing to the client we can't cleanly restart.
+export async function* streamPalReply(
+  palRole: PalRole,
+  history: IChatMessage[],
+  message: string,
+  context = ""
+): AsyncGenerator<string, void, unknown> {
+  const systemInstruction = context
+    ? `${SYSTEM_PROMPTS[palRole]}\n\n${context}`
+    : SYSTEM_PROMPTS[palRole];
+
+  if (!env.vertexConfigured) {
+    yield `(${palRole} PAL — stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
+    return;
+  }
+
+  const recent = history.slice(-MAX_HISTORY_TURNS);
+  const contents = [
+    ...recent.map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    })),
+    { role: "user", parts: [{ text: message }] },
+  ];
+
+  const stream = await getClient().models.generateContentStream({
+    model: env.vertexModel,
+    contents,
+    config: {
+      systemInstruction,
+      temperature: 0.7,
+      topP: 0.95,
+      maxOutputTokens: 2048,
+      safetySettings: SAFETY_SETTINGS,
+    },
+  });
+
+  for await (const chunk of stream) {
+    if (chunk.text) yield chunk.text;
+  }
 }
