@@ -32,6 +32,10 @@ export interface IUser extends Document {
   password: string;
   role: "student" | "parent" | "teacher";
 
+  // ---------- Verification (email / phone OTP) ----------
+  emailVerified: boolean;
+  phoneVerified: boolean;
+
   // ---------- STUDENT fields ----------
   rollNumber?: string; // unique student roll number, e.g. "EDU-7A-021"
   className?: string; // e.g. "Class 7"
@@ -70,6 +74,10 @@ const userSchema = new Schema<IUser>(
       enum: ["student", "parent", "teacher"],
       required: true,
     },
+
+    // Verification flags (set true once the matching OTP is confirmed).
+    emailVerified: { type: Boolean, default: false },
+    phoneVerified: { type: Boolean, default: false },
 
     // STUDENT
     rollNumber: { type: String, sparse: true, index: true },

@@ -10,6 +10,7 @@ import {
 import { setRefreshCookie, clearRefreshCookie } from "../utils/cookies";
 import { env } from "../config/env";
 import { AuthRequest } from "../middleware/auth";
+import { isUserVerified } from "../services/otpService";
 
 // ---------- helpers ----------
 function issueTokens(res: Response, payload: JwtPayload): string {
@@ -27,6 +28,8 @@ function publicUser(user: IUser) {
     email: user.email,
     phone: user.phone,
     role: user.role,
+    emailVerified: user.emailVerified,
+    phoneVerified: user.phoneVerified,
   };
   if (user.role === "student") {
     return {
@@ -249,6 +252,19 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (role && role !== user.role) {
       res.status(403).json({
         error: `This account is a ${user.role}, not a ${role}. Please use the ${user.role} tab.`,
+      });
+      return;
+    }
+
+    // Verification gate (only enforced when OTP_ENFORCED=true). Returns 403 with
+    // a machine-readable code so the frontend can route to the verify screen.
+    if (env.otpEnforced && !isUserVerified(user)) {
+      res.status(403).json({
+        error: "Please verify your account to continue.",
+        code: "VERIFICATION_REQUIRED",
+        userId: user.id,
+        email: user.email,
+        phone: user.phone,
       });
       return;
     }

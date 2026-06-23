@@ -57,6 +57,26 @@ export const env = {
   // unset, the admin endpoint is disabled in production and open only in dev.
   adminApiKey: process.env.ADMIN_API_KEY ?? "",
 
+  // ---- OTP / verification ----
+  // When true, unverified users cannot log in. Keep false until the frontend
+  // has a verify screen, then flip it on. The OTP endpoints work either way.
+  otpEnforced: process.env.OTP_ENFORCED === "true",
+
+  // Email provider: "resend" | "sendgrid" | "" (console fallback).
+  emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),
+  emailFrom: process.env.EMAIL_FROM ?? "EduLearn <no-reply@edulearn.app>",
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
+  sendgridApiKey: process.env.SENDGRID_API_KEY ?? "",
+
+  // SMS provider: "msg91" | "twilio" | "" (console fallback).
+  smsProvider: (process.env.SMS_PROVIDER ?? "").toLowerCase(),
+  msg91AuthKey: process.env.MSG91_AUTH_KEY ?? "",
+  msg91TemplateId: process.env.MSG91_TEMPLATE_ID ?? "",
+  msg91Sender: process.env.MSG91_SENDER ?? "EDULRN",
+  twilioSid: process.env.TWILIO_ACCOUNT_SID ?? "",
+  twilioToken: process.env.TWILIO_AUTH_TOKEN ?? "",
+  twilioFrom: process.env.TWILIO_FROM ?? "",
+
   // Allowed CORS origins, split into an array.
   clientOrigins: (process.env.CLIENT_ORIGIN ?? "http://localhost:8000")
     .split(",")
