@@ -60,7 +60,7 @@ export const env = {
   // ---- OTP / verification ----
   // When true, unverified users cannot log in. Keep false until the frontend
   // has a verify screen, then flip it on. The OTP endpoints work either way.
-  otpEnforced: process.env.OTP_ENFORCED === "true",
+  otpEnforced: true,
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
   emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),

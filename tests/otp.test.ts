@@ -77,15 +77,13 @@ describe("OTP — send & verify (dev/console mode)", () => {
   });
 });
 
-describe("OTP — login gate is OFF by default", () => {
-  it("an unverified user can still log in when OTP_ENFORCED is not set", async () => {
+describe("OTP — login gate is ON by default", () => {
+  it("an unverified user is blocked when logging in", async () => {
     const u = await signup();
     const res = await request(app)
       .post("/api/auth/login")
       .send({ email: u.email, password: u.password, role: "student" });
-    // Default env has OTP_ENFORCED unset → login succeeds even unverified.
-    expect(res.status).toBe(200);
-    expect(res.body.accessToken).toBeTruthy();
-    expect(res.body.user.emailVerified).toBe(false);
+    expect(res.status).toBe(403);
+    expect(res.body.code).toBe("VERIFICATION_REQUIRED");
   });
 });

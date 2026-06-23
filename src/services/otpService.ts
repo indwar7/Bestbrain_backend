@@ -101,7 +101,7 @@ export async function verifyOtp(
 }
 
 // A user counts as verified when their required channels are confirmed.
-// (Currently: email OR phone is enough; tighten here if both are required.)
+// Both email and phone are mandatory.
 export function isUserVerified(user: IUser): boolean {
-  return user.emailVerified || user.phoneVerified;
+  return user.emailVerified && user.phoneVerified;
 }

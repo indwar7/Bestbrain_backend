@@ -265,6 +265,8 @@ export async function login(req: Request, res: Response): Promise<void> {
         userId: user.id,
         email: user.email,
         phone: user.phone,
+        emailVerified: user.emailVerified,
+        phoneVerified: user.phoneVerified,
       });
       return;
     }
