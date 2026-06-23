@@ -12,3 +12,14 @@ export const palChatLimiter = rateLimit({
   keyGenerator: (req) => (req as AuthRequest).user?.id ?? req.ip ?? "anon",
   message: { error: "Too many messages — please slow down and try again shortly." },
 });
+
+// OTP send/verify is unauthenticated and abuse-prone (SMS/email cost, brute
+// force). Cap per IP. Keyed by IP since there's no user session yet.
+export const otpLimiter = rateLimit({
+  windowMs: 15 * 60_000, // 15 minutes
+  limit: 10, // 10 OTP requests / 15 min / IP
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip ?? "anon",
+  message: { error: "Too many requests — please try again later." },
+});

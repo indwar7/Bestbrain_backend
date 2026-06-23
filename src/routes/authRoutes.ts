@@ -9,6 +9,8 @@ import {
   me,
 } from "../controllers/authController";
 import { requireAuth } from "../middleware/auth";
+import { requestOtp, confirmOtp } from "../controllers/otpController";
+import { otpLimiter } from "../middleware/rateLimit";
 
 const router = Router();
 
@@ -19,6 +21,10 @@ router.post("/signup/parent", signupParent);
 
 // Single role-aware login (the frontend sends the chosen role tab).
 router.post("/login", login);
+
+// Email / phone OTP verification (rate-limited; pre-login).
+router.post("/send-otp", otpLimiter, requestOtp);
+router.post("/verify-otp", otpLimiter, confirmOtp);
 
 router.post("/refresh", refresh);
 router.post("/logout", logout);
