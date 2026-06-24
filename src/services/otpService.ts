@@ -52,15 +52,28 @@ export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpRes
   });
 
   const message = `Your EduLearn verification code is ${code}. It expires in 10 minutes.`;
-  const result =
-    channel === "email"
-      ? await sendEmail(destination, "EduLearn verification code", message)
-      : await sendSms(destination, message);
+
+  // A provider failure (e.g. unverified recipient on a trial plan) must not
+  // crash the request — the code is already stored, only delivery failed. We
+  // log it and, outside production, surface the code so the flow stays testable.
+  let delivered = false;
+  let via = "none";
+  try {
+    const result =
+      channel === "email"
+        ? await sendEmail(destination, "EduLearn verification code", message)
+        : await sendSms(destination, message);
+    delivered = result.delivered;
+    via = result.via;
+  } catch (err) {
+    console.error(`OTP ${channel} delivery failed:`, (err as Error).message);
+    via = "error";
+  }
 
   // Expose the code only when no real provider delivered it (dev convenience),
   // and never in production.
-  const exposeDev = !result.delivered && !env.isProd;
-  return { sent: true, via: result.via, devCode: exposeDev ? code : undefined };
+  const exposeDev = !delivered && !env.isProd;
+  return { sent: true, via, devCode: exposeDev ? code : undefined };
 }
 
 export type VerifyOutcome =

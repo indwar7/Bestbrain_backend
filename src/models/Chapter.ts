@@ -11,6 +11,8 @@ export interface IChapter extends Document {
   description: string;
   estimatedMinutes: number;
   prerequisites: string[]; // chapter slugs that should come first
+  lessonContent: string; // lesson body shown in the player (markdown/plain)
+  videoUrl: string; // optional lecture video link
   isPublished: boolean;
   createdById: mongoose.Types.ObjectId;
   createdByRole: "teacher" | "admin";
@@ -27,6 +29,8 @@ const chapterSchema = new Schema<IChapter>(
     description: { type: String, default: "" },
     estimatedMinutes: { type: Number, default: 0 },
     prerequisites: { type: [String], default: [] },
+    lessonContent: { type: String, default: "" },
+    videoUrl: { type: String, default: "" },
     isPublished: { type: Boolean, default: true },
     createdById: { type: Schema.Types.ObjectId, ref: "User" },
     createdByRole: { type: String, enum: ["teacher", "admin"], default: "teacher" },

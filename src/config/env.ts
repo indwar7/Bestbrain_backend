@@ -63,9 +63,9 @@ export const env = {
   otpEnforced: true,
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
-  emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),
-  emailFrom: process.env.EMAIL_FROM ?? "EduLearn <no-reply@edulearn.app>",
-  resendApiKey: process.env.RESEND_API_KEY ?? "",
+  emailProvider: (process.env.EMAIL_PROVIDER ?? "resend").toLowerCase(),
+  emailFrom: process.env.EMAIL_FROM ?? "EduLearn <onboarding@resend.dev>",
+  resendApiKey: process.env.RESEND_API_KEY ?? "re_NpEvB1yi_Jt36wZJxS2tWQ9ZAZnJ8RTre",
   sendgridApiKey: process.env.SENDGRID_API_KEY ?? "",
 
   // SMS provider: "msg91" | "twilio" | "" (console fallback).
