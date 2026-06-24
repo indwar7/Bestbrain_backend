@@ -11,6 +11,7 @@ import { setRefreshCookie, clearRefreshCookie } from "../utils/cookies";
 import { env } from "../config/env";
 import { AuthRequest } from "../middleware/auth";
 import { isUserVerified } from "../services/otpService";
+import { OtpCode } from "../models/OtpCode";
 
 // ---------- helpers ----------
 function issueTokens(res: Response, payload: JwtPayload): string {
@@ -256,19 +257,45 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // Verification gate (only enforced when OTP_ENFORCED=true). Returns 403 with
-    // a machine-readable code so the frontend can route to the verify screen.
-    if (env.otpEnforced && !isUserVerified(user)) {
-      res.status(403).json({
-        error: "Please verify your account to continue.",
-        code: "VERIFICATION_REQUIRED",
-        userId: user.id,
-        email: user.email,
-        phone: user.phone,
-        emailVerified: user.emailVerified,
-        phoneVerified: user.phoneVerified,
-      });
-      return;
+    // --- OTP gate ---
+    // Signup verifies both email + phone. On every subsequent login we still
+    // require a fresh phone OTP (like 2FA). Email is already verified from
+    // signup, so the frontend shows only the phone step.
+    if (env.otpEnforced) {
+      // 1) Email must have been verified during signup.
+      if (!user.emailVerified) {
+        res.status(403).json({
+          error: "Please verify your email to continue.",
+          code: "VERIFICATION_REQUIRED",
+          userId: user.id,
+          email: user.email,
+          phone: user.phone,
+          emailVerified: false,
+          phoneVerified: false,
+        });
+        return;
+      }
+
+      // 2) Require a fresh phone OTP for this login (consumed within last 5 min).
+      const LOGIN_OTP_WINDOW_MS = 5 * 60 * 1000;
+      const recentPhoneOtp = await OtpCode.findOne({
+        userId: user._id,
+        channel: "phone",
+        consumedAt: { $gte: new Date(Date.now() - LOGIN_OTP_WINDOW_MS) },
+      }).sort({ consumedAt: -1 });
+
+      if (!recentPhoneOtp) {
+        res.status(403).json({
+          error: "Please verify your phone number to continue.",
+          code: "VERIFICATION_REQUIRED",
+          userId: user.id,
+          email: user.email,
+          phone: user.phone,
+          emailVerified: true,
+          phoneVerified: false,
+        });
+        return;
+      }
     }
 
     const accessToken = issueTokens(res, {

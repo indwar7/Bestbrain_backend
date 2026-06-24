@@ -144,6 +144,8 @@ export async function updateChapter(req: AuthRequest, res: Response): Promise<vo
     "description",
     "estimatedMinutes",
     "prerequisites",
+    "lessonContent",
+    "videoUrl",
     "isPublished",
   ] as const;
   const updates: Record<string, unknown> = {};
