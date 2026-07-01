@@ -1,5 +1,6 @@
 // Runs before any test module is imported. Forces OTP into console/dev mode so
 // tests never hit a real email/SMS provider, regardless of what's in .env.
+process.env.NODE_ENV = "test"; // disables rate limiting so auth suites aren't throttled
 process.env.EMAIL_PROVIDER = "";
 process.env.SMS_PROVIDER = "";
 process.env.RESEND_API_KEY = "";

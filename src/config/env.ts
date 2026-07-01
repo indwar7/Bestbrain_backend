@@ -61,7 +61,10 @@ export const env = {
   // When true, unverified users cannot log in. Currently disabled per product
   // decision: login is plain email + password, no email/phone verification.
   // Set OTP_ENFORCED=true in the env to re-enable the gate (endpoints still work).
-  otpEnforced: (process.env.OTP_ENFORCED ?? "false").toLowerCase() === "true",
+  // A getter (not a snapshot) so per-suite test overrides are picked up live.
+  get otpEnforced(): boolean {
+    return (process.env.OTP_ENFORCED ?? "false").toLowerCase() === "true";
+  },
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
   emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),
@@ -77,6 +80,10 @@ export const env = {
   twilioSid: process.env.TWILIO_ACCOUNT_SID ?? "",
   twilioToken: process.env.TWILIO_AUTH_TOKEN ?? "",
   twilioFrom: process.env.TWILIO_FROM ?? "",
+
+  // Error tracking (optional). When set, wire @sentry/node in index.ts (see
+  // config/logger.ts). Unset → errors are structured-logged only.
+  sentryDsn: process.env.SENTRY_DSN ?? "",
 
   // Allowed CORS origins, split into an array.
   clientOrigins: (process.env.CLIENT_ORIGIN ?? "http://localhost:8000")

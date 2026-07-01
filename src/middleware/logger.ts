@@ -1,21 +1,21 @@
-import { Request, Response, NextFunction } from "express";
+import pinoHttp from "pino-http";
+import { logger } from "../config/logger";
 
-// Lightweight request logger — prints each API call + status so a live demo
-// clearly shows registrations and logins happening on the backend.
-export function requestLogger(req: Request, res: Response, next: NextFunction): void {
-  const start = Date.now();
-  res.on("finish", () => {
-    const ms = Date.now() - start;
-    const tag =
-      res.statusCode >= 500
-        ? "🔴"
-        : res.statusCode >= 400
-        ? "🟡"
-        : "🟢";
-    // e.g. "🟢 POST /api/auth/signup/student → 201 (34ms)"
-    console.log(
-      `${tag} ${req.method} ${req.originalUrl} → ${res.statusCode} (${ms}ms)`
-    );
-  });
-  next();
-}
+// Structured per-request logger. Emits one JSON line per request in production
+// (method, url, status, response time, request id) and pretty output in dev.
+// Health checks are logged at debug level to keep the stream quiet.
+export const requestLogger = pinoHttp({
+  logger,
+  customLogLevel(_req, res, err) {
+    if (err || res.statusCode >= 500) return "error";
+    if (res.statusCode >= 400) return "warn";
+    if (res.statusCode >= 300) return "silent";
+    return "info";
+  },
+  customSuccessMessage(req, res) {
+    return `${req.method} ${req.url} → ${res.statusCode}`;
+  },
+  autoLogging: {
+    ignore: (req) => req.url === "/" || req.url === "/health",
+  },
+});

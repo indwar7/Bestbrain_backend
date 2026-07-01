@@ -4,6 +4,7 @@ import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env";
+import { captureException } from "./config/logger";
 import { requestLogger } from "./middleware/logger";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -85,8 +86,8 @@ app.use((_req, res) => {
 // leaks a stack trace to the client or crashes on an unhandled route error.
 // (Must be last, and must keep all four args for Express to treat it as one.)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  console.error("Unhandled error:", err);
+app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+  captureException(err, { method: req.method, url: req.originalUrl });
   if (res.headersSent) return;
   const payload = env.isProd
     ? { error: "Server error" }
