@@ -10,17 +10,18 @@ import {
 } from "../controllers/authController";
 import { requireAuth } from "../middleware/auth";
 import { requestOtp, confirmOtp } from "../controllers/otpController";
-import { otpLimiter } from "../middleware/rateLimit";
+import { otpLimiter, authLimiter } from "../middleware/rateLimit";
 
 const router = Router();
 
-// Three separate role-specific signups.
-router.post("/signup/student", signupStudent);
-router.post("/signup/teacher", signupTeacher);
-router.post("/signup/parent", signupParent);
+// Three separate role-specific signups (rate-limited against abuse).
+router.post("/signup/student", authLimiter, signupStudent);
+router.post("/signup/teacher", authLimiter, signupTeacher);
+router.post("/signup/parent", authLimiter, signupParent);
 
 // Single role-aware login (the frontend sends the chosen role tab).
-router.post("/login", login);
+// Rate-limited to blunt credential-stuffing / brute-force.
+router.post("/login", authLimiter, login);
 
 // Email / phone OTP verification (rate-limited; pre-login).
 router.post("/send-otp", otpLimiter, requestOtp);

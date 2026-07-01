@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { User, IUser } from "../models/User";
 import { getProgressInsights, ProgressInsights } from "../services/progressInsights";
+import { getMasteryInsights } from "../services/masteryInsights";
 
 // Derive simple display metrics from a student's progress object.
 function studentSummary(user: IUser) {
@@ -50,12 +51,16 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
 
   // ---------- STUDENT ----------
   if (user.role === "student") {
-    const insights = await getProgressInsights(String(user._id), now);
+    const [insights, mastery] = await Promise.all([
+      getProgressInsights(String(user._id), now),
+      getMasteryInsights(user),
+    ]);
     res.json({
       role: "student",
       profile: { id: String(user._id), name: user.name, classLabel: user.classLabel },
       stats: studentSummary(user), // legacy shape (kept for the existing UI)
       insights, // real day-streak, weekly activity, this-week totals
+      mastery, // real per-subject mastery + earned badges (empty if none)
       progress: user.progress,
     });
     return;
@@ -68,9 +73,12 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
       _id: { $in: childIds },
       role: "student",
     });
-    // Each child gets its real streak + weekly activity for the parent view.
+    // Each child gets its real streak + weekly activity + mastery for the parent view.
     const enriched = await Promise.all(
-      children.map((c) => studentSummaryWithInsights(c, now))
+      children.map(async (c) => ({
+        ...(await studentSummaryWithInsights(c, now)),
+        mastery: await getMasteryInsights(c),
+      }))
     );
     res.json({
       role: "parent",

@@ -35,7 +35,7 @@ export const env = {
   // OR as the raw JSON string (GOOGLE_CREDENTIALS_JSON, good for hosts with no
   // persistent filesystem like Render/Railway). If neither is set, PAL falls
   // back to a stub reply.
-  vertexProject: process.env.VERTEX_PROJECT ?? "apt-momentum-449405-b4",
+  vertexProject: process.env.VERTEX_PROJECT ?? "",
   vertexLocation: process.env.VERTEX_LOCATION ?? "global",
   vertexModel: process.env.VERTEX_MODEL ?? "gemini-2.5-flash",
   googleCredentialsFile: process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "",
@@ -64,9 +64,9 @@ export const env = {
   otpEnforced: (process.env.OTP_ENFORCED ?? "false").toLowerCase() === "true",
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
-  emailProvider: (process.env.EMAIL_PROVIDER ?? "resend").toLowerCase(),
+  emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),
   emailFrom: process.env.EMAIL_FROM ?? "EduLearn <onboarding@resend.dev>",
-  resendApiKey: process.env.RESEND_API_KEY ?? "re_NpEvB1yi_Jt36wZJxS2tWQ9ZAZnJ8RTre",
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
   sendgridApiKey: process.env.SENDGRID_API_KEY ?? "",
 
   // SMS provider: "msg91" | "twilio" | "" (console fallback).
@@ -89,26 +89,43 @@ export const env = {
   },
 };
 
-// Loud, non-fatal warnings when production is running with insecure or missing
-// secrets. Called once on startup. We warn rather than crash so a deploy is
-// never blocked, but the operator sees exactly what to fix.
+// FATAL config check — refuse to boot in production with a configuration that
+// is actively insecure or data-losing. These are not warnings: running with
+// dev JWT secrets lets anyone forge tokens, and an in-memory DB silently loses
+// every user on restart. Called once on startup, before the server listens.
+export function assertProductionConfig(): void {
+  if (!env.isProd) return;
+
+  const fatal: string[] = [];
+
+  if (env.accessSecret === DEV_ACCESS_SECRET || env.refreshSecret === DEV_REFRESH_SECRET) {
+    fatal.push("JWT secrets are still the dev defaults — set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET (anyone can forge tokens otherwise).");
+  }
+  if (!env.mongoUri || env.useMemoryDb) {
+    fatal.push("No persistent database — set MONGODB_URI (in-memory data is lost on every restart).");
+  }
+
+  if (fatal.length > 0) {
+    console.error("\n🛑 FATAL: refusing to start in production with insecure config:");
+    for (const p of fatal) console.error(`   - ${p}`);
+    console.error("");
+    throw new Error("Insecure production configuration — see the errors above.");
+  }
+}
+
+// Loud, non-fatal warnings for config that is incomplete but not dangerous
+// (a deploy is never blocked; the operator just sees what to fix).
 export function warnInsecureConfig(): void {
   if (!env.isProd) return;
 
   const problems: string[] = [];
 
-  if (env.accessSecret === DEV_ACCESS_SECRET || env.refreshSecret === DEV_REFRESH_SECRET) {
-    problems.push("JWT secrets are still the dev defaults — set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET.");
-  }
-  if (!env.mongoUri || env.useMemoryDb) {
-    problems.push("No persistent database — set MONGODB_URI (in-memory data is lost on restart).");
-  }
   if (!env.vertexConfigured) {
     problems.push("PAL has no credentials — set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
   }
 
   if (problems.length > 0) {
-    console.warn("\n⚠️  INSECURE / INCOMPLETE PRODUCTION CONFIG:");
+    console.warn("\n⚠️  INCOMPLETE PRODUCTION CONFIG:");
     for (const p of problems) console.warn(`   - ${p}`);
     console.warn("");
   }

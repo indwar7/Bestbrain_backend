@@ -1,5 +1,7 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env";
 import { requestLogger } from "./middleware/logger";
@@ -15,6 +17,26 @@ import curriculumRoutes from "./routes/curriculumRoutes";
 import assessmentRoutes from "./routes/assessmentRoutes";
 
 export const app = express();
+
+// Behind a reverse proxy (CloudFront/nginx) — trust it so req.ip is the real
+// client IP (rate limiting keys off it) and secure cookies work over the proxy.
+app.set("trust proxy", 1);
+
+// Security headers (HSTS, no-sniff, frame options, etc.). crossOriginResourcePolicy
+// is relaxed so the video <src> endpoint can still be embedded cross-origin.
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+
+// Gzip responses — but never SSE streams (compression buffers them and breaks
+// PAL's token-by-token streaming). Skip when the response is an event stream.
+app.use(
+  compression({
+    filter(req, res) {
+      const type = res.getHeader("Content-Type");
+      if (typeof type === "string" && type.includes("text/event-stream")) return false;
+      return compression.filter(req, res);
+    },
+  })
+);
 
 // CORS: allow the configured origins, plus any localhost port and file:// (null)
 // origin in development so the demo works however the frontend is opened.
@@ -32,7 +54,8 @@ app.use(
   })
 );
 
-app.use(express.json());
+// Cap JSON body size — reject oversized payloads (DoS guard).
+app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(requestLogger);
 
@@ -56,4 +79,17 @@ app.use("/api/assessments", assessmentRoutes);
 // 404 fallback
 app.use((_req, res) => {
   res.status(404).json({ error: "Not found" });
+});
+
+// Global error handler — catches thrown/rejected errors so the process never
+// leaks a stack trace to the client or crashes on an unhandled route error.
+// (Must be last, and must keep all four args for Express to treat it as one.)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  console.error("Unhandled error:", err);
+  if (res.headersSent) return;
+  const payload = env.isProd
+    ? { error: "Server error" }
+    : { error: "Server error", detail: String((err as Error)?.message ?? err) };
+  res.status(500).json(payload);
 });

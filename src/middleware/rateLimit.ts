@@ -23,3 +23,15 @@ export const otpLimiter = rateLimit({
   keyGenerator: (req) => req.ip ?? "anon",
   message: { error: "Too many requests — please try again later." },
 });
+
+// Login/signup are unauthenticated and the prime target for credential
+// stuffing / brute-force. Cap per IP. Deliberately stricter than general
+// traffic but loose enough not to lock out a legitimate user who mistypes.
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60_000, // 15 minutes
+  limit: 20, // 20 attempts / 15 min / IP
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip ?? "anon",
+  message: { error: "Too many attempts — please try again later." },
+});
