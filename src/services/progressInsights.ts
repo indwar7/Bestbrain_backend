@@ -50,6 +50,45 @@ export async function getProgressInsights(
     .select("type payload occurredAt")
     .sort({ occurredAt: 1 });
 
+  return computeInsights(events, now);
+}
+
+// Batch version: compute insights for MANY users in a SINGLE DB query instead
+// of one query per user (the teacher/parent dashboards used to N+1 here — a
+// 40-student class meant 40 round-trips). Returns a Map keyed by userId string.
+export async function getProgressInsightsBatch(
+  userIds: string[],
+  now: Date = new Date()
+): Promise<Map<string, ProgressInsights>> {
+  const result = new Map<string, ProgressInsights>();
+  if (userIds.length === 0) return result;
+
+  const since = new Date(now.getTime() - 60 * 86400000);
+  const events = await ProgressEvent.find({
+    userId: { $in: userIds },
+    occurredAt: { $gte: since },
+  })
+    .select("userId type payload occurredAt")
+    .sort({ occurredAt: 1 });
+
+  // Group events by user, then compute each user's insights in memory.
+  const byUser = new Map<string, typeof events>();
+  for (const e of events) {
+    const key = String(e.userId);
+    const arr = byUser.get(key) ?? [];
+    arr.push(e);
+    byUser.set(key, arr);
+  }
+  for (const id of userIds) {
+    result.set(id, computeInsights(byUser.get(id) ?? [], now));
+  }
+  return result;
+}
+
+// Shared computation: turn a chronological event list into insights. Extracted
+// so single + batch paths stay identical.
+type EventLike = { type: string; payload?: unknown; occurredAt: Date };
+function computeInsights(events: EventLike[], now: Date): ProgressInsights {
   // Bucket per calendar day.
   const perDay = new Map<
     string,

@@ -23,6 +23,13 @@ async function start() {
   const server = http.createServer(app);
   initLiveSocket(server); // attach Socket.IO for live classes
 
+  // Connection-level timeouts so slow clients / half-open sockets can't pile up
+  // and exhaust resources under load. These are SSE-safe (they bound header
+  // receipt and idle keep-alive, not the length of a streaming response body).
+  server.keepAliveTimeout = 65_000; // > typical LB idle timeout to avoid races
+  server.headersTimeout = 66_000; // must exceed keepAliveTimeout
+  server.requestTimeout = 0; // disable the hard per-request cap (PAL SSE streams)
+
   server.listen(env.port, () => {
     logger.info({ port: env.port }, `🚀 EduLearn backend running on http://localhost:${env.port}`);
     logger.info("Socket.IO live events ready");

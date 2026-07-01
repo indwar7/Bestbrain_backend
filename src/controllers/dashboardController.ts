@@ -1,8 +1,12 @@
 import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { User, IUser } from "../models/User";
-import { getProgressInsights, ProgressInsights } from "../services/progressInsights";
-import { getMasteryInsights } from "../services/masteryInsights";
+import {
+  getProgressInsights,
+  getProgressInsightsBatch,
+  ProgressInsights,
+} from "../services/progressInsights";
+import { getMasteryInsights, getMasteryInsightsBatch } from "../services/masteryInsights";
 
 // Derive simple display metrics from a student's progress object.
 function studentSummary(user: IUser) {
@@ -24,19 +28,30 @@ function studentSummary(user: IUser) {
   };
 }
 
-// A student summary enriched with derived insights (real day-streak, weekly
-// activity, this-week totals) from the ProgressEvent log.
-async function studentSummaryWithInsights(user: IUser, now: Date) {
-  const base = studentSummary(user);
-  const insights = await getProgressInsights(String(user._id), now);
+// The insight fields the dashboards attach to each student summary. Extracted
+// so single + batch paths shape the response identically. Tolerates a missing
+// insights object (a student with no events) with safe empty defaults.
+function insightsFields(insights?: ProgressInsights) {
   return {
-    ...base,
-    dayStreak: insights.dayStreak, // real consecutive-day streak
-    activeToday: insights.activeToday,
-    weekly: insights.weekly,
-    thisWeek: insights.thisWeek,
-    lastActiveAt: insights.lastActiveAt,
+    dayStreak: insights?.dayStreak ?? 0, // real consecutive-day streak
+    activeToday: insights?.activeToday ?? false,
+    weekly: insights?.weekly ?? [],
+    thisWeek:
+      insights?.thisWeek ?? {
+        minutes: 0,
+        lessons: 0,
+        exercises: 0,
+        chaptersCompleted: 0,
+        activeDays: 0,
+      },
+    lastActiveAt: insights?.lastActiveAt ?? null,
   };
+}
+
+// A student summary enriched with derived insights (single-user path).
+async function studentSummaryWithInsights(user: IUser, now: Date) {
+  const insights = await getProgressInsights(String(user._id), now);
+  return { ...studentSummary(user), ...insightsFields(insights) };
 }
 
 // GET /api/dashboard — returns role-specific data for the logged-in user.
@@ -73,13 +88,17 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
       _id: { $in: childIds },
       role: "student",
     });
-    // Each child gets its real streak + weekly activity + mastery for the parent view.
-    const enriched = await Promise.all(
-      children.map(async (c) => ({
-        ...(await studentSummaryWithInsights(c, now)),
-        mastery: await getMasteryInsights(c),
-      }))
-    );
+    // Batch the insights + mastery for all children in two queries total
+    // (not two per child) — keeps parent dashboards cheap at scale.
+    const [insightsMap, masteryMap] = await Promise.all([
+      getProgressInsightsBatch(children.map((c) => String(c._id)), now),
+      getMasteryInsightsBatch(children),
+    ]);
+    const enriched = children.map((c) => ({
+      ...studentSummary(c),
+      ...insightsFields(insightsMap.get(String(c._id))),
+      mastery: masteryMap.get(String(c._id)),
+    }));
     res.json({
       role: "parent",
       profile: { id: String(user._id), name: user.name },
@@ -105,10 +124,16 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
         ? await User.find({ role: "student", $or: orFilters })
         : [];
 
-    // Enrich every student with real streak + weekly activity.
-    const summaries = await Promise.all(
-      roster.map((s) => studentSummaryWithInsights(s, now))
+    // Enrich every student with real streak + weekly activity — batched into
+    // ONE ProgressEvent query for the whole roster (was one query per student).
+    const insightsMap = await getProgressInsightsBatch(
+      roster.map((s) => String(s._id)),
+      now
     );
+    const summaries = roster.map((s) => ({
+      ...studentSummary(s),
+      ...insightsFields(insightsMap.get(String(s._id))),
+    }));
     const count = summaries.length || 1;
 
     const classAverage = {

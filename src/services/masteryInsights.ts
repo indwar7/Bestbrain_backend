@@ -79,7 +79,50 @@ function clampPct(v: unknown): number {
 // ---------------------------------------------------------------------------
 // Main entry: derive subjects + badges for one student.
 // ---------------------------------------------------------------------------
+// A minimal finished-mock shape (subject + score/total) — all the mastery
+// computation needs. Lets the batch path pass pre-fetched mocks.
+export interface MockLike {
+  subject: string;
+  score: number;
+  total: number;
+}
+
 export async function getMasteryInsights(user: IUser): Promise<MasteryInsights> {
+  // ---- fetch this user's finished mocks (single-user path) ----
+  const mocks = await MockAttempt.find({ userId: user._id, finished: true }).select(
+    "subject score total"
+  );
+  return computeMastery(user, mocks);
+}
+
+// Batch version: fetch finished mocks for MANY students in ONE query, then
+// compute each student's mastery in memory (avoids the per-student MockAttempt
+// query the teacher/parent dashboards used to fire). Returns a Map by userId.
+export async function getMasteryInsightsBatch(
+  users: IUser[]
+): Promise<Map<string, MasteryInsights>> {
+  const result = new Map<string, MasteryInsights>();
+  if (users.length === 0) return result;
+
+  const ids = users.map((u) => u._id);
+  const mocks = await MockAttempt.find({ userId: { $in: ids }, finished: true }).select(
+    "userId subject score total"
+  );
+  const mocksByUser = new Map<string, MockLike[]>();
+  for (const m of mocks) {
+    const key = String(m.userId);
+    const arr = mocksByUser.get(key) ?? [];
+    arr.push({ subject: m.subject, score: m.score, total: m.total });
+    mocksByUser.set(key, arr);
+  }
+  for (const u of users) {
+    result.set(String(u._id), computeMastery(u, mocksByUser.get(String(u._id)) ?? []));
+  }
+  return result;
+}
+
+// Pure computation shared by single + batch paths.
+function computeMastery(user: IUser, mocks: MockLike[]): MasteryInsights {
   const chapters = (user.progress?.chapters ?? {}) as Record<
     string,
     Record<string, unknown>
@@ -103,9 +146,6 @@ export async function getMasteryInsights(user: IUser): Promise<MasteryInsights> 
   }
 
   // ---- fold in finished mock-test performance per subject ----
-  const mocks = await MockAttempt.find({ userId: user._id, finished: true }).select(
-    "subject score total"
-  );
   const mockBySubject = new Map<string, { pctSum: number; n: number }>();
   for (const m of mocks) {
     if (!m.total) continue;
