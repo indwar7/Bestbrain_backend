@@ -58,9 +58,10 @@ export const env = {
   adminApiKey: process.env.ADMIN_API_KEY ?? "",
 
   // ---- OTP / verification ----
-  // When true, unverified users cannot log in. Keep false until the frontend
-  // has a verify screen, then flip it on. The OTP endpoints work either way.
-  otpEnforced: true,
+  // When true, unverified users cannot log in. Currently disabled per product
+  // decision: login is plain email + password, no email/phone verification.
+  // Set OTP_ENFORCED=true in the env to re-enable the gate (endpoints still work).
+  otpEnforced: (process.env.OTP_ENFORCED ?? "false").toLowerCase() === "true",
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
   emailProvider: (process.env.EMAIL_PROVIDER ?? "resend").toLowerCase(),
