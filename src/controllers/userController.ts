@@ -22,7 +22,12 @@ export async function getProgress(req: AuthRequest, res: Response): Promise<void
   res.json({ progress: user.progress });
 }
 
-// PUT /api/users/me/progress  — save the whole progress object
+// Only these progress fields may be written by the client. Everything else in
+// the body is ignored so a user can't inject arbitrary keys or overwrite
+// server-managed state. (streak/minutes/badges are validated below.)
+const WRITABLE_PROGRESS_FIELDS = ["lang", "minutes", "streak", "badges", "chapters", "pal"];
+
+// PUT /api/users/me/progress  — save (whitelisted, validated) progress fields.
 export async function saveProgress(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
   if (!user) {
@@ -30,8 +35,25 @@ export async function saveProgress(req: AuthRequest, res: Response): Promise<voi
     return;
   }
 
-  // Merge incoming fields onto existing progress so partial updates work.
-  user.progress = { ...user.progress, ...req.body };
+  const body = (req.body ?? {}) as Record<string, unknown>;
+  const next = { ...user.progress } as Record<string, unknown>;
+
+  for (const key of WRITABLE_PROGRESS_FIELDS) {
+    if (body[key] === undefined) continue;
+    const val = body[key];
+    // Type-guard each field so junk/malicious values can't corrupt progress.
+    if (key === "lang" && typeof val === "string") next.lang = val;
+    else if ((key === "minutes" || key === "streak") && typeof val === "number" && val >= 0) {
+      next[key] = val;
+    } else if (key === "badges" && Array.isArray(val)) {
+      next.badges = val.filter((b) => typeof b === "string");
+    } else if ((key === "chapters" || key === "pal") && val && typeof val === "object") {
+      next[key] = val;
+    }
+  }
+
+  user.progress = next as unknown as typeof user.progress;
+  user.markModified("progress");
   await user.save();
 
   res.json({ progress: user.progress });

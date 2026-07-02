@@ -60,14 +60,27 @@ function subjectFromChapterKey(key: string): string {
   return parts.length >= 3 ? parts[1] : "";
 }
 
-// A single chapter's mastery: weight the three real signals. Test carries the
-// most weight (it proves understanding), then practice, then just watching.
-function chapterScore(ch: Record<string, unknown>): number {
-  const video = clampPct(ch.video);
-  const practice = clampPct(ch.practice);
-  const test = ch.test == null ? null : clampPct(ch.test);
-  if (test != null) return Math.round(0.5 * test + 0.3 * practice + 0.2 * video);
-  return Math.round(0.6 * practice + 0.4 * video);
+// A single chapter's mastery, scored ONLY from the signals actually present so
+// a chapter isn't unfairly penalised for missing fields. Weights (test > practice
+// > video) are renormalised over whichever of the three exist. A chapter marked
+// `completed`/`mastered` with no percentages counts as 100 (real completion via
+// the event pipeline, which writes {completed:true} but no video/practice/test).
+// Returns null when there is NO mastery signal at all (so the caller can skip it
+// from the subject average instead of dragging it down with a 0).
+function chapterScore(ch: Record<string, unknown>): number | null {
+  const W = { test: 0.5, practice: 0.3, video: 0.2 };
+  let weighted = 0;
+  let weightSum = 0;
+  for (const [field, w] of Object.entries(W) as [keyof typeof W, number][]) {
+    if (ch[field] == null) continue;
+    weighted += w * clampPct(ch[field]);
+    weightSum += w;
+  }
+  if (weightSum > 0) return Math.round(weighted / weightSum);
+
+  // No percentage signals — fall back to explicit completion flags.
+  if (ch.mastered === true || ch.completed === true) return 100;
+  return null; // nothing to say about this chapter
 }
 
 function clampPct(v: unknown): number {
@@ -136,12 +149,17 @@ function computeMastery(user: IUser, mocks: MockLike[]): MasteryInsights {
 
   for (const [key, ch] of Object.entries(chapters)) {
     if (!ch || typeof ch !== "object") continue;
+    const score = chapterScore(ch);
     const slug = subjectFromChapterKey(key);
     const { key: subjKey, name } = canonicalSubject(slug);
     const entry = bySubject.get(subjKey) ?? { name, sum: 0, count: 0, mastered: 0 };
-    entry.sum += chapterScore(ch);
-    entry.count += 1;
-    if (ch.mastered === true) entry.mastered += 1;
+    // Only chapters with a real mastery signal contribute to the average; a
+    // chapter with nothing to say (score null) doesn't drag the subject down.
+    if (score != null) {
+      entry.sum += score;
+      entry.count += 1;
+    }
+    if (ch.mastered === true || ch.completed === true) entry.mastered += 1;
     bySubject.set(subjKey, entry);
   }
 

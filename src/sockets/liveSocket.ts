@@ -181,10 +181,12 @@ export function initLiveSocket(httpServer: HttpServer): Server {
       "attention-ping",
       ({ sessionId, score }: { sessionId: string; score: number }) => {
         if (!sessionId) return;
+        if (joinedSession !== sessionId) return; // must actually be in the room (no spoofing)
+        const clamped = Math.max(0, Math.min(100, Number(score) || 0));
         // Broadcast to the teacher(s) in the room.
         socket.to(room(sessionId)).emit("attention-update", {
           userId: user.id,
-          score,
+          score: clamped,
           at: new Date().toISOString(),
         });
       }
@@ -194,10 +196,22 @@ export function initLiveSocket(httpServer: HttpServer): Server {
     // This is a fast signaling shortcut; the authoritative teardown (DB status
     // + LiveKit room delete) is POST /api/live/:id/end, which calls the same
     // broadcast helper. Both paths emit `session-ended` identically.
-    socket.on("end-session", ({ sessionId }: { sessionId: string }) => {
+    socket.on("end-session", async ({ sessionId }: { sessionId: string }) => {
       if (!sessionId) return;
       if (user.role !== "teacher") {
         socket.emit("error-message", { error: "Only a teacher can end the session" });
+        return;
+      }
+      // Ownership check: a teacher may only end THEIR OWN session, not any other
+      // teacher's class (the REST path scopes by teacherId; match that here).
+      try {
+        const session = await LiveSession.findById(sessionId).select("teacherId");
+        if (!session || String(session.teacherId) !== String(user.id)) {
+          socket.emit("error-message", { error: "You can only end your own session" });
+          return;
+        }
+      } catch {
+        socket.emit("error-message", { error: "Could not end the session" });
         return;
       }
       endSessionRoom(sessionId, user.id);

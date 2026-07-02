@@ -14,6 +14,23 @@ import { isUserVerified } from "../services/otpService";
 import { OtpCode } from "../models/OtpCode";
 
 // ---------- helpers ----------
+// Turn a Mongo duplicate-key error (E11000) into a friendly 409. This closes
+// the signup race: two concurrent requests both pass the findOne pre-check, but
+// the unique index rejects the second insert — we translate that here instead
+// of returning a 500. Returns true if it handled the error.
+function handleDuplicateKey(err: unknown, res: Response): boolean {
+  const e = err as { code?: number; keyPattern?: Record<string, unknown> };
+  if (e?.code !== 11000) return false;
+  const field = e.keyPattern ? Object.keys(e.keyPattern)[0] : "";
+  const messages: Record<string, string> = {
+    email: "Email already registered",
+    rollNumber: "This roll number is already registered",
+    teacherId: "This teacher ID is already registered",
+  };
+  res.status(409).json({ error: messages[field] ?? "Already registered" });
+  return true;
+}
+
 function issueTokens(res: Response, payload: JwtPayload): string {
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
@@ -100,6 +117,7 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
     });
     res.status(201).json({ accessToken, user: publicUser(user) });
   } catch (err) {
+    if (handleDuplicateKey(err, res)) return;
     console.error("student signup error:", err);
     res.status(500).json({ error: "Server error" });
   }
@@ -154,6 +172,7 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
     });
     res.status(201).json({ accessToken, user: publicUser(user) });
   } catch (err) {
+    if (handleDuplicateKey(err, res)) return;
     console.error("teacher signup error:", err);
     res.status(500).json({ error: "Server error" });
   }
@@ -227,6 +246,7 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
     });
     res.status(201).json({ accessToken, user: publicUser(user) });
   } catch (err) {
+    if (handleDuplicateKey(err, res)) return;
     console.error("parent signup error:", err);
     res.status(500).json({ error: "Server error" });
   }

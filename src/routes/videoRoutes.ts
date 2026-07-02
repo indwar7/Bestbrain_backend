@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import { requireAuth } from "../middleware/auth";
 import { requireRole } from "../middleware/requireRole";
+import { asyncHandler } from "../middleware/asyncHandler";
 import {
   uploadVideo,
   listVideos,
@@ -30,9 +31,9 @@ const upload = multer({
 });
 
 // Anyone logged in can browse + watch.
-router.get("/", requireAuth, listVideos);
-router.get("/:id/stream", streamVideo); // no auth so <video src> works directly
-router.post("/:id/view", recordView);
+router.get("/", requireAuth, asyncHandler(listVideos));
+router.get("/:id/stream", asyncHandler(streamVideo)); // no auth so <video src> works directly
+router.post("/:id/view", asyncHandler(recordView));
 
 // Only teachers (admin treated as teacher here) can upload.
 router.post(
@@ -40,7 +41,7 @@ router.post(
   requireAuth,
   requireRole("teacher"),
   upload.single("video"),
-  uploadVideo
+  asyncHandler(uploadVideo)
 );
 
 export default router;

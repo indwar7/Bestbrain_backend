@@ -105,4 +105,25 @@ describe("Progress — snapshot get/save", () => {
     // Untouched fields stay at their defaults.
     expect(snap.body.progress.minutes).toBe(0);
   });
+
+  it("ignores non-whitelisted keys and rejects invalid field types", async () => {
+    const token = await studentToken();
+    const res = await request(app)
+      .put("/api/progress")
+      .set(auth(token))
+      .send({
+        streak: -5, // invalid (negative) → ignored
+        minutes: "lots", // invalid type → ignored
+        badges: ["real", 123, null], // non-strings filtered out
+        role: "teacher", // not a progress field → must NOT leak in
+        hacked: true, // arbitrary junk → dropped
+      });
+    expect(res.status).toBe(200);
+    const p = res.body.progress;
+    expect(p.streak).toBe(0); // negative rejected, stayed default
+    expect(p.minutes).toBe(0); // string rejected, stayed default
+    expect(p.badges).toEqual(["real"]); // only the string kept
+    expect(p.role).toBeUndefined(); // never accepted a stray field
+    expect(p.hacked).toBeUndefined();
+  });
 });

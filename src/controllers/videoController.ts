@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
+import mongoose from "mongoose";
 import { Video } from "../models/Video";
 import { AuthRequest } from "../middleware/auth";
 
@@ -68,6 +69,12 @@ export async function listVideos(req: Request, res: Response): Promise<void> {
 
 // GET /api/videos/:id/stream — stream the video with HTTP range support (seeking).
 export async function streamVideo(req: Request, res: Response): Promise<void> {
+  // Guard against a non-ObjectId id (findById would otherwise throw CastError).
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+
   const video = await Video.findById(req.params.id);
   if (!video) {
     res.status(404).json({ error: "Video not found" });
@@ -85,10 +92,20 @@ export async function streamVideo(req: Request, res: Response): Promise<void> {
   const range = req.headers.range;
 
   if (range) {
-    // Partial content — lets the browser seek.
+    // Partial content — lets the browser seek. Validate + clamp the range so a
+    // malformed/out-of-bounds header returns 416 instead of streaming garbage
+    // (negative chunk size) or throwing on a NaN start.
     const parts = range.replace(/bytes=/, "").split("-");
-    const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    let start = parseInt(parts[0], 10);
+    let end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    if (Number.isNaN(start)) start = 0;
+    if (Number.isNaN(end)) end = fileSize - 1;
+    if (start > end || start >= fileSize || start < 0) {
+      res.writeHead(416, { "Content-Range": `bytes */${fileSize}` });
+      res.end();
+      return;
+    }
+    end = Math.min(end, fileSize - 1);
     const chunkSize = end - start + 1;
     res.writeHead(206, {
       "Content-Range": `bytes ${start}-${end}/${fileSize}`,
@@ -108,6 +125,10 @@ export async function streamVideo(req: Request, res: Response): Promise<void> {
 
 // POST /api/videos/:id/view — increment view count (called when a student plays it).
 export async function recordView(req: Request, res: Response): Promise<void> {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
   await Video.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
   res.json({ ok: true });
 }

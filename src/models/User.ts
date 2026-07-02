@@ -80,7 +80,10 @@ const userSchema = new Schema<IUser>(
     phoneVerified: { type: Boolean, default: false },
 
     // STUDENT
-    rollNumber: { type: String, sparse: true, index: true },
+    // unique+sparse: enforce roll-number uniqueness at the DB level (not just a
+    // controller pre-check, which races). sparse so non-students (no rollNumber)
+    // aren't caught by the unique constraint.
+    rollNumber: { type: String, unique: true, sparse: true },
     className: { type: String, default: "" },
     section: { type: String, default: "" },
     board: { type: String, default: "" },
@@ -96,7 +99,7 @@ const userSchema = new Schema<IUser>(
     },
 
     // TEACHER
-    teacherId: { type: String, sparse: true, index: true },
+    teacherId: { type: String, unique: true, sparse: true },
     teaches: {
       type: [
         {

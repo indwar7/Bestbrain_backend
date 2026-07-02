@@ -53,6 +53,21 @@ describe("masteryInsights — real, derived, honest", () => {
     expect(science!.chapters).toBe(1);
   });
 
+  it("counts event-completed chapters (completed:true, no pct fields) as mastery", async () => {
+    // The event pipeline writes { completed: true } with NO video/practice/test.
+    // Regression guard: these must score 100, not 0 (the old bug).
+    const student = await makeStudent({
+      chapters: { "c7-sci-heat": { completed: true } },
+    });
+    const m = await getMasteryInsights(student);
+    expect(m.hasActivity).toBe(true);
+    const science = m.subjects.find((s) => s.key === "science");
+    expect(science).toBeTruthy();
+    expect(science!.pct).toBe(100);
+    // A completed chapter earns the first-chapter badge.
+    expect(m.badges.find((b) => b.key === "first-chapter")).toBeTruthy();
+  });
+
   it("awards a badge only when the milestone is genuinely met", async () => {
     const noBadge = await makeStudent({
       chapters: { "c7-sci-heat": { video: 40, practice: 10, test: null, mastered: false } },
