@@ -99,7 +99,26 @@ export async function listSessions(req: AuthRequest, res: Response): Promise<voi
   res.json({ sessions: [] });
 }
 
-// POST /api/live/:id/join — eligibility-checked join.
+// Shape the room info the frontend needs after a successful join. Shared by
+// the by-id and by-code join paths so both return an identical payload.
+function joinPayload(session: InstanceType<typeof LiveSession>) {
+  return {
+    ok: true,
+    session: {
+      id: session.id,
+      title: session.title,
+      className: session.className,
+      section: session.section,
+      subject: session.subject,
+      // Frontend uses this room name to connect Socket.IO + (later) the video SDK.
+      room: `session:${session.id}`,
+      videoProvider: session.videoProvider || null,
+      videoRoom: session.videoRoom || null,
+    },
+  };
+}
+
+// POST /api/live/:id/join — eligibility-checked join by session id.
 // Returns the room info the frontend needs (video provider details added later).
 export async function joinSession(req: AuthRequest, res: Response): Promise<void> {
   const [user, session] = await Promise.all([
@@ -117,20 +136,41 @@ export async function joinSession(req: AuthRequest, res: Response): Promise<void
     return;
   }
 
-  res.json({
-    ok: true,
-    session: {
-      id: session.id,
-      title: session.title,
-      className: session.className,
-      section: session.section,
-      subject: session.subject,
-      // Frontend uses this room name to connect Socket.IO + (later) the video SDK.
-      room: `session:${session.id}`,
-      videoProvider: session.videoProvider || null,
-      videoRoom: session.videoRoom || null,
-    },
-  });
+  res.json(joinPayload(session));
+}
+
+// POST /api/live/join-by-code — join using the short join code (e.g. "SCI-7A-4821").
+// Body: { code }. Same eligibility as by-id join: the code is a shortcut, not a
+// security bypass — a user still must belong to the class/section/subject.
+export async function joinByCode(req: AuthRequest, res: Response): Promise<void> {
+  const raw = (req.body?.code ?? "") as unknown;
+  const code = String(raw).trim().toUpperCase();
+  if (!code) {
+    res.status(400).json({ error: "A join code is required" });
+    return;
+  }
+
+  const [user, session] = await Promise.all([
+    User.findById(req.user!.id),
+    // Codes are generated uppercase; match case-insensitively for safety.
+    LiveSession.findOne({ joinCode: code }),
+  ]);
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  if (!session) {
+    res.status(404).json({ error: "No class found for that code" });
+    return;
+  }
+
+  const verdict = canJoinSession(user, session);
+  if (!verdict.allowed) {
+    res.status(403).json({ error: verdict.reason });
+    return;
+  }
+
+  res.json(joinPayload(session));
 }
 
 // POST /api/live/:id/token — issue a LiveKit access token for the video room.
