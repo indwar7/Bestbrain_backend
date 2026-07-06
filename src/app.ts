@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import { MulterError } from "multer";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
@@ -87,8 +88,25 @@ app.use((_req, res) => {
 // (Must be last, and must keep all four args for Express to treat it as one.)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
-  captureException(err, { method: req.method, url: req.originalUrl });
   if (res.headersSent) return;
+
+  // Multer errors (oversized file, wrong mimetype) reach here as plain
+  // thrown errors — surface them as a clear 4xx instead of a generic 500 so
+  // the upload UI can show the real reason ("file too large" vs "server error").
+  if (err instanceof MulterError) {
+    const message =
+      err.code === "LIMIT_FILE_SIZE"
+        ? "Video is too large (max 500 MB)."
+        : err.message;
+    res.status(400).json({ error: message });
+    return;
+  }
+  if (err instanceof Error && /only video files are allowed/i.test(err.message)) {
+    res.status(400).json({ error: err.message });
+    return;
+  }
+
+  captureException(err, { method: req.method, url: req.originalUrl });
   const payload = env.isProd
     ? { error: "Server error" }
     : { error: "Server error", detail: String((err as Error)?.message ?? err) };
