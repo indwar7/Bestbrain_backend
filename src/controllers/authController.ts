@@ -201,20 +201,22 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
     }
 
     // Verify the child: roll number must exist AND name + class must match.
-    const child = await User.findOne({
+    // Roll numbers are only unique within a class, so fetch ALL students with
+    // this roll number and pick the one whose name + class both match —
+    // findOne would grab an arbitrary student and link the wrong child.
+    const candidates = await User.find({
       role: "student",
       rollNumber: childRollNumber,
     });
-    if (!child) {
+    if (!candidates.length) {
       res.status(404).json({ error: "No student found with that roll number" });
       return;
     }
-    const nameMatches =
-      child.name.trim().toLowerCase() === String(childName).trim().toLowerCase();
-    const classMatches =
-      child.className?.trim().toLowerCase() ===
-      String(childClass).trim().toLowerCase();
-    if (!nameMatches || !classMatches) {
+    const norm = (s: unknown) => String(s ?? "").trim().toLowerCase();
+    const child = candidates.find(
+      (c) => norm(c.name) === norm(childName) && norm(c.className) === norm(childClass)
+    );
+    if (!child) {
       res.status(400).json({
         error:
           "Student details don't match. Check the name and class for this roll number.",

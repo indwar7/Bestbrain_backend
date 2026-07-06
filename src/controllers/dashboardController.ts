@@ -126,14 +126,28 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
 
     // Enrich every student with real streak + weekly activity — batched into
     // ONE ProgressEvent query for the whole roster (was one query per student).
-    const insightsMap = await getProgressInsightsBatch(
-      roster.map((s) => String(s._id)),
-      now
-    );
-    const summaries = roster.map((s) => ({
-      ...studentSummary(s),
-      ...insightsFields(insightsMap.get(String(s._id))),
-    }));
+    const [insightsMap, masteryMap] = await Promise.all([
+      getProgressInsightsBatch(roster.map((s) => String(s._id)), now),
+      getMasteryInsightsBatch(roster),
+    ]);
+    const summaries = roster.map((s) => {
+      // Per-student mastery: average subject pct + the weakest subject name,
+      // so the teacher roster shows real numbers instead of demo data.
+      const mastery = masteryMap.get(String(s._id));
+      const subjects = mastery?.subjects ?? [];
+      const masteryPct = subjects.length
+        ? Math.round(subjects.reduce((sum, x) => sum + x.pct, 0) / subjects.length)
+        : 0;
+      const weakest = subjects.length
+        ? subjects.reduce((a, b) => (b.pct < a.pct ? b : a))
+        : null;
+      return {
+        ...studentSummary(s),
+        ...insightsFields(insightsMap.get(String(s._id))),
+        masteryPct,
+        weakSubject: weakest ? weakest.name : null,
+      };
+    });
     const count = summaries.length || 1;
 
     const classAverage = {
