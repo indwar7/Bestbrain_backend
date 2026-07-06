@@ -41,13 +41,42 @@ export async function uploadVideo(req: AuthRequest, res: Response): Promise<void
   res.status(201).json({ video });
 }
 
-// GET /api/videos — list videos, optionally filtered by ?className= & ?subject=
-export async function listVideos(req: Request, res: Response): Promise<void> {
-  const filter: Record<string, unknown> = {};
-  if (req.query.className) filter.className = req.query.className;
-  if (req.query.subject) filter.subject = req.query.subject;
+// Class is stored inconsistently across callers ("Class 7", "7", 7) — compare
+// by the digits only so a lookup from either shape still matches.
+function classDigits(v: unknown): string {
+  return String(v ?? "").replace(/\D/g, "");
+}
 
-  const videos = await Video.find(filter).sort({ createdAt: -1 }).lean();
+// Subject likewise varies in case/casing ("Science", "science") — compare
+// case-insensitively on the first word so "Social Studies" still matches "social".
+function normalizeSubject(v: unknown): string {
+  return String(v ?? "").trim().toLowerCase().split(/\s+/)[0] ?? "";
+}
+
+// GET /api/videos — list videos, optionally filtered by ?className= & ?subject=
+// & ?topic=. Filtering is done in-memory (not via a Mongo query) because
+// className/subject are free-text and stored in inconsistent shapes
+// ("Class 7" vs "7", "Science" vs "science") depending on which UI wrote them.
+export async function listVideos(req: Request, res: Response): Promise<void> {
+  const wantClass = req.query.className ? classDigits(req.query.className) : null;
+  const wantSubject = req.query.subject ? normalizeSubject(req.query.subject) : null;
+  const wantTopic = req.query.topic
+    ? String(req.query.topic).trim().toLowerCase()
+    : null;
+
+  const all = await Video.find().sort({ createdAt: -1 }).lean();
+  const videos = all.filter((v) => {
+    if (wantClass !== null && classDigits(v.className) !== wantClass) return false;
+    if (wantSubject !== null && normalizeSubject(v.subject) !== wantSubject) return false;
+    if (wantTopic !== null) {
+      const topic = v.topic.trim().toLowerCase();
+      // Loose match: the chapter slug's words should appear in the topic (or
+      // vice versa) since topic is free text a teacher typed by hand.
+      if (!topic || (!topic.includes(wantTopic) && !wantTopic.includes(topic))) return false;
+    }
+    return true;
+  });
+
   res.json({
     total: videos.length,
     videos: videos.map((v) => ({
