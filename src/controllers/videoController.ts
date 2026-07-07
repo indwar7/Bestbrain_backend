@@ -3,7 +3,9 @@ import fs from "fs";
 import path from "path";
 import mongoose from "mongoose";
 import { Video } from "../models/Video";
+import { User } from "../models/User";
 import { AuthRequest } from "../middleware/auth";
+import { canViewVideo } from "../services/videoEligibility";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "videos");
 
@@ -97,7 +99,11 @@ export async function listVideos(req: Request, res: Response): Promise<void> {
 }
 
 // GET /api/videos/:id/stream — stream the video with HTTP range support (seeking).
-export async function streamVideo(req: Request, res: Response): Promise<void> {
+// Requires auth + the same class/subject eligibility as everything else (a
+// student can only stream lectures for their own class+subject, a parent only
+// for a linked child's, a teacher can stream any). Previously this route had
+// NO auth at all — any unauthenticated request could stream any video by id.
+export async function streamVideo(req: AuthRequest, res: Response): Promise<void> {
   // Guard against a non-ObjectId id (findById would otherwise throw CastError).
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(404).json({ error: "Video not found" });
@@ -107,6 +113,24 @@ export async function streamVideo(req: Request, res: Response): Promise<void> {
   const video = await Video.findById(req.params.id);
   if (!video) {
     res.status(404).json({ error: "Video not found" });
+    return;
+  }
+
+  const viewer = await User.findById(req.user!.id);
+  if (!viewer) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  let children: Awaited<ReturnType<typeof User.find>> | undefined;
+  if (viewer.role === "parent") {
+    children = await User.find({
+      _id: { $in: viewer.childLinks.map((l) => l.studentId) },
+      role: "student",
+    });
+  }
+  const eligibility = canViewVideo(viewer, video, children);
+  if (!eligibility.allowed) {
+    res.status(403).json({ error: eligibility.reason ?? "Not eligible to view this lecture" });
     return;
   }
 
@@ -153,7 +177,7 @@ export async function streamVideo(req: Request, res: Response): Promise<void> {
 }
 
 // POST /api/videos/:id/view — increment view count (called when a student plays it).
-export async function recordView(req: Request, res: Response): Promise<void> {
+export async function recordView(req: AuthRequest, res: Response): Promise<void> {
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(404).json({ error: "Video not found" });
     return;

@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import path from "path";
 import { requireAuth } from "../middleware/auth";
+import { requireAuthViaQueryToken } from "../middleware/authViaQueryToken";
 import { requireRole } from "../middleware/requireRole";
 import { asyncHandler } from "../middleware/asyncHandler";
 import {
@@ -30,10 +31,15 @@ const upload = multer({
   },
 });
 
-// Anyone logged in can browse + watch.
+// Anyone logged in can browse. Streaming/view-count additionally require the
+// requester to be eligible for this specific video's class+subject (checked
+// in the controller) — previously these had no auth at all.
 router.get("/", requireAuth, asyncHandler(listVideos));
-router.get("/:id/stream", asyncHandler(streamVideo)); // no auth so <video src> works directly
-router.post("/:id/view", asyncHandler(recordView));
+// <video src="..."> can't send an Authorization header, so this route also
+// accepts the token as ?token= (query-param auth is scoped to this one
+// unauthenticated-by-nature media route, not general API auth).
+router.get("/:id/stream", requireAuthViaQueryToken, asyncHandler(streamVideo));
+router.post("/:id/view", requireAuth, asyncHandler(recordView));
 
 // Only teachers (admin treated as teacher here) can upload.
 router.post(
