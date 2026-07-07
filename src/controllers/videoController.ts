@@ -26,19 +26,29 @@ export async function uploadVideo(req: AuthRequest, res: Response): Promise<void
   }
 
   const user = req.user;
-  const video = await Video.create({
-    title,
-    description: description || "",
-    className,
-    subject,
-    topic: topic || "",
-    filename: file.filename,
-    mimeType: file.mimetype,
-    size: file.size,
-    uploadedById: user?.id,
-    uploadedByName: req.body.uploaderName || user?.email || "",
-    uploadedByRole: user?.role === "teacher" ? "teacher" : "admin",
-  });
+  let video;
+  try {
+    video = await Video.create({
+      title,
+      description: description || "",
+      className,
+      subject,
+      topic: topic || "",
+      filename: file.filename,
+      mimeType: file.mimetype,
+      size: file.size,
+      uploadedById: user?.id,
+      uploadedByName: req.body.uploaderName || user?.email || "",
+      uploadedByRole: user?.role === "teacher" ? "teacher" : "admin",
+    });
+  } catch (err) {
+    // The file already made it to disk even though the DB write failed
+    // (e.g. a transient Mongo error) — without this it's an orphaned file
+    // AND a generic 500 with no cleanup, on top of whatever upload error
+    // the teacher was already retrying past.
+    fs.unlink(path.join(UPLOAD_DIR, file.filename), () => {});
+    throw err;
+  }
 
   res.status(201).json({ video });
 }

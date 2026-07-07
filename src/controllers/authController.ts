@@ -70,6 +70,25 @@ async function emailTaken(email: string): Promise<boolean> {
   return !!(await User.findOne({ email: email.toLowerCase() }));
 }
 
+const norm = (s: unknown) => String(s ?? "").trim().toLowerCase();
+
+// Roll number is meant to be globally unique (see the User schema), but a
+// parent's link is only ever as correct as the roll number they typed — so
+// name + class are checked too as a guard against a fat-fingered roll number
+// that happens to belong to a different student.
+async function findMatchingChild(
+  rollNumber: string,
+  name: string,
+  className: string
+): Promise<IUser | null> {
+  const candidates = await User.find({ role: "student", rollNumber });
+  return (
+    candidates.find(
+      (c) => norm(c.name) === norm(name) && norm(c.className) === norm(className)
+    ) ?? null
+  );
+}
+
 // =====================================================================
 // STUDENT SIGNUP
 // Body: { name, email, password, rollNumber, className, section, board?, subjects? }
@@ -207,22 +226,14 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // Verify the child: roll number must exist AND name + class must match.
-    // Roll numbers are only unique within a class, so fetch ALL students with
-    // this roll number and pick the one whose name + class both match —
-    // findOne would grab an arbitrary student and link the wrong child.
-    const candidates = await User.find({
-      role: "student",
-      rollNumber: childRollNumber,
-    });
-    if (!candidates.length) {
+    // Verify the child: roll number must exist AND name + class must match,
+    // so a fat-fingered roll number can't silently link the wrong student.
+    const hasRoll = !!(await User.findOne({ role: "student", rollNumber: childRollNumber }));
+    if (!hasRoll) {
       res.status(404).json({ error: "No student found with that roll number" });
       return;
     }
-    const norm = (s: unknown) => String(s ?? "").trim().toLowerCase();
-    const child = candidates.find(
-      (c) => norm(c.name) === norm(childName) && norm(c.className) === norm(childClass)
-    );
+    const child = await findMatchingChild(childRollNumber, childName, childClass);
     if (!child) {
       res.status(400).json({
         error:
@@ -259,6 +270,53 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
     console.error("parent signup error:", err);
     res.status(500).json({ error: "Server error" });
   }
+}
+
+// =====================================================================
+// RELINK CHILD (self-service fix for a mismatched parent-child link)
+// Body: { childRollNumber, childName, childClass }
+// Replaces the parent's existing childLinks with a freshly re-verified
+// match. Needed because a bad link created before name+class checking
+// existed (or from a typo) had no way to be corrected short of a new signup.
+// =====================================================================
+export async function relinkChild(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user || user.role !== "parent") {
+    res.status(403).json({ error: "Only parents can link a child" });
+    return;
+  }
+
+  const { childRollNumber, childName, childClass } = req.body as {
+    childRollNumber?: string;
+    childName?: string;
+    childClass?: string;
+  };
+  if (!childRollNumber || !childName || !childClass) {
+    res.status(400).json({
+      error: "childRollNumber, childName and childClass are required",
+    });
+    return;
+  }
+
+  const child = await findMatchingChild(childRollNumber, childName, childClass);
+  if (!child) {
+    res.status(400).json({
+      error: "Student details don't match. Check the name and class for this roll number.",
+    });
+    return;
+  }
+
+  user.childLinks = [
+    {
+      studentId: child._id,
+      rollNumber: childRollNumber,
+      relation: user.childLinks[0]?.relation ?? "guardian",
+      status: "verified",
+    },
+  ] as IUser["childLinks"];
+  await user.save();
+
+  res.json({ user: publicUser(user) });
 }
 
 // =====================================================================

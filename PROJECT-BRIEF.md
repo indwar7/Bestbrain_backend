@@ -1,9 +1,9 @@
 # EduLearn — Project Brief
 
 > **Learn smarter, score better.** An iPrep-style K-12 learning platform for Bharat —
-> CBSE / NCERT + state boards, Classes 6–9. Mobile-first, offline-first, bilingual
-> (English / हिंदी), with adaptive AI at its core. Three roles — **Student, Parent,
-> Teacher** — each with its own dashboard and experience.
+> CBSE / NCERT + state boards, Classes 6–9. Mobile-first, offline-first, English-only
+> for now (no language switcher), with adaptive AI at its core. Three roles —
+> **Student, Parent, Teacher** — each with its own dashboard and experience.
 
 _Last updated: 2026-06-22_
 
@@ -47,8 +47,15 @@ _Last updated: 2026-06-22_
 ## 🎨 Frontend — status
 
 **Stack:** Plain HTML, CSS, vanilla JavaScript — **no framework, no build step**.
-Shared dark/light theme + bilingual (EN/हिंदी) UI. Per-browser state via `localStorage`.
-Deployed as static files on **Vercel** (auto-deploy on every push to `main`).
+Shared dark/light theme. English-only UI (Hindi toggle disabled — see note below).
+Per-browser state via `localStorage`. Deployed as static files on **Vercel**
+(auto-deploy on every push to `main`).
+
+> **Language:** the Hindi toggle exists in the code but is commented out
+> everywhere (nav, settings panel, marketing copy) — the platform is English-only
+> with no way to switch. Re-enabling it needs Hindi translations for ~190 NCERT
+> chapter titles in `learn.html` first (currently English-only), plus removing
+> the comment-outs in `dashboard.html`, `learn.html` and `account-menu.js`.
 
 | Page | What it does | Status |
 |---|---|---|
@@ -70,7 +77,7 @@ Deployed as static files on **Vercel** (auto-deploy on every push to `main`).
 - **PAL AI assistant** — doubts, notes, summaries, quizzes; separate role experiences.
 - **Adaptive mock tests** — visible difficulty ladder.
 - **Hourly Arena** — whole school sees the same question; speed is the anti-cheat.
-- **Bharat-first** — Hindi/English, offline-oriented.
+- **Bharat-first** — CBSE/NCERT/state boards, offline-oriented (English-only for now).
 
 > ⚠️ **To confirm before presenting:** the frontend README lists "Live LLM API behind
 > PAL" as a *roadmap* item, which suggests the deployed site may still use mock/local

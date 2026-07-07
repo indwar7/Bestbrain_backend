@@ -7,6 +7,7 @@ import {
   refresh,
   logout,
   me,
+  relinkChild,
 } from "../controllers/authController";
 import { requireAuth } from "../middleware/auth";
 import { asyncHandler } from "../middleware/asyncHandler";
@@ -31,5 +32,6 @@ router.post("/verify-otp", otpLimiter, asyncHandler(confirmOtp));
 router.post("/refresh", asyncHandler(refresh));
 router.post("/logout", asyncHandler(logout));
 router.get("/me", requireAuth, asyncHandler(me));
+router.post("/relink-child", requireAuth, asyncHandler(relinkChild));
 
 export default router;
