@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { env } from "./env";
 import { logger } from "./logger";
+import { User } from "../models/User";
 
 // Connection-pool + timeout tuning for concurrency. maxPoolSize caps sockets
 // per process; with cluster mode the effective total is maxPoolSize × workers,
@@ -32,6 +33,23 @@ export async function connectDB(): Promise<void> {
       { maxPoolSize: CONNECT_OPTIONS.maxPoolSize },
       "MongoDB connected"
     );
+
+    // Mongoose's default autoIndex only ever ADDS indexes that are missing by
+    // name — it never alters an existing index's options. The users collection
+    // had a plain (non-unique) rollNumber index from before the schema added
+    // `unique: true`, so duplicate roll numbers could still slip in and get
+    // linked to the wrong parent. syncIndexes reconciles the real indexes with
+    // the schema (rebuilding rollNumber_1 as unique); it throws if existing
+    // data already violates the new constraint, so failure here is surfaced
+    // rather than silently leaving the weaker index in place.
+    try {
+      await User.syncIndexes();
+    } catch (err) {
+      logger.error(
+        { err },
+        "User.syncIndexes failed — check for duplicate rollNumber/teacherId values before retrying"
+      );
+    }
 
     // Surface pool/connection errors after the initial connect instead of
     // crashing silently.

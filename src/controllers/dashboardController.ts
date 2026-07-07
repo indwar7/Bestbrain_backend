@@ -111,11 +111,18 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
   if (user.role === "teacher") {
     // Distinct class+section pairs this teacher is assigned to.
     const classKeys = Array.from(
-      new Set(user.teaches.map((t) => `${t.className}||${t.section}`))
+      new Set(user.teaches.map((t) => `${t.className.trim()}||${t.section.trim()}`))
     );
+    // Case/whitespace-insensitive match: className/section are free-typed at
+    // signup, and older records may predate the trim-at-write-time fix, so an
+    // exact-string match here can silently return zero students.
+    const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const orFilters = classKeys.map((k) => {
       const [className, section] = k.split("||");
-      return { className, section };
+      return {
+        className: new RegExp(`^\\s*${escapeRegex(className)}\\s*$`, "i"),
+        section: new RegExp(`^\\s*${escapeRegex(section)}\\s*$`, "i"),
+      };
     });
 
     // Roster = all students in any class+section the teacher teaches.

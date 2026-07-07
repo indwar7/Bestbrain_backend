@@ -95,6 +95,11 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // Trim so a stray space typed at signup ("Class 7 " vs "Class 7") can't
+    // silently break the exact-match roster lookup a teacher relies on later.
+    const cleanClassName = String(className).trim();
+    const cleanSection = String(section).trim();
+
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
@@ -103,11 +108,11 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
       password: hashed,
       role: "student",
       rollNumber,
-      className,
-      section,
+      className: cleanClassName,
+      section: cleanSection,
       board: board ?? "",
       subjects: Array.isArray(subjects) ? subjects : [],
-      classLabel: `${className} · ${section}`,
+      classLabel: `${cleanClassName} · ${cleanSection}`,
     });
 
     const accessToken = issueTokens(res, {
@@ -148,6 +153,8 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // Trim so a stray space typed at signup can't silently break the exact
+    // string match the roster lookup (dashboardController) relies on.
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
@@ -158,8 +165,8 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
       teacherId,
       teaches: [
         {
-          className,
-          section,
+          className: String(className).trim(),
+          section: String(section).trim(),
           subject: subject ?? "General",
         },
       ],

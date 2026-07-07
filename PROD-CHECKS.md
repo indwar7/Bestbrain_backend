@@ -43,7 +43,7 @@ self-explanatory in the browser.
 LiveKit env vars exist correctly in the **local** `.env` (`LIVEKIT_URL`,
 `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`). If they're missing/blank in
 production, `env.livekitConfigured` is false and `/api/live/:id/token`
-returns 400 — the frontend then has nothing to connect the video stage to,
+returns 503 — the frontend then has nothing to connect the video stage to,
 which reads exactly like "camera/mic not working."
 
 ```bash

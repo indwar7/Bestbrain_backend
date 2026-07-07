@@ -83,32 +83,38 @@ export async function listQuestions(req: AuthRequest, res: Response): Promise<vo
 // MOCK TESTS
 // ===========================================================================
 
-// POST /api/assessments/mock/start   Body: { subject, count? }
-// Serves a fresh set of questions for the student's class+subject and opens an
-// attempt. Answers are NOT included.
+// POST /api/assessments/mock/start   Body: { subject, chapterSlug?, count? }
+// Serves a fresh set of questions for the student's class+subject (optionally
+// narrowed to one chapter, e.g. from a teacher's shared-test link) and opens
+// an attempt. Answers are NOT included.
 export async function startMock(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
   if (!user || user.role !== "student") {
     res.status(403).json({ error: "Only students can take mock tests" });
     return;
   }
-  const { subject } = req.body as { subject?: string };
+  const { subject, chapterSlug } = req.body as { subject?: string; chapterSlug?: string };
   const count = Math.min(Math.max(Number((req.body as { count?: number }).count) || 10, 1), 50);
   if (!subject) {
     res.status(400).json({ error: "subject is required" });
     return;
   }
 
-  const pool = await Question.aggregate([
-    {
-      $match: {
-        className: user.className,
-        subject,
-        usage: { $in: ["mock", "both"] },
-      },
-    },
-    { $sample: { size: count } },
-  ]);
+  const match: Record<string, unknown> = {
+    className: user.className,
+    subject,
+    usage: { $in: ["mock", "both"] },
+  };
+  if (chapterSlug) match.chapterSlug = chapterSlug;
+
+  let pool = await Question.aggregate([{ $match: match }, { $sample: { size: count } }]);
+
+  // A shared chapter link with no matching questions yet shouldn't dead-end —
+  // fall back to the subject's general pool rather than a bare 404.
+  if (pool.length === 0 && chapterSlug) {
+    delete match.chapterSlug;
+    pool = await Question.aggregate([{ $match: match }, { $sample: { size: count } }]);
+  }
 
   if (pool.length === 0) {
     res.status(404).json({ error: "No questions available for this class and subject yet" });
