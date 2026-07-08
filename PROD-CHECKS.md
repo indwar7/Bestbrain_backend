@@ -1,67 +1,60 @@
 # Production checks — video upload & live camera/mic
 
-Two tester-reported bugs need verification on the live server (EC2 behind
-CloudFront) that I don't have access to from here. The app-side code is
-already correct and tested locally; these are config checks.
+## 1. Video upload failing in production — ROOT CAUSE CONFIRMED (2026-07-08)
 
-## 1. Video upload failing in production
+**Not an nginx body-size issue** (that was an earlier, unconfirmed guess —
+ignore the old version of this doc). Direct testing against the production
+API (`https://d3cxm67a2ygkx3.cloudfront.net`) with a valid teacher token
+proves the request never reaches the app at all:
 
-Confirmed working locally end-to-end (multer + Mongo + streaming all pass).
-Most likely cause: the reverse proxy in front of the app is capping request
-body size below the video file size.
-
-```bash
-# SSH into the EC2 box, then:
-
-# a) Confirm the app's own .env has real LiveKit + other secrets (compare
-#    against local .env — do NOT paste secrets back into chat).
-grep -c "LIVEKIT_URL=\|LIVEKIT_API_KEY=\|LIVEKIT_API_SECRET=" /path/to/edulearn-backend/.env
-# should print 3 (all present and non-empty)
-
-# b) Check nginx's upload cap (multer itself allows up to 500MB — see
-#    src/routes/videoRoutes.ts). If nginx sits in front of Node:
-sudo nginx -T 2>/dev/null | grep -i client_max_body_size
-
-# If missing or too small (nginx defaults to 1MB!), add to the relevant
-# server{} or location{} block for the API:
-#   client_max_body_size 520M;
-# then:
-sudo nginx -t && sudo systemctl reload nginx
-
-# c) If CloudFront sits in front of nginx, check its origin request policy /
-# size limits too — CloudFront has its own request body cap depending on
-# distribution settings.
+```
+POST /api/videos  (10KB binary file, valid auth token)
+→ HTTP 403, server: CloudFront, x-cache: Error from cloudfront
+→ body: "ERROR: The request could not be satisfied — Request blocked."
 ```
 
-After the nginx fix, re-test with a real video file from upload.html — the
-app now returns a clear JSON error (`"Video is too large (max 500 MB)."` or
-the real reason) instead of an opaque 500, so any remaining failure will be
-self-explanatory in the browser.
+Evidence that isolates this to CloudFront/WAF, not the app or file size:
+- A ~5-byte plain-text file through the same endpoint → succeeds (201).
+- A 10KB/100KB/200KB **binary** file (`/dev/urandom`) → blocked every time,
+  same CloudFront error page, before hitting the origin.
+- Normal JSON POSTs (login, etc.) of any size are unaffected.
+- GET requests to the same `/api/videos` path work fine.
 
-## 2. Live class camera/mic not working
+This is the signature of an **AWS WAF Web ACL rule** attached to the
+CloudFront distribution — the "Request blocked" wording (not a generic 403,
+not a CloudFront size-limit message) plus `x-cache: Error from cloudfront`
+is WAF, not nginx or the app. WAF body-inspection rules (e.g. the AWS Managed
+Rules "SizeRestrictions_BODY" or generic anomaly-detection rules) commonly
+false-positive on high-entropy binary multipart bodies — exactly what a
+video file looks like.
 
-LiveKit env vars exist correctly in the **local** `.env` (`LIVEKIT_URL`,
-`LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`). If they're missing/blank in
-production, `env.livekitConfigured` is false and `/api/live/:id/token`
-returns 503 — the frontend then has nothing to connect the video stage to,
-which reads exactly like "camera/mic not working."
+**Action needed (requires AWS Console / WAF access, not SSH):**
+1. Go to **AWS WAF & Shield → Web ACLs**, find the one associated with this
+   CloudFront distribution.
+2. Check the Web ACL's request/block sampling for `/api/videos` — it should
+   show which specific rule is firing on the upload requests.
+3. Either add a rule exception (exclude `/api/videos` POST from body
+   inspection) or increase/adjust the offending rule's body-size/content
+   thresholds for that path.
+4. Alternatively, if the origin has no WAF requirement, temporarily
+   switching the Web ACL to "Count" mode for that rule (log-only, don't
+   block) will confirm this diagnosis conclusively before making it permanent.
 
-```bash
-# On the server:
-grep -c "LIVEKIT_URL=\|LIVEKIT_API_KEY=\|LIVEKIT_API_SECRET=" /path/to/edulearn-backend/.env
+The app-side code is already correct (confirmed via local multer + Mongo +
+streaming, and via the actual 5-byte upload succeeding against prod) — this
+is purely an AWS-side WAF/CloudFront configuration fix, and the person who
+manages the AWS account needs to make it.
 
-# If any are missing, add them (same values as local .env, from
-# https://cloud.livekit.io -> your project), then reload so PM2 picks up
-# the new env (PM2 does NOT re-read .env on its own):
-pm2 restart edulearn-backend --update-env
-```
+## 2. Live class camera/mic — CONFIRMED WORKING (2026-07-08)
 
-Also confirm the LiveKit project isn't paused/over-quota on
-cloud.livekit.io — a valid-looking token can still fail to connect if the
-project itself is suspended.
+Verified end-to-end against production: created a real live session as the
+teacher, requested `/api/live/:id/token`, and got back a real, correctly-
+scoped LiveKit token (`room: session-<id>`, `canPublish: true`, issuer
+matching the real LiveKit project key) — LiveKit is properly configured on
+the server now. This item is resolved; no further action needed. (Test
+session was ended and torn down immediately after verifying.)
 
 ## Note on browser permissions
 
 Camera/mic also requires HTTPS (already true here — CloudFront serves the
-frontend and backend over HTTPS) — no action needed there, just flagging
-that this was independently confirmed, not a suspect.
+frontend and backend over HTTPS) — no action needed there.
