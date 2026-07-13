@@ -23,14 +23,27 @@ function hashStr(s: string): number {
   return h + Date.now();
 }
 
+// A conservative check that the link is actually a Google Meet URL, so this
+// field can't be used to redirect students to an arbitrary site.
+function isGoogleMeetLink(url: string): boolean {
+  return /^https:\/\/meet\.google\.com\/[a-z0-9-]+$/i.test(url.trim());
+}
+
 // POST /api/live  (teacher only) — create a targeted live class.
-// Body: { title, className, section, subject }
+// Body: { title, className, section, subject, meetLink? }
+// meetLink is a temporary fallback for while LiveKit is being set up in
+// production: if provided, students are sent to that Google Meet call
+// instead of the in-app LiveKit room.
 export async function createSession(req: AuthRequest, res: Response): Promise<void> {
-  const { title, className, section, subject } = req.body;
+  const { title, className, section, subject, meetLink } = req.body;
   if (!title || !className || !section || !subject) {
     res
       .status(400)
       .json({ error: "title, className, section and subject are required" });
+    return;
+  }
+  if (meetLink && !isGoogleMeetLink(meetLink)) {
+    res.status(400).json({ error: "meetLink must be a valid https://meet.google.com/... link" });
     return;
   }
 
@@ -58,6 +71,7 @@ export async function createSession(req: AuthRequest, res: Response): Promise<vo
     joinCode: makeJoinCode(subject, className, section),
     status: "live",
     startedAt: new Date(),
+    ...(meetLink ? { videoProvider: "google-meet", videoRoom: meetLink.trim() } : {}),
   });
 
   res.status(201).json({ session });
@@ -177,11 +191,6 @@ export async function joinByCode(req: AuthRequest, res: Response): Promise<void>
 // Eligibility is the SAME as joinSession. Teacher (owner) can publish;
 // students can only subscribe (watch).
 export async function getVideoToken(req: AuthRequest, res: Response): Promise<void> {
-  if (!env.livekitConfigured) {
-    res.status(503).json({ error: "Live video is not configured (LiveKit keys missing)" });
-    return;
-  }
-
   const [user, session] = await Promise.all([
     User.findById(req.user!.id),
     LiveSession.findById(req.params.id),
@@ -194,6 +203,18 @@ export async function getVideoToken(req: AuthRequest, res: Response): Promise<vo
   const verdict = canJoinSession(user, session);
   if (!verdict.allowed) {
     res.status(403).json({ error: verdict.reason });
+    return;
+  }
+
+  // This session was created with a Google Meet fallback link — no LiveKit
+  // token needed, the frontend just opens the link.
+  if (session.videoProvider === "google-meet") {
+    res.json({ videoProvider: "google-meet", videoRoom: session.videoRoom });
+    return;
+  }
+
+  if (!env.livekitConfigured) {
+    res.status(503).json({ error: "Live video is not configured (LiveKit keys missing)" });
     return;
   }
 
