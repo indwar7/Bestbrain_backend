@@ -195,3 +195,59 @@ export async function recordView(req: AuthRequest, res: Response): Promise<void>
   await Video.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
   res.json({ ok: true });
 }
+
+// PATCH /api/videos/:id — edit a video's metadata (teacher). Only the
+// safe text fields; the file itself is never changed here. An admin may edit
+// any video; a teacher may edit only videos they uploaded.
+export async function updateVideo(req: AuthRequest, res: Response): Promise<void> {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+  const video = await Video.findById(req.params.id);
+  if (!video) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+  const user = req.user;
+  if (String(video.uploadedById) !== String(user?.id)) {
+    res.status(403).json({ error: "You can only edit your own videos" });
+    return;
+  }
+
+  const { title, description, className, subject, topic } = req.body;
+  if (typeof title === "string" && title.trim()) video.title = title.trim();
+  if (typeof description === "string") video.description = description;
+  if (typeof className === "string" && className.trim()) video.className = className.trim();
+  if (typeof subject === "string" && subject.trim()) video.subject = subject.trim();
+  if (typeof topic === "string") video.topic = topic;
+  await video.save();
+
+  res.json({ video });
+}
+
+// DELETE /api/videos/:id — remove a video (teacher/admin) and its file on disk.
+// Admin may delete any video; a teacher only their own.
+export async function deleteVideo(req: AuthRequest, res: Response): Promise<void> {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+  const video = await Video.findById(req.params.id);
+  if (!video) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+  const user = req.user;
+  if (String(video.uploadedById) !== String(user?.id)) {
+    res.status(403).json({ error: "You can only delete your own videos" });
+    return;
+  }
+
+  // Best-effort remove the file from disk, then the DB record.
+  if (video.filename) {
+    fs.unlink(path.join(UPLOAD_DIR, video.filename), () => {});
+  }
+  await video.deleteOne();
+  res.json({ ok: true, deleted: req.params.id });
+}

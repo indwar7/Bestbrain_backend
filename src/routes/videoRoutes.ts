@@ -10,6 +10,8 @@ import {
   listVideos,
   streamVideo,
   recordView,
+  updateVideo,
+  deleteVideo,
 } from "../controllers/videoController";
 
 const router = Router();
@@ -49,5 +51,9 @@ router.post(
   upload.single("video"),
   asyncHandler(uploadVideo)
 );
+
+// Edit / delete a video — teacher or admin (ownership enforced in controller).
+router.patch("/:id", requireAuth, requireRole("teacher"), asyncHandler(updateVideo));
+router.delete("/:id", requireAuth, requireRole("teacher"), asyncHandler(deleteVideo));
 
 export default router;
