@@ -26,10 +26,14 @@ module.exports = {
     {
       name: "edulearn-backend",
       script: "dist/index.js",
-      // "max" = one worker per CPU core. Lower it (e.g. 2) if the box is small
-      // or until the Socket.IO Redis adapter is in place.
-      instances: process.env.WEB_CONCURRENCY || "max",
-      exec_mode: "cluster",
+      // Live classes use Socket.IO with IN-MEMORY rooms/presence. Under cluster
+      // mode each worker has its own memory, so with >1 worker (and no Redis
+      // adapter / sticky sessions) chat messages, roster and join signals don't
+      // cross workers — live chat and camera/mic joins appear broken/glitchy.
+      // Pinned to a SINGLE instance so real-time works reliably. To scale across
+      // cores again, wire @socket.io/redis-adapter first, then raise this.
+      instances: 1,
+      exec_mode: "fork",
       max_memory_restart: "500M", // restart a worker if it leaks past 500MB
       kill_timeout: 10_000, // give graceful shutdown time to drain
       env: {
