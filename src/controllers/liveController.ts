@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AccessToken } from "livekit-server-sdk";
 import { AuthRequest } from "../middleware/auth";
 import { LiveSession } from "../models/LiveSession";
+import { LiveReport } from "../models/LiveReport";
 import { User } from "../models/User";
 import { canJoinSession } from "../services/liveEligibility";
 import { deleteLiveKitRoom } from "../services/liveVideo";
@@ -327,4 +328,88 @@ export async function endSession(req: AuthRequest, res: Response): Promise<void>
   endSessionRoom(session.id, req.user!.id);
 
   res.json({ session, videoTornDown });
+}
+
+// =====================================================================
+// ATTENTION / MONITORING REPORTS
+// A student POSTs their attentiveness report when they leave a live class.
+// A parent can read their linked child's reports; a student reads their own.
+// =====================================================================
+
+// POST /api/live/reports — student submits one report (from the live classroom).
+export async function submitLiveReport(req: AuthRequest, res: Response): Promise<void> {
+  const user = req.user!;
+  if (user.role !== "student") {
+    res.status(403).json({ error: "Only students submit attention reports" });
+    return;
+  }
+  const b = req.body || {};
+  // Clamp/validate the few numbers we trust into a range, so a tampered client
+  // can't store a 9000% score or negative durations.
+  const clampPct = (v: unknown): number | null => {
+    if (v === null || v === undefined || v === "") return null;
+    const n = Number(v);
+    if (Number.isNaN(n)) return null;
+    return Math.max(0, Math.min(100, Math.round(n)));
+  };
+  const nonNeg = (v: unknown): number => Math.max(0, Math.round(Number(v) || 0));
+
+  const dbUser = await User.findById(user.id).select("name className");
+  const events = Array.isArray(b.events)
+    ? b.events.slice(0, 200).map((e: { t?: unknown; type?: unknown; label?: unknown }) => ({
+        t: nonNeg(e?.t),
+        type: e?.type === "bad" || e?.type === "warn" ? e.type : "ok",
+        label: String(e?.label ?? "").slice(0, 160),
+      }))
+    : [];
+
+  const report = await LiveReport.create({
+    studentId: user.id,
+    studentName: dbUser?.name || "",
+    className: dbUser?.className || String(b.className || ""),
+    topic: String(b.topic || "").slice(0, 160),
+    tutor: String(b.tutor || "").slice(0, 120),
+    durationSec: nonNeg(b.durationSec),
+    score: clampPct(b.score) ?? 0,
+    camUsed: !!b.camUsed,
+    onScreenPct: clampPct(b.onScreenPct),
+    lookAwayCount: nonNeg(b.lookAwayCount),
+    awayCount: nonNeg(b.awayCount),
+    chats: nonNeg(b.chats),
+    events,
+  });
+  res.status(201).json({ report });
+}
+
+// GET /api/live/reports — student: own reports; parent: a linked child's
+// (?childId=<studentId>, defaults to the first linked child). Newest first.
+export async function listLiveReports(req: AuthRequest, res: Response): Promise<void> {
+  const user = req.user!;
+  let studentId: string | null = null;
+
+  if (user.role === "student") {
+    studentId = user.id;
+  } else if (user.role === "parent") {
+    const dbUser = await User.findById(user.id).select("childLinks");
+    const links = dbUser?.childLinks || [];
+    const wanted = req.query.childId ? String(req.query.childId) : null;
+    const match = wanted
+      ? links.find((l) => String(l.studentId) === wanted)
+      : links[0];
+    if (!match) {
+      res.json({ reports: [], children: links.map((l) => String(l.studentId)) });
+      return;
+    }
+    studentId = String(match.studentId);
+  } else {
+    // Teachers/admins aren't the audience for a single student's private report.
+    res.status(403).json({ error: "Not available for this role" });
+    return;
+  }
+
+  const reports = await LiveReport.find({ studentId })
+    .sort({ createdAt: -1 })
+    .limit(50)
+    .lean();
+  res.json({ reports });
 }
