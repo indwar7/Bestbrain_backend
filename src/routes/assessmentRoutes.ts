@@ -7,6 +7,7 @@ import {
   listQuestions,
   startMock,
   submitMock,
+  recordMockAttempt,
   mockHistory,
   getChallenge,
   answerChallenge,
@@ -23,6 +24,7 @@ router.get("/questions", requireRole("teacher"), asyncHandler(listQuestions));
 
 // Mock tests — students.
 router.post("/mock/start", asyncHandler(startMock));
+router.post("/mock/record", asyncHandler(recordMockAttempt));
 router.post("/mock/:attemptId/submit", asyncHandler(submitMock));
 router.get("/mock/history", asyncHandler(mockHistory));
 

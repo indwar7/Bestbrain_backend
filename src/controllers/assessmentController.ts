@@ -181,10 +181,61 @@ export async function submitMock(req: AuthRequest, res: Response): Promise<void>
   res.json({ score, total: attempt.total, review });
 }
 
+// POST /api/assessments/mock/record  Body: { subject, testName?, score, total, mastery? }
+// Persists a COMPLETED attempt from the client-side adaptive test engine. That
+// engine runs entirely in the browser with its own question bank, so there's no
+// server-side attempt to grade via submitMock — we just record the result so it
+// survives re-login, syncs across devices, and is visible server-side.
+export async function recordMockAttempt(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user || user.role !== "student") {
+    res.status(403).json({ error: "Only students can record test attempts" });
+    return;
+  }
+  const b = (req.body || {}) as {
+    subject?: string; testName?: string; score?: number; total?: number; mastery?: number;
+  };
+  const subject = String(b.subject || "").trim().slice(0, 60);
+  const total = Math.max(0, Math.round(Number(b.total) || 0));
+  const score = Math.max(0, Math.min(total, Math.round(Number(b.score) || 0)));
+  if (!subject || total <= 0) {
+    res.status(400).json({ error: "subject and a positive total are required" });
+    return;
+  }
+  const mastery =
+    b.mastery === undefined || b.mastery === null
+      ? Math.round((score / total) * 100)
+      : Math.max(0, Math.min(100, Math.round(Number(b.mastery) || 0)));
+
+  const attempt = await MockAttempt.create({
+    userId: user._id,
+    className: user.className,
+    subject,
+    testName: String(b.testName || subject).slice(0, 120),
+    total,
+    score,
+    mastery,
+    finished: true,
+    finishedAt: new Date(),
+  });
+
+  res.status(201).json({
+    attempt: {
+      id: String(attempt._id),
+      subject: attempt.subject,
+      testName: attempt.testName,
+      score: attempt.score,
+      total: attempt.total,
+      mastery: attempt.mastery,
+      finishedAt: attempt.finishedAt,
+    },
+  });
+}
+
 // GET /api/assessments/mock/history — the student's past attempts.
 export async function mockHistory(req: AuthRequest, res: Response): Promise<void> {
   const attempts = await MockAttempt.find({ userId: req.user!.id, finished: true })
-    .select("subject score total finishedAt")
+    .select("subject testName score total mastery finishedAt")
     .sort({ finishedAt: -1 })
     .limit(50)
     .lean();

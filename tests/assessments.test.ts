@@ -93,6 +93,29 @@ describe("Assessments — mock test", () => {
     const again = await request(app).post(`/api/assessments/mock/${start.body.attemptId}/submit`).set(auth(student)).send({ answers });
     expect(again.status).toBe(409);
   });
+
+  it("records a client-side attempt and returns it in history", async () => {
+    const rec = await request(app)
+      .post("/api/assessments/mock/record")
+      .set(auth(student))
+      .send({ subject: "Science", testName: "Class 7 Science — Cells", score: 7, total: 10, mastery: 82 });
+    expect(rec.status).toBe(201);
+    expect(rec.body.attempt).toMatchObject({ subject: "Science", testName: "Class 7 Science — Cells", score: 7, total: 10, mastery: 82 });
+
+    const hist = await request(app).get("/api/assessments/mock/history").set(auth(student));
+    expect(hist.status).toBe(200);
+    const found = hist.body.attempts.find((a: { testName?: string }) => a.testName === "Class 7 Science — Cells");
+    expect(found).toBeTruthy();
+    expect(found).toMatchObject({ subject: "Science", score: 7, total: 10, mastery: 82 });
+  });
+
+  it("rejects a record with no subject or non-positive total", async () => {
+    const bad = await request(app)
+      .post("/api/assessments/mock/record")
+      .set(auth(student))
+      .send({ subject: "", total: 0 });
+    expect(bad.status).toBe(400);
+  });
 });
 
 describe("Assessments — hourly challenge", () => {

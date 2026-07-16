@@ -12,6 +12,8 @@ export interface IMockAttempt extends Document {
   finished: boolean;
   startedAt: Date;
   finishedAt?: Date;
+  testName?: string; // display name for client-side adaptive tests
+  mastery?: number; // 0–100 mastery % (client engine may weight beyond raw score)
 }
 
 const mockAttemptSchema = new Schema<IMockAttempt>(
@@ -26,6 +28,8 @@ const mockAttemptSchema = new Schema<IMockAttempt>(
     finished: { type: Boolean, default: false },
     startedAt: { type: Date, default: Date.now },
     finishedAt: { type: Date },
+    testName: { type: String, default: "" },
+    mastery: { type: Number, min: 0, max: 100 },
   },
   { timestamps: true }
 );
