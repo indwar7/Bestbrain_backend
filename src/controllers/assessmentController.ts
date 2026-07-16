@@ -264,13 +264,20 @@ export async function getChallenge(req: AuthRequest, res: Response): Promise<voi
   }
 
   // Deterministically pick one question for this class+hour so everyone in the
-  // class sees the same one (stable across requests within the hour).
-  const pool = await Question.find({
+  // class sees the same one (stable across requests within the hour). The arena
+  // is a Science drop, so prefer Science questions; only if a class has none do
+  // we fall back to its full challenge pool rather than dead-ending on a 404.
+  const baseMatch: Record<string, unknown> = {
     className: user.className,
     usage: { $in: ["challenge", "both"] },
-  })
-    .select("_id text options difficulty subject chapterSlug")
+  };
+  const select = "_id text options difficulty subject chapterSlug";
+  let pool = await Question.find({ ...baseMatch, subject: "Science" })
+    .select(select)
     .sort({ _id: 1 });
+  if (pool.length === 0) {
+    pool = await Question.find(baseMatch).select(select).sort({ _id: 1 });
+  }
 
   if (pool.length === 0) {
     res.status(404).json({ error: "No challenge question available yet" });
