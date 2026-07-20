@@ -42,13 +42,37 @@ app.use(
 
 // CORS: allow the configured origins, plus any localhost port and file:// (null)
 // origin in development so the demo works however the frontend is opened.
+//
+// The !isProd branch is DELIBERATE and must stay: in production only the
+// explicit CLIENT_ORIGIN list is honoured. Do not add localhost entries to the
+// production allowlist to make local development easier — with
+// credentials:'include' on the client, any page served from that port on any
+// machine could then call this API as a signed-in user and read real student
+// records. To develop against production data, serve the frontend from an
+// origin that is ALREADY on the list.
+const LOCALHOST_ORIGIN = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/;
+
+// Rejections were previously silent: the browser reported an opaque "Failed to
+// fetch" and the server logged nothing at all, so a blocked origin was
+// indistinguishable from a dead server. Log each distinct rejected origin once.
+const rejectedOrigins = new Set<string>();
+
 app.use(
   cors({
     origin(origin, cb) {
       if (!origin) return cb(null, true); // file:// or same-origin/curl
       if (env.clientOrigins.includes(origin)) return cb(null, true);
-      if (!env.isProd && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        return cb(null, true);
+      if (!env.isProd && LOCALHOST_ORIGIN.test(origin)) return cb(null, true);
+
+      if (!rejectedOrigins.has(origin)) {
+        rejectedOrigins.add(origin);
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[cors] BLOCKED origin ${origin}. Allowed: ${env.clientOrigins.join(", ") || "(none)"}` +
+            (env.isProd
+              ? ". Production only honours CLIENT_ORIGIN — serve the frontend from one of those origins."
+              : ". Any localhost port is allowed in development.")
+        );
       }
       return cb(null, false);
     },
