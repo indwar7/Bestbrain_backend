@@ -10,10 +10,14 @@ export function setRefreshCookie(res: Response, token: string): void {
     secure: env.isProd, // HTTPS only in production
     sameSite: env.isProd ? "none" : "lax", // cross-site (Vercel→API) needs "none"
     maxAge: REFRESH_MAX_AGE,
-    path: "/api/auth",
+    // Path must be "/": the deployed site reaches us through Vercel's
+    // /backend-api/* rewrite, so the browser sees the refresh endpoint at
+    // /backend-api/api/auth/refresh — a "/api/auth" path would never match
+    // and the cookie would never be sent back through the proxy.
+    path: "/",
   });
 }
 
 export function clearRefreshCookie(res: Response): void {
-  res.clearCookie(env.refreshCookieName, { path: "/api/auth" });
+  res.clearCookie(env.refreshCookieName, { path: "/" });
 }
