@@ -85,6 +85,64 @@ describe("Assessments — mock test", () => {
     expect(submit.body.review[0]).toHaveProperty("correctIndex"); // review reveals answers
   });
 
+  it("reveals the solution one question at a time, and locks that answer in", async () => {
+    const start = await request(app)
+      .post("/api/assessments/mock/start").set(auth(student)).send({ subject: "Maths", count: 3 });
+    const attemptId = start.body.attemptId;
+
+    // Answer Q0 wrongly (option 1; the seeded correct answer is 0).
+    const wrong = await request(app)
+      .post(`/api/assessments/mock/${attemptId}/answer`)
+      .set(auth(student)).send({ index: 0, chosenIndex: 1 });
+    expect(wrong.status).toBe(200);
+    expect(wrong.body.correct).toBe(false);
+    expect(wrong.body.correctIndex).toBe(0);
+    expect(wrong.body.explanation).toBe("Add them."); // solution comes back
+
+    // Re-answering the same question can't change the locked-in choice.
+    const retry = await request(app)
+      .post(`/api/assessments/mock/${attemptId}/answer`)
+      .set(auth(student)).send({ index: 0, chosenIndex: 0 });
+    expect(retry.status).toBe(200);
+    expect(retry.body.chosen).toBe(1); // still the original wrong answer
+    expect(retry.body.correct).toBe(false);
+
+    // Answer Q1 correctly, leave Q2 untouched.
+    const right = await request(app)
+      .post(`/api/assessments/mock/${attemptId}/answer`)
+      .set(auth(student)).send({ index: 1, chosenIndex: 0 });
+    expect(right.body.correct).toBe(true);
+
+    // Final submit must trust the locked server-side answers over the body,
+    // so claiming "all correct" at the end cannot inflate the score.
+    const submit = await request(app)
+      .post(`/api/assessments/mock/${attemptId}/submit`)
+      .set(auth(student)).send({ answers: [0, 0, 0] });
+    expect(submit.status).toBe(200);
+    expect(submit.body.score).toBe(2); // Q0 wrong (locked), Q1 right, Q2 from body
+    expect(submit.body.review[0].chosen).toBe(1);
+  });
+
+  it("rejects an out-of-range question index when revealing a solution", async () => {
+    const start = await request(app)
+      .post("/api/assessments/mock/start").set(auth(student)).send({ subject: "Maths", count: 3 });
+    const bad = await request(app)
+      .post(`/api/assessments/mock/${start.body.attemptId}/answer`)
+      .set(auth(student)).send({ index: 99, chosenIndex: 0 });
+    expect(bad.status).toBe(400);
+  });
+
+  it("cannot reveal a solution on an already-submitted attempt", async () => {
+    const start = await request(app)
+      .post("/api/assessments/mock/start").set(auth(student)).send({ subject: "Maths", count: 3 });
+    await request(app).post(`/api/assessments/mock/${start.body.attemptId}/submit`)
+      .set(auth(student)).send({ answers: [0, 0, 0] });
+    const after = await request(app)
+      .post(`/api/assessments/mock/${start.body.attemptId}/answer`)
+      .set(auth(student)).send({ index: 0, chosenIndex: 0 });
+    expect(after.status).toBe(409);
+  });
+
   it("cannot submit the same attempt twice", async () => {
     const start = await request(app)
       .post("/api/assessments/mock/start").set(auth(student)).send({ subject: "Maths", count: 3 });

@@ -7,6 +7,7 @@ export interface IMockAttempt extends Document {
   subject: string;
   questionIds: mongoose.Types.ObjectId[]; // the questions served, in order
   answers: number[]; // chosen option index per question (-1 = unanswered)
+  revealed: number[]; // indices whose solution the student has already been shown
   score: number; // correct count
   total: number;
   finished: boolean;
@@ -23,6 +24,7 @@ const mockAttemptSchema = new Schema<IMockAttempt>(
     subject: { type: String, required: true },
     questionIds: { type: [Schema.Types.ObjectId], default: [] },
     answers: { type: [Number], default: [] },
+    revealed: { type: [Number], default: [] },
     score: { type: Number, default: 0 },
     total: { type: Number, default: 0 },
     finished: { type: Boolean, default: false },

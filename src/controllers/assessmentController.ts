@@ -137,6 +137,58 @@ export async function startMock(req: AuthRequest, res: Response): Promise<void> 
   });
 }
 
+// POST /api/assessments/mock/:attemptId/answer  Body: { index, chosenIndex }
+// Grades ONE question mid-test so the student can read the worked solution before
+// moving on. The correct answer never reaches the browser until the student has
+// committed to a choice, so the paper can't be read ahead from devtools.
+export async function answerMockQuestion(req: AuthRequest, res: Response): Promise<void> {
+  const attempt = await MockAttempt.findOne({
+    _id: req.params.attemptId,
+    userId: req.user!.id,
+  });
+  if (!attempt) {
+    res.status(404).json({ error: "Attempt not found" });
+    return;
+  }
+  if (attempt.finished) {
+    res.status(409).json({ error: "This attempt was already submitted" });
+    return;
+  }
+
+  const index = Number(req.body?.index);
+  if (!Number.isInteger(index) || index < 0 || index >= attempt.questionIds.length) {
+    res.status(400).json({ error: "index is out of range for this attempt" });
+    return;
+  }
+
+  const q = await Question.findById(attempt.questionIds[index]);
+  if (!q) {
+    res.status(404).json({ error: "Question not found" });
+    return;
+  }
+
+  // Record the choice as we go so a dropped connection doesn't lose the attempt.
+  // Once revealed, the answer is locked — you can't read the solution and then
+  // change your mind. Repeating the same call is idempotent (safe on retry).
+  if (!attempt.revealed.includes(index)) {
+    const raw = Number(req.body?.chosenIndex);
+    const chosen =
+      Number.isInteger(raw) && raw >= 0 && raw < q.options.length ? raw : -1;
+    attempt.answers[index] = chosen;
+    attempt.markModified("answers");
+    attempt.revealed.push(index);
+    await attempt.save();
+  }
+
+  const chosen = attempt.answers[index] ?? -1;
+  res.json({
+    chosen,
+    correct: chosen === q.correctIndex,
+    correctIndex: q.correctIndex,
+    explanation: q.explanation || "",
+  });
+}
+
 // POST /api/assessments/mock/:attemptId/submit  Body: { answers: number[] }
 // Grades the attempt server-side and returns the score + per-question review.
 export async function submitMock(req: AuthRequest, res: Response): Promise<void> {
@@ -160,7 +212,11 @@ export async function submitMock(req: AuthRequest, res: Response): Promise<void>
   let score = 0;
   const review = attempt.questionIds.map((qid, i) => {
     const q = byId.get(String(qid));
-    const chosen = Number(answers[i]);
+    // A question answered one-at-a-time (see answerMockQuestion) is already
+    // locked server-side — trust that over whatever the client posts now.
+    const chosen = attempt.revealed.includes(i)
+      ? attempt.answers[i]
+      : Number(answers[i]);
     const isCorrect = !!q && chosen === q.correctIndex;
     if (isCorrect) score += 1;
     return {
