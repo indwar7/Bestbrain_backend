@@ -18,10 +18,22 @@ export interface WeeklyPoint {
   events: number;
 }
 
+export interface DayPoint {
+  day: string; // "2026-06-18"
+  minutes: number;
+}
+
 export interface ProgressInsights {
   dayStreak: number; // consecutive active days ending today/yesterday
   activeToday: boolean;
   weekly: WeeklyPoint[]; // last 7 days, oldest → newest
+  // Last DAILY_WINDOW days, oldest → newest. The dashboard's calendar heatmap
+  // needs a real per-day series; before this existed it only had `weekly`, so
+  // 7 of its 56 cells could ever be true and the other 49 rendered as rest
+  // days regardless of what the student had actually done. The per-day buckets
+  // were already being aggregated over a 60-day scan for the streak — this
+  // just exposes them instead of throwing them away.
+  daily: DayPoint[];
   thisWeek: {
     minutes: number;
     lessons: number;
@@ -33,6 +45,10 @@ export interface ProgressInsights {
 }
 
 const WEEKDAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+// 8 weeks. Must stay <= the 60-day scan window below, or the tail of the
+// series would be zeroes that only mean "not queried", not "no activity".
+const DAILY_WINDOW = 56;
 
 // Build a derived view of a user's activity from their stored ProgressEvents.
 // `now` is injectable so callers/tests can pass a fixed clock.
@@ -145,6 +161,15 @@ function computeInsights(events: EventLike[], now: Date): ProgressInsights {
     });
   }
 
+  // --- daily series for the calendar heatmap (oldest → newest) ---
+  // Kept inside the 60-day scan window above so every point is backed by real
+  // events rather than padded zeroes beyond what we actually queried.
+  const daily: DayPoint[] = [];
+  for (let i = DAILY_WINDOW - 1; i >= 0; i--) {
+    const key = dayKeyFrom(i, now);
+    daily.push({ day: key, minutes: perDay.get(key)?.minutes ?? 0 });
+  }
+
   // --- this-week (last 7 days) totals ---
   const thisWeek = weekly.reduce(
     (acc, pt) => {
@@ -163,6 +188,7 @@ function computeInsights(events: EventLike[], now: Date): ProgressInsights {
     dayStreak,
     activeToday,
     weekly,
+    daily,
     thisWeek,
     lastActiveAt: lastActiveAt ? lastActiveAt.toISOString() : null,
   };

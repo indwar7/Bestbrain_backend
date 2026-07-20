@@ -53,11 +53,28 @@ function canonicalSubject(slug: string): { key: string; name: string } {
   return { key: s || "other", name };
 }
 
-// Extract the subject slug from a chapter key like "c7-sci-photosynthesis".
-// Convention: "<class>-<subject>-<chapter>". Returns "" if it doesn't match.
+// Extract the subject slug from a chapter key.
+//
+// TWO key formats are live in the data and both must be handled:
+//   "c7-sci-photosynthesis"  <class>-<subject>-<chapter>   (frontend curriculum ids)
+//   "science-motion"         <subject>-<chapter>           (event pipeline / seeds)
+//
+// This used to return parts[1] only when length >= 3, so every 2-segment key
+// returned "" and canonicalSubject turned it into {key:"other", name:"Other"}.
+// A student who mastered a Science chapter saw a donut labelled "Other" at
+// 100% and "Science" at 0% — their real work filed under a subject that does
+// not exist. Disambiguated by checking whether the first segment looks like a
+// class marker (c6/c7/class7/7) rather than by segment count alone, so a
+// 3-segment subject-first key like "science-light-shadows" still resolves.
+const CLASS_SEGMENT = /^(?:c|class)?\d{1,2}$/i;
+
 function subjectFromChapterKey(key: string): string {
-  const parts = key.split("-");
-  return parts.length >= 3 ? parts[1] : "";
+  const parts = key.split("-").filter(Boolean);
+  if (parts.length === 0) return "";
+  // <class>-<subject>-... → the subject is the second segment
+  if (parts.length >= 3 && CLASS_SEGMENT.test(parts[0])) return parts[1];
+  // otherwise the key is subject-first
+  return parts[0];
 }
 
 // A single chapter's mastery, scored ONLY from the signals actually present so
