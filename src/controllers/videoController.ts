@@ -65,6 +65,35 @@ function normalizeSubject(v: unknown): string {
   return String(v ?? "").trim().toLowerCase().split(/\s+/)[0] ?? "";
 }
 
+// Filler words that carry no chapter identity — dropped before matching so
+// "Sources of Food" and "food sources" compare as the same two words.
+const TOPIC_STOPWORDS = new Set(["of", "the", "a", "an", "to", "and", "or", "in", "on", "for", "with"]);
+
+function topicWords(v: unknown): string[] {
+  return String(v ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]+/g, " ") // punctuation → space
+    .split(/\s+/)
+    .filter((w) => w && !TOPIC_STOPWORDS.has(w));
+}
+
+// Match a chapter's search term against a video's free-text topic. Teachers
+// type the topic by hand, so word order and filler drift ("Sources of Food",
+// "Introduction to Food Sources") relative to the chapter slug the lesson hub
+// sends ("food sources"). Compare the significant words as sets and accept when
+// one side's words are all contained in the other — a plain substring test
+// missed every reorder or added descriptor, so real uploads never appeared
+// under their chapter. Both empty → no match (an untagged video is not claimed
+// by every chapter).
+function topicMatches(wantTopic: string, videoTopic: unknown): boolean {
+  const want = topicWords(wantTopic);
+  const have = topicWords(videoTopic);
+  if (!want.length || !have.length) return false;
+  const haveSet = new Set(have);
+  const wantSet = new Set(want);
+  return want.every((w) => haveSet.has(w)) || have.every((w) => wantSet.has(w));
+}
+
 // GET /api/videos — list videos, optionally filtered by ?className= & ?subject=
 // & ?topic=. Filtering is done in-memory (not via a Mongo query) because
 // className/subject are free-text and stored in inconsistent shapes
@@ -80,12 +109,7 @@ export async function listVideos(req: Request, res: Response): Promise<void> {
   const videos = all.filter((v) => {
     if (wantClass !== null && classDigits(v.className) !== wantClass) return false;
     if (wantSubject !== null && normalizeSubject(v.subject) !== wantSubject) return false;
-    if (wantTopic !== null) {
-      const topic = v.topic.trim().toLowerCase();
-      // Loose match: the chapter slug's words should appear in the topic (or
-      // vice versa) since topic is free text a teacher typed by hand.
-      if (!topic || (!topic.includes(wantTopic) && !wantTopic.includes(topic))) return false;
-    }
+    if (wantTopic !== null && !topicMatches(wantTopic, v.topic)) return false;
     return true;
   });
 
