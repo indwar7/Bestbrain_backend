@@ -6,4 +6,6 @@ dist/
 .DS_Store
 uploads/videos/*
 !uploads/videos/.gitkeep
+uploads/notes/*
+!uploads/notes/.gitkeep
 reference/

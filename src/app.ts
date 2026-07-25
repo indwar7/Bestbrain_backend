@@ -15,6 +15,7 @@ import liveRoutes from "./routes/liveRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import videoRoutes from "./routes/videoRoutes";
+import noteRoutes from "./routes/noteRoutes";
 import curriculumRoutes from "./routes/curriculumRoutes";
 import assessmentRoutes from "./routes/assessmentRoutes";
 
@@ -99,6 +100,7 @@ app.use("/api/live", liveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/notes", noteRoutes);
 app.use("/api/curriculum", curriculumRoutes);
 app.use("/api/assessments", assessmentRoutes);
 
