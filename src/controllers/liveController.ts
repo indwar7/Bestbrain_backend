@@ -7,7 +7,72 @@ import { User } from "../models/User";
 import { canJoinSession } from "../services/liveEligibility";
 import { deleteLiveKitRoom } from "../services/liveVideo";
 import { endSessionRoom, getPresentUserIds } from "../sockets/liveSocket";
+import { sendEmail } from "../services/notifier";
 import { env } from "../config/env";
+
+// ---------------------------------------------------------------------------
+// Email notification: tell a class's students that their live class has begun.
+// Fire-and-forget from createSession — a failed email must never fail (or slow)
+// starting the class. Honours each student's emailNotifications preference; the
+// only place that preference is actually acted upon.
+// ---------------------------------------------------------------------------
+const classDigits = (v: unknown): string => String(v ?? "").replace(/\D/g, "");
+const sameSection = (a: unknown, b: unknown): boolean =>
+  String(a ?? "").trim().toUpperCase() === String(b ?? "").trim().toUpperCase();
+
+async function notifyStudentsLiveStarted(
+  session: { _id: unknown; title: string; className: string; section: string; subject: string; joinCode: string; videoProvider?: string; videoRoom?: string },
+  teacherName: string
+): Promise<void> {
+  try {
+    // className is stored in inconsistent shapes ("Class 7" vs "7"), so narrow
+    // in Mongo by the consistent fields (subject in their subjects, notifications
+    // not switched off) and match the class/section in memory.
+    const candidates = await User.find({
+      role: "student",
+      subjects: session.subject,
+      "preferences.emailNotifications": { $ne: false },
+    })
+      .select("email name className section")
+      .lean();
+
+    const recipients = candidates.filter(
+      (u) =>
+        u.email &&
+        classDigits(u.className) === classDigits(session.className) &&
+        sameSection(u.section, session.section)
+    );
+    if (!recipients.length) return;
+
+    const joinInfo =
+      session.videoProvider === "google-meet" && session.videoRoom
+        ? `Join here: ${session.videoRoom}`
+        : `Open EduLearn → Live to join, or use class code ${session.joinCode}.`;
+    const subject = `Live now: ${session.subject} — ${session.title}`;
+
+    // A class is capped at ~15 students, so sending sequentially is fine and
+    // keeps us well under any provider rate limit.
+    let sent = 0;
+    for (const u of recipients) {
+      const text =
+        `Hi ${u.name || "there"},\n\n` +
+        `${teacherName} just started a live ${session.subject} class for ${session.className} ${session.section}:\n` +
+        `  "${session.title}"\n\n` +
+        `${joinInfo}\n\n` +
+        `— EduLearn\n` +
+        `You're getting this because email notifications are on. You can turn them off in Settings.`;
+      try {
+        await sendEmail(u.email!, subject, text);
+        sent++;
+      } catch (e) {
+        console.error(`live-notify: email failed for ${u.email}:`, (e as Error)?.message || e);
+      }
+    }
+    console.log(`live-notify: emailed ${sent}/${recipients.length} student(s) for session ${String(session._id)}`);
+  } catch (err) {
+    console.error("live-notify failed:", err);
+  }
+}
 
 // Generate a short, readable join code, e.g. "SCI-7A-4821".
 function makeJoinCode(subject: string, className: string, section: string): string {
@@ -74,6 +139,10 @@ export async function createSession(req: AuthRequest, res: Response): Promise<vo
     startedAt: new Date(),
     ...(meetLink ? { videoProvider: "google-meet", videoRoom: meetLink.trim() } : {}),
   });
+
+  // Email the class's students that the session is live (fire-and-forget so it
+  // never blocks or fails starting the class). Honours emailNotifications.
+  void notifyStudentsLiveStarted(session, teacher?.name || "Your teacher");
 
   res.status(201).json({ session });
 }
