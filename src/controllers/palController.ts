@@ -25,8 +25,14 @@ function validateMessage(req: AuthRequest, res: Response): string | null {
   return message;
 }
 
-// Load the user's session by id, or create a fresh one. Returns null (+ 404) if
+// Load the user's session by id, or build a fresh one. Returns null (+ 404) if
 // a sessionId was given but doesn't belong to this user.
+//
+// A NEW session is built in memory and deliberately NOT saved here: if the LLM
+// call then fails, an empty session would be left behind, and since every retry
+// starts another one the session list fills up with "New chat" rows holding no
+// messages. Mongoose assigns the _id up front, so the id is still available;
+// the caller persists it along with the first exchange.
 async function loadOrCreateSession(
   req: AuthRequest,
   res: Response,
@@ -42,7 +48,31 @@ async function loadOrCreateSession(
     }
     return existing;
   }
-  return ChatSession.create({ userId, palRole: role, messages: [] });
+  return new ChatSession({ userId, palRole: role, messages: [] });
+}
+
+// Credential/config failures (dead service account, missing project, malformed
+// key JSON) are permanent until an operator acts — they are not the transient
+// "try again in a moment" the generic message promises. Separate them so the
+// user isn't told to retry something that can never succeed, and so the reason
+// is visible without shell access to the server.
+function isConfigFailure(err: unknown): boolean {
+  const msg = String((err as Error)?.message ?? err);
+  return /invalid_grant|invalid_client|unauthorized_client|could not load the default credentials|permission denied|PERMISSION_DENIED|API has not been used|billing|project is required|Unable to detect a Project/i.test(
+    msg
+  );
+}
+
+function failChat(res: Response, err: unknown, where: string): void {
+  console.error(`pal ${where} error:`, err);
+  if (isConfigFailure(err)) {
+    res.status(503).json({
+      error: "PAL is not set up correctly on the server — please contact support.",
+      code: "pal_not_configured",
+    });
+    return;
+  }
+  res.status(500).json({ error: "PAL is unavailable right now" });
 }
 
 // POST /api/pal/chat
@@ -81,8 +111,7 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
 
     res.json({ sessionId: session.id, reply });
   } catch (err) {
-    console.error("pal chat error:", err);
-    res.status(500).json({ error: "PAL is unavailable right now" });
+    failChat(res, err, "chat");
   }
 }
 
@@ -136,7 +165,15 @@ export async function chatStream(req: AuthRequest, res: Response): Promise<void>
     send("done", { sessionId: session.id });
   } catch (err) {
     console.error("pal stream error:", err);
-    send("error", { error: "PAL is unavailable right now" });
+    // The 200 for the SSE stream is already sent, so the status can't carry
+    // this — the event does. (The session is only saved on success above, so a
+    // failed stream leaves no empty session behind.)
+    send("error", {
+      error: isConfigFailure(err)
+        ? "PAL is not set up correctly on the server — please contact support."
+        : "PAL is unavailable right now",
+      code: isConfigFailure(err) ? "pal_not_configured" : "pal_unavailable",
+    });
   } finally {
     res.end();
   }
