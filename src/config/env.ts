@@ -68,7 +68,7 @@ export const env = {
 
   // Email provider: "resend" | "sendgrid" | "" (console fallback).
   emailProvider: (process.env.EMAIL_PROVIDER ?? "").toLowerCase(),
-  emailFrom: process.env.EMAIL_FROM ?? "EduLearn <onboarding@resend.dev>",
+  emailFrom: process.env.EMAIL_FROM ?? "BestBrain <onboarding@resend.dev>",
   resendApiKey: process.env.RESEND_API_KEY ?? "",
   sendgridApiKey: process.env.SENDGRID_API_KEY ?? "",
 

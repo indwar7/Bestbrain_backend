@@ -72,7 +72,7 @@ export async function buildPalContext(
   if (role === "student") {
     const lines = await studentContextLines(user, now);
     return (
-      `Here is ${user.name}'s real EduLearn progress. Reference these specifics ` +
+      `Here is ${user.name}'s real BestBrain progress. Reference these specifics ` +
       `when relevant; do not invent numbers.\n${lines.join("\n")}`
     );
   }
@@ -90,7 +90,7 @@ export async function buildPalContext(
       blocks.push(`Child — ${child.name}:\n${lines.join("\n")}`);
     }
     return (
-      `Here is real EduLearn progress for this parent's child/children. ` +
+      `Here is real BestBrain progress for this parent's child/children. ` +
       `Reference these specifics when relevant; do not invent numbers.\n\n` +
       blocks.join("\n\n")
     );

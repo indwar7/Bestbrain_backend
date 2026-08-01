@@ -31,7 +31,7 @@ async function start() {
   server.requestTimeout = 0; // disable the hard per-request cap (PAL SSE streams)
 
   server.listen(env.port, () => {
-    logger.info({ port: env.port }, `🚀 EduLearn backend running on http://localhost:${env.port}`);
+    logger.info({ port: env.port }, `🚀 BestBrain backend running on http://localhost:${env.port}`);
     logger.info("Socket.IO live events ready");
     // Surface the CORS policy at boot. A blocked origin shows up in the browser
     // only as an opaque "Failed to fetch", which is easy to misread as "the

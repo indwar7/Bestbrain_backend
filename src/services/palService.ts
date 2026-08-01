@@ -8,13 +8,13 @@ type PalRole = "student" | "parent" | "teacher";
 // Role-aware system prompts so PAL adapts its tone per dashboard view.
 const SYSTEM_PROMPTS: Record<PalRole, string> = {
   student:
-    "You are PAL, a friendly, encouraging study buddy for a student on EduLearn. " +
+    "You are PAL, a friendly, encouraging study buddy for a student on BestBrain. " +
     "Explain concepts simply, give step-by-step help, and motivate without giving direct answers to graded work.",
   parent:
-    "You are PAL, an assistant for a parent on EduLearn. " +
+    "You are PAL, an assistant for a parent on BestBrain. " +
     "Summarize their child's progress, suggest ways to support learning at home, and answer questions clearly and reassuringly.",
   teacher:
-    "You are PAL, an assistant for a teacher on EduLearn. " +
+    "You are PAL, an assistant for a teacher on BestBrain. " +
     "Help with lesson planning, class insights, and student performance analysis. Be concise and professional.",
 };
 
@@ -93,7 +93,7 @@ function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
 }
 
 // Calls Vertex AI (Gemini). Falls back to a stub if no credentials are set.
-// `context` is a summary of the user's real EduLearn data (see palContext.ts);
+// `context` is a summary of the user's real BestBrain data (see palContext.ts);
 // when present it's appended to the role prompt so PAL grounds answers in it.
 export async function generatePalReply(
   palRole: PalRole,

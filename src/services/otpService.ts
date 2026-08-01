@@ -51,7 +51,7 @@ export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpRes
     expiresAt: new Date(Date.now() + OTP_TTL_MS),
   });
 
-  const message = `Your EduLearn verification code is ${code}. It expires in 10 minutes.`;
+  const message = `Your BestBrain verification code is ${code}. It expires in 10 minutes.`;
 
   // A provider failure (e.g. unverified recipient on a trial plan) must not
   // crash the request — the code is already stored, only delivery failed. We
@@ -61,7 +61,7 @@ export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpRes
   try {
     const result =
       channel === "email"
-        ? await sendEmail(destination, "EduLearn verification code", message)
+        ? await sendEmail(destination, "BestBrain verification code", message)
         : await sendSms(destination, message);
     delivered = result.delivered;
     via = result.via;

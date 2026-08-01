@@ -92,7 +92,7 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
     const session = await loadOrCreateSession(req, res, role);
     if (!session) return;
 
-    // Ground PAL in the user's REAL EduLearn data (own progress for a student,
+    // Ground PAL in the user's REAL BestBrain data (own progress for a student,
     // child's for a parent, class snapshot for a teacher). Best-effort: if it
     // fails, PAL still answers without the data rather than erroring.
     let context = "";

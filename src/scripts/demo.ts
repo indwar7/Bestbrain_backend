@@ -86,7 +86,7 @@ async function start() {
   server.listen(env.port, () => {
     console.log("");
     console.log("╔══════════════════════════════════════════════════════╗");
-    console.log("║  EduLearn backend + demo data ready                    ║");
+    console.log("║  BestBrain backend + demo data ready                    ║");
     console.log("╠══════════════════════════════════════════════════════╣");
     console.log(`║  API:  http://localhost:${env.port}                          ║`);
     console.log("║  Demo logins (password: Demo@2024):                    ║");
