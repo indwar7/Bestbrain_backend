@@ -7,6 +7,8 @@ import {
   MAX_MESSAGE_LENGTH,
 } from "../services/palService";
 import { buildPalContext } from "../services/palContext";
+import { buildStudyDoc, checkTopic } from "../services/studyPdfService";
+import { User } from "../models/User";
 
 // Validate the inbound message; returns a trimmed string or null (+ writes the
 // 400 response itself) so each handler can `if (!msg) return;`.
@@ -203,6 +205,33 @@ export async function chatStream(req: AuthRequest, res: Response): Promise<void>
 // voice-optimized (short, plain, speakable) — the client reads them aloud.
 export async function tutorStream(req: AuthRequest, res: Response): Promise<void> {
   return runChatStream(req, res, true);
+}
+
+// POST /api/pal/study-pdf — structured study material for one science topic.
+//
+// Returns the document as data, not as a file: the client already renders the
+// app's typography and can print to PDF with the browser's own engine, which
+// keeps the layout identical to what the student saw on screen and spares the
+// server a PDF toolchain it would otherwise have to keep alive.
+export async function studyPdf(req: AuthRequest, res: Response): Promise<void> {
+  const { topic } = req.body as { topic?: unknown };
+  if (!topic || typeof topic !== "string" || !topic.trim()) {
+    res.status(400).json({ error: "topic is required" });
+    return;
+  }
+
+  const verdict = checkTopic(topic);
+  if (!verdict.ok) {
+    res.status(400).json({ error: verdict.reason, code: "topic_rejected" });
+    return;
+  }
+
+  /* The class shapes the depth of the explanation, and the token does not
+     carry it — read it from the profile rather than trusting the client. */
+  const profile = await User.findById(req.user!.id).select("className").lean();
+  const className = profile?.className || "Class 6";
+  const doc = await buildStudyDoc(topic.trim(), className);
+  res.json(doc);
 }
 
 // GET /api/pal/sessions — list the current user's sessions (newest first,

@@ -6,6 +6,7 @@ import {
   chat,
   chatStream,
   tutorStream,
+  studyPdf,
   listSessions,
   getSession,
   renameSession,
@@ -20,6 +21,7 @@ router.use(requireAuth);
 router.post("/chat", palChatLimiter, asyncHandler(chat));
 router.post("/chat/stream", palChatLimiter, asyncHandler(chatStream)); // SSE streaming
 router.post("/tutor/stream", palChatLimiter, asyncHandler(tutorStream)); // live doubt session (voice)
+router.post("/study-pdf", palChatLimiter, asyncHandler(studyPdf)); // topic -> study sheet
 
 // Session management.
 router.get("/sessions", asyncHandler(listSessions));
