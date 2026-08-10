@@ -9,6 +9,7 @@ export interface IChatMessage {
 export interface IChatSession extends Document {
   userId: mongoose.Types.ObjectId;
   palRole: "student" | "parent" | "teacher"; // which PAL persona this session uses
+  mode: "text" | "voice"; // "voice" = live doubt session (spoken, call-style)
   title?: string; // optional user-set name (defaults to first message preview)
   messages: IChatMessage[];
   createdAt: Date;
@@ -22,6 +23,11 @@ const chatSessionSchema = new Schema<IChatSession>(
       type: String,
       enum: ["student", "parent", "teacher"],
       required: true,
+    },
+    mode: {
+      type: String,
+      enum: ["text", "voice"],
+      default: "text",
     },
     title: { type: String, default: "" },
     messages: {

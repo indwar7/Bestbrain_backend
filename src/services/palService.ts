@@ -18,6 +18,35 @@ const SYSTEM_PROMPTS: Record<PalRole, string> = {
     "Help with lesson planning, class insights, and student performance analysis. Be concise and professional.",
 };
 
+// Extra instructions layered on top of the role prompt when the reply will be
+// SPOKEN aloud (the live doubt session). TTS reads the text verbatim, so
+// markdown, symbols and long lecture-style answers all degrade the experience.
+const VOICE_STYLE =
+  "\n\nYou are currently on a LIVE VOICE CALL (a live doubt session) and your reply " +
+  "will be read aloud by text-to-speech. Follow these rules strictly:\n" +
+  "- Keep it short and conversational: 2-4 sentences unless the student asks for more.\n" +
+  "- Plain speakable text only: no markdown, no asterisks, no bullet points, no " +
+  "headings, no LaTeX, no code blocks, no emoji.\n" +
+  "- Say maths the way it is spoken: 'x squared plus 2 x minus 7', 'three by four', " +
+  "not symbols like x^2 or 3/4.\n" +
+  "- Answer the doubt directly first, then optionally one short check question.\n" +
+  "- For a big topic, give the core idea and ask if they want you to go deeper.\n" +
+  "- Reply in the language the student spoke (English, Hindi or Hinglish).\n" +
+  "- Be warm and encouraging, like a friendly teacher on a call.";
+
+// Voice replies are meant to be a few spoken sentences — a tighter cap keeps
+// both latency and TTS duration down.
+const VOICE_MAX_OUTPUT_TOKENS = 512;
+
+function buildSystemInstruction(
+  palRole: PalRole,
+  context: string,
+  voice: boolean
+): string {
+  const base = voice ? SYSTEM_PROMPTS[palRole] + VOICE_STYLE : SYSTEM_PROMPTS[palRole];
+  return context ? `${base}\n\n${context}` : base;
+}
+
 // Disable all safety filters so PAL never silently blocks an academic answer.
 const SAFETY_SETTINGS = [
   HarmCategory.HARM_CATEGORY_HATE_SPEECH,
@@ -99,11 +128,10 @@ export async function generatePalReply(
   palRole: PalRole,
   history: IChatMessage[],
   message: string,
-  context = ""
+  context = "",
+  voice = false
 ): Promise<string> {
-  const systemInstruction = context
-    ? `${SYSTEM_PROMPTS[palRole]}\n\n${context}`
-    : SYSTEM_PROMPTS[palRole];
+  const systemInstruction = buildSystemInstruction(palRole, context, voice);
 
   if (!env.vertexConfigured) {
     // Stub reply so the endpoint works end-to-end without credentials in dev.
@@ -133,7 +161,7 @@ export async function generatePalReply(
             systemInstruction,
             temperature: 0.7,
             topP: 0.95,
-            maxOutputTokens: 2048,
+            maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
             safetySettings: SAFETY_SETTINGS,
           },
         }),
@@ -166,11 +194,10 @@ export async function* streamPalReply(
   palRole: PalRole,
   history: IChatMessage[],
   message: string,
-  context = ""
+  context = "",
+  voice = false
 ): AsyncGenerator<string, void, unknown> {
-  const systemInstruction = context
-    ? `${SYSTEM_PROMPTS[palRole]}\n\n${context}`
-    : SYSTEM_PROMPTS[palRole];
+  const systemInstruction = buildSystemInstruction(palRole, context, voice);
 
   if (!env.vertexConfigured) {
     yield `(${palRole} PAL — stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
@@ -193,7 +220,7 @@ export async function* streamPalReply(
       systemInstruction,
       temperature: 0.7,
       topP: 0.95,
-      maxOutputTokens: 2048,
+      maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
       safetySettings: SAFETY_SETTINGS,
     },
   });

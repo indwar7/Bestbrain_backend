@@ -36,7 +36,8 @@ function validateMessage(req: AuthRequest, res: Response): string | null {
 async function loadOrCreateSession(
   req: AuthRequest,
   res: Response,
-  role: "student" | "parent" | "teacher"
+  role: "student" | "parent" | "teacher",
+  mode: "text" | "voice" = "text"
 ) {
   const userId = req.user!.id;
   const { sessionId } = req.body as { sessionId?: string };
@@ -48,7 +49,7 @@ async function loadOrCreateSession(
     }
     return existing;
   }
-  return new ChatSession({ userId, palRole: role, messages: [] });
+  return new ChatSession({ userId, palRole: role, messages: [], mode });
 }
 
 // Credential/config failures (dead service account, missing project, malformed
@@ -115,19 +116,22 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
   }
 }
 
-// POST /api/pal/chat/stream  (Server-Sent Events)
-// Same body as /chat. Streams the reply as it's generated:
-//   event: chunk  data: {"text":"..."}   (repeated)
-//   event: done   data: {"sessionId":"..."}
-//   event: error  data: {"error":"..."}
-export async function chatStream(req: AuthRequest, res: Response): Promise<void> {
+// Shared SSE implementation for /chat/stream and /tutor/stream. `voice: true`
+// switches PAL into the spoken live-doubt-session style (short, plain,
+// speakable answers) and tags new sessions mode:"voice" so the session list
+// can show them as doubt calls.
+async function runChatStream(
+  req: AuthRequest,
+  res: Response,
+  voice: boolean
+): Promise<void> {
   const userId = req.user!.id;
   const role = req.user!.role;
 
   const message = validateMessage(req, res);
   if (!message) return;
 
-  const session = await loadOrCreateSession(req, res, role);
+  const session = await loadOrCreateSession(req, res, role, voice ? "voice" : "text");
   if (!session) return;
 
   // Open the SSE stream.
@@ -148,7 +152,13 @@ export async function chatStream(req: AuthRequest, res: Response): Promise<void>
 
   let full = "";
   try {
-    for await (const piece of streamPalReply(role, session.messages, message, context)) {
+    for await (const piece of streamPalReply(
+      role,
+      session.messages,
+      message,
+      context,
+      voice
+    )) {
       full += piece;
       send("chunk", { text: piece });
     }
@@ -179,12 +189,28 @@ export async function chatStream(req: AuthRequest, res: Response): Promise<void>
   }
 }
 
+// POST /api/pal/chat/stream  (Server-Sent Events)
+// Same body as /chat. Streams the reply as it's generated:
+//   event: chunk  data: {"text":"..."}   (repeated)
+//   event: done   data: {"sessionId":"..."}
+//   event: error  data: {"error":"..."}
+export async function chatStream(req: AuthRequest, res: Response): Promise<void> {
+  return runChatStream(req, res, false);
+}
+
+// POST /api/pal/tutor/stream  (Server-Sent Events)
+// The live doubt session: same protocol as /chat/stream, but replies are
+// voice-optimized (short, plain, speakable) — the client reads them aloud.
+export async function tutorStream(req: AuthRequest, res: Response): Promise<void> {
+  return runChatStream(req, res, true);
+}
+
 // GET /api/pal/sessions — list the current user's sessions (newest first,
 // without the full message bodies). Includes a short preview + counts.
 export async function listSessions(req: AuthRequest, res: Response): Promise<void> {
   const sessions = await ChatSession.find({ userId: req.user!.id })
     .sort({ updatedAt: -1 })
-    .select("palRole title messages updatedAt createdAt")
+    .select("palRole mode title messages updatedAt createdAt")
     .lean();
 
   const summaries = sessions.map((s) => {
@@ -193,6 +219,7 @@ export async function listSessions(req: AuthRequest, res: Response): Promise<voi
     return {
       id: String(s._id),
       palRole: s.palRole,
+      mode: s.mode || "text",
       title: s.title || lastUser?.content?.slice(0, 60) || "New chat",
       messageCount: msgs.length,
       lastMessageAt: msgs.length ? msgs[msgs.length - 1].at : s.updatedAt,

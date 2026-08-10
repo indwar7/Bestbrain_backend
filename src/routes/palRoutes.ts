@@ -5,6 +5,7 @@ import { palChatLimiter } from "../middleware/rateLimit";
 import {
   chat,
   chatStream,
+  tutorStream,
   listSessions,
   getSession,
   renameSession,
@@ -18,6 +19,7 @@ router.use(requireAuth);
 // Chat (rate-limited — Gemini calls cost money).
 router.post("/chat", palChatLimiter, asyncHandler(chat));
 router.post("/chat/stream", palChatLimiter, asyncHandler(chatStream)); // SSE streaming
+router.post("/tutor/stream", palChatLimiter, asyncHandler(tutorStream)); // live doubt session (voice)
 
 // Session management.
 router.get("/sessions", asyncHandler(listSessions));

@@ -142,3 +142,52 @@ describe("PAL streaming (SSE)", () => {
     expect(res.text).toContain("event: done");
   });
 });
+
+describe("AI tutor / live doubt session (SSE)", () => {
+  it("requires authentication", async () => {
+    const res = await request(app).post("/api/pal/tutor/stream").send({ message: "hi" });
+    expect(res.status).toBe(401);
+  });
+
+  it("streams a voice reply and saves a mode:'voice' session", async () => {
+    const token = await signupStudent();
+    const res = await request(app)
+      .post("/api/pal/tutor/stream")
+      .set(auth(token))
+      .send({ message: "what is photosynthesis" });
+    expect(res.status).toBe(200);
+    expect(res.headers["content-type"]).toMatch(/text\/event-stream/);
+    expect(res.text).toContain("event: chunk");
+    expect(res.text).toContain("event: done");
+
+    // The session it created must be tagged as a voice session and carry both
+    // turns, so the transcript survives the call.
+    const list = await request(app).get("/api/pal/sessions").set(auth(token));
+    expect(list.status).toBe(200);
+    expect(list.body.sessions).toHaveLength(1);
+    expect(list.body.sessions[0].mode).toBe("voice");
+    expect(list.body.sessions[0].messageCount).toBe(2);
+  });
+
+  it("continues an existing voice session when given its sessionId", async () => {
+    const token = await signupStudent();
+    const first = await request(app)
+      .post("/api/pal/tutor/stream")
+      .set(auth(token))
+      .send({ message: "first doubt" });
+    const sid = JSON.parse(
+      first.text.split("event: done\ndata: ")[1].split("\n")[0]
+    ).sessionId as string;
+    expect(sid).toBeTruthy();
+
+    await request(app)
+      .post("/api/pal/tutor/stream")
+      .set(auth(token))
+      .send({ message: "follow-up doubt", sessionId: sid });
+
+    const full = await request(app).get(`/api/pal/sessions/${sid}`).set(auth(token));
+    expect(full.status).toBe(200);
+    expect(full.body.session.messages).toHaveLength(4);
+    expect(full.body.session.mode).toBe("voice");
+  });
+});
