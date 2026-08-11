@@ -23,7 +23,14 @@ export const env = {
     process.env.JWT_ACCESS_SECRET ?? process.env.JWT_SECRET ?? DEV_ACCESS_SECRET,
   refreshSecret:
     process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET ?? DEV_REFRESH_SECRET,
-  accessTtl: process.env.ACCESS_TTL ?? "15m",
+  /* 15 minutes was the default, and the refresh that was meant to cover it
+     cannot run on the current deployment: the refresh cookie is SameSite=None,
+     which a browser only stores with Secure, which it only honours over HTTPS.
+     Until the site and the API are both on TLS there is no refresh at all — so
+     a 15-minute access token means a student is signed out in the middle of a
+     chapter the product itself calls "about 24 minutes".
+     Restore a short TTL the moment TLS lands and the cookie survives. */
+  accessTtl: process.env.ACCESS_TTL ?? "12h",
   refreshTtl: process.env.REFRESH_TTL ?? "7d",
   refreshCookieName: "edulearn_refresh",
 
