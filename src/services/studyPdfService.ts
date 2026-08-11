@@ -34,7 +34,7 @@ export interface StudyDoc {
  * not a syllabus checker. A real chapter name that is not on it still passes
  * as long as it reads like a topic rather than a sentence.
  */
-const SCIENCE_HINTS = [
+const SUBJECT_HINTS = [
   "photosynth", "respiration", "digest", "circulat", "excret", "reproduc",
   "cell", "tissue", "organ", "microb", "bacteria", "virus", "plant", "animal",
   "food", "nutrition", "fibre", "fabric", "material", "metal", "non-metal",
@@ -49,6 +49,20 @@ const SCIENCE_HINTS = [
   "matter", "state of matter", "physic", "chemist", "biolog", "science",
   "gene", "dna", "evolution", "human", "body", "skeleton", "muscle", "brain",
   "heart", "lung", "kidney", "eye", "ear", "blood", "nerve",
+
+  /* A study sheet is as useful for fractions or the Mughal empire as it is for
+     photosynthesis. This guard exists to refuse "how do I hack the portal",
+     not to refuse three quarters of the syllabus. */
+  "fraction", "decimal", "integer", "number", "algebra", "equation", "ratio",
+  "percent", "geometry", "angle", "triangle", "circle", "area", "perimeter",
+  "volume", "mensuration", "symmetry", "data", "graph", "statistic", "maths",
+  "mathematics", "arithmetic", "multiplication", "division", "square root",
+  "history", "civics", "geography", "empire", "dynasty", "kingdom", "mughal",
+  "maurya", "gupta", "harappa", "indus", "vedic", "medieval", "freedom",
+  "constitution", "democracy", "government", "panchayat", "parliament",
+  "map", "latitude", "longitude", "globe", "monsoon", "river", "mountain",
+  "grammar", "noun", "verb", "adjective", "tense", "essay", "comprehension",
+  "poem", "story", "vocabulary", "english", "hindi", "sanskrit", "vyakaran",
 ];
 
 /** Rejects sentences, questions and obvious junk; accepts topic-shaped input. */
@@ -66,14 +80,14 @@ export function checkTopic(raw: string): { ok: boolean; reason?: string } {
   }
 
   const low = topic.toLowerCase();
-  const looksScience = SCIENCE_HINTS.some((h) => low.includes(h));
+  const looksLikeTopic = SUBJECT_HINTS.some((h) => low.includes(h));
   /* A two-or-three word phrase that is not obviously off-topic is allowed
      through: chapter names are endless and an allow-list cannot hold them
      all. Anything longer has to actually look like science. */
-  if (!looksScience && words.length > 3) {
+  if (!looksLikeTopic && words.length > 3) {
     return {
       ok: false,
-      reason: "This does not look like a science topic. Try something like 'Photosynthesis'.",
+      reason: "That does not look like a chapter or topic. Try something like 'Fractions' or 'Photosynthesis'.",
     };
   }
   return { ok: true };
@@ -94,7 +108,7 @@ const SECTION_PLAN = [
 
 function prompt(topic: string, className: string): string {
   return [
-    `Write study material on "${topic}" for a ${className} student following the NCERT science curriculum.`,
+    `Write study material on "${topic}" for a ${className} student following the NCERT curriculum.`,
     "",
     "Return ONLY a JSON object, no markdown fence, in exactly this shape:",
     '{"sections":[{"heading":"...","body":["para",...],"points":["line",...]}]}',
@@ -155,7 +169,7 @@ function outline(topic: string, className: string): StudySection[] {
     {
       heading: "Introduction",
       body: [
-        `This study sheet covers ${topic} for ${className}, following the NCERT science curriculum.`,
+        `This study sheet covers ${topic} for ${className}, following the NCERT curriculum.`,
         "The explanation could not be written automatically right now, so the sheet below is a structure to work through with your textbook or with PAL.",
       ],
     },
