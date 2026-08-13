@@ -9,6 +9,9 @@ const MAX_ATTEMPTS = 5; // wrong guesses before a code is locked
 const RESEND_COOLOFF_MS = 30 * 1000; // min gap between sends per channel
 
 type Channel = "email" | "phone";
+// What a code entitles its holder to do. Codes are scoped to one purpose so a
+// verification code can never be spent on a password reset, and vice versa.
+export type Purpose = "verify" | "reset";
 
 function generateCode(): string {
   // 6-digit, zero-padded, cryptographically random.
@@ -28,14 +31,18 @@ export interface SendOtpResult {
 }
 
 // Create + send a fresh OTP for one channel. Enforces a short resend cool-off.
-export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpResult> {
+export async function sendOtp(
+  user: IUser,
+  channel: Channel,
+  purpose: Purpose = "verify"
+): Promise<SendOtpResult> {
   const destination = channel === "email" ? user.email : user.phone;
   if (!destination) {
     throw new Error(`User has no ${channel} on file`);
   }
 
-  // Cool-off: block rapid re-sends for the same user+channel.
-  const recent = await OtpCode.findOne({ userId: user._id, channel }).sort({
+  // Cool-off: block rapid re-sends for the same user+channel+purpose.
+  const recent = await OtpCode.findOne({ userId: user._id, channel, purpose }).sort({
     createdAt: -1,
   });
   if (recent && Date.now() - recent.createdAt.getTime() < RESEND_COOLOFF_MS) {
@@ -46,12 +53,19 @@ export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpRes
   await OtpCode.create({
     userId: user._id,
     channel,
+    purpose,
     destination,
     codeHash: hashCode(code),
     expiresAt: new Date(Date.now() + OTP_TTL_MS),
   });
 
-  const message = `Your BestBrain verification code is ${code}. It expires in 10 minutes.`;
+  // Say what the code is for. A reset code arriving labelled "verification"
+  // gives the reader no way to notice a reset they did not ask for.
+  const message =
+    purpose === "reset"
+      ? `Your BestBrain password reset code is ${code}. It expires in 10 minutes. ` +
+        `If you did not ask to reset your password, ignore this message and your password stays unchanged.`
+      : `Your BestBrain verification code is ${code}. It expires in 10 minutes.`;
 
   // A provider failure (e.g. unverified recipient on a trial plan) must not
   // crash the request — the code is already stored, only delivery failed. We
@@ -59,9 +73,11 @@ export async function sendOtp(user: IUser, channel: Channel): Promise<SendOtpRes
   let delivered = false;
   let via = "none";
   try {
+    const subject =
+      purpose === "reset" ? "BestBrain password reset code" : "BestBrain verification code";
     const result =
       channel === "email"
-        ? await sendEmail(destination, "BestBrain verification code", message)
+        ? await sendEmail(destination, subject, message)
         : await sendSms(destination, message);
     delivered = result.delivered;
     via = result.via;
@@ -84,11 +100,13 @@ export type VerifyOutcome =
 export async function verifyOtp(
   user: IUser,
   channel: Channel,
-  code: string
+  code: string,
+  purpose: Purpose = "verify"
 ): Promise<VerifyOutcome> {
   const otp = await OtpCode.findOne({
     userId: user._id,
     channel,
+    purpose,
     consumedAt: { $exists: false },
   }).sort({ createdAt: -1 });
 
@@ -102,13 +120,19 @@ export async function verifyOtp(
     return { ok: false, reason: "mismatch" };
   }
 
-  // Success — consume this code and mark the channel verified.
+  // Success — consume this code so it cannot be replayed.
   otp.consumedAt = new Date();
   await otp.save();
 
-  if (channel === "email") user.emailVerified = true;
-  else user.phoneVerified = true;
-  await user.save();
+  // Only a "verify" code proves the user owns the channel. A reset code is
+  // proof of the same thing in practice, but treating it as verification
+  // would let the reset flow quietly complete onboarding, so the two stay
+  // separate and each does exactly what it says.
+  if (purpose === "verify") {
+    if (channel === "email") user.emailVerified = true;
+    else user.phoneVerified = true;
+    await user.save();
+  }
 
   return { ok: true };
 }

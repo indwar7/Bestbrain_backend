@@ -12,6 +12,7 @@ import {
 import { requireAuth } from "../middleware/auth";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { requestOtp, confirmOtp } from "../controllers/otpController";
+import { forgotPassword, resetPassword } from "../controllers/passwordController";
 import { otpLimiter, authLimiter } from "../middleware/rateLimit";
 
 const router = Router();
@@ -28,6 +29,12 @@ router.post("/login", authLimiter, asyncHandler(login));
 // Email / phone OTP verification (rate-limited; pre-login).
 router.post("/send-otp", otpLimiter, asyncHandler(requestOtp));
 router.post("/verify-otp", otpLimiter, asyncHandler(confirmOtp));
+
+// Password reset: ask for a code, then spend it on a new password. On the OTP
+// limiter rather than the auth one — these are code-issuing endpoints, and the
+// tighter budget is the point.
+router.post("/forgot-password", otpLimiter, asyncHandler(forgotPassword));
+router.post("/reset-password", otpLimiter, asyncHandler(resetPassword));
 
 router.post("/refresh", asyncHandler(refresh));
 router.post("/logout", asyncHandler(logout));
