@@ -8,6 +8,12 @@ export interface IProgress {
   badges: string[];
   chapters: Record<string, unknown>;
   pal: Record<string, unknown>;
+  // Spendable balance. The running total lives here so a screen can render it
+  // in one read; CoinLedger holds the entry behind every change, so the
+  // balance can always be explained and re-derived. Coins are only ever
+  // awarded by the server, from events it has already accepted — a client
+  // cannot ask to be given any.
+  coins: number;
 }
 
 // A class a teacher is assigned to teach.
@@ -96,6 +102,9 @@ const userSchema = new Schema<IUser>(
       badges: { type: [String], default: [] },
       chapters: { type: Schema.Types.Mixed, default: {} },
       pal: { type: Schema.Types.Mixed, default: {} },
+      // min:0 is a backstop: spending checks the balance first, and this makes
+      // a negative balance unwritable even if some future path forgets to.
+      coins: { type: Number, default: 0, min: 0 },
     },
 
     // TEACHER

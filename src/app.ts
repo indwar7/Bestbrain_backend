@@ -10,6 +10,7 @@ import { requestLogger } from "./middleware/logger";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import progressRoutes from "./routes/progressRoutes";
+import coinRoutes from "./routes/coinRoutes";
 import palRoutes from "./routes/palRoutes";
 import liveRoutes from "./routes/liveRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
@@ -95,6 +96,7 @@ app.get("/", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/progress", progressRoutes);
+app.use("/api/coins", coinRoutes);
 app.use("/api/pal", palRoutes);
 app.use("/api/live", liveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
