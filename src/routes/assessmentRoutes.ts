@@ -13,6 +13,9 @@ import {
   getChallenge,
   answerChallenge,
   challengeLeaderboard,
+  getBank,
+  answerBankQuestion,
+  bankChapterCounts,
 } from "../controllers/assessmentController";
 
 const router = Router();
@@ -29,6 +32,12 @@ router.post("/mock/record", asyncHandler(recordMockAttempt));
 router.post("/mock/:attemptId/answer", asyncHandler(answerMockQuestion));
 router.post("/mock/:attemptId/submit", asyncHandler(submitMock));
 router.get("/mock/history", asyncHandler(mockHistory));
+
+// Question bank — students. Untimed chapter practice; no attempt is recorded,
+// so there is nothing to start or submit, only fetch and grade.
+router.get("/bank", asyncHandler(getBank));
+router.get("/bank/chapters", asyncHandler(bankChapterCounts));
+router.post("/bank/answer", asyncHandler(answerBankQuestion));
 
 // Hourly challenge — students.
 router.get("/challenge", asyncHandler(getChallenge));

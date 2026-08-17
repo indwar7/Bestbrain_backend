@@ -13,12 +13,13 @@
     "seed:questions": "tsx src/scripts/seedQuestions.ts",
     "demo": "USE_MEMORY_DB=true tsx src/scripts/demo.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seed:class6science": "tsx src/scripts/seedClass6Science.ts"
   },
   "keywords": [],
   "author": "Abhaydeep Indwar",
   "license": "MIT",
-  "description": "Backend API for EduLearn — auth, user progress, PAL, challenges, live classes",
+  "description": "Backend API for EduLearn \u2014 auth, user progress, PAL, challenges, live classes",
   "dependencies": {
     "@google/genai": "^2.9.0",
     "bcryptjs": "^3.0.3",

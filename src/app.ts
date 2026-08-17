@@ -19,6 +19,7 @@ import videoRoutes from "./routes/videoRoutes";
 import noteRoutes from "./routes/noteRoutes";
 import curriculumRoutes from "./routes/curriculumRoutes";
 import assessmentRoutes from "./routes/assessmentRoutes";
+import homeworkRoutes from "./routes/homeworkRoutes";
 
 export const app = express();
 
@@ -105,6 +106,7 @@ app.use("/api/videos", videoRoutes);
 app.use("/api/notes", noteRoutes);
 app.use("/api/curriculum", curriculumRoutes);
 app.use("/api/assessments", assessmentRoutes);
+app.use("/api/homework", homeworkRoutes);
 
 // 404 fallback
 app.use((_req, res) => {

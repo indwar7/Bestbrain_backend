@@ -5,6 +5,11 @@ import { User } from "../models/User";
 import { Question, IQuestion } from "../models/Question";
 import { MockAttempt } from "../models/MockAttempt";
 import { ChallengeAttempt } from "../models/ChallengeAttempt";
+import { awardCoins } from "../services/coinService";
+
+// What one first-correct bank answer is worth. Small on purpose: practice
+// should be worth doing, not worth farming.
+const BANK_COINS_PER_FIRST_CORRECT = 1;
 
 // Strip the answer before sending a question to a student.
 function publicQuestion(q: IQuestion) {
@@ -433,4 +438,149 @@ export async function challengeLeaderboard(req: AuthRequest, res: Response): Pro
     })),
     you: me ? { points: me.points, correct: me.correct } : null,
   });
+}
+
+// ===========================================================================
+// QUESTION BANK
+//
+// Chapter practice, not a test. There is no clock, no attempt row and no score
+// kept: a student opens a chapter, answers, is told immediately whether they
+// were right and why, and can keep going for as long as they like. That is the
+// whole difference from a mock test, and it is why nothing here writes an
+// attempt record.
+//
+// Coins are paid on the FIRST correct answer to each question and never again,
+// so drilling the same chapter twice is worth doing and worth nothing extra.
+// The ledger's unique refId is what holds that — see awardCoins.
+// ===========================================================================
+
+// A question is available to the bank if it was authored for the bank, or for
+// anything ("both"). Mock- and challenge-only questions stay out, so a teacher
+// can keep exam material out of open practice.
+const BANK_USAGE = { $in: ["bank", "both"] };
+
+// GET /api/assessments/bank?subject=&chapterSlug=&count=&difficulty=
+// Student only. Serves questions for the student's OWN class — className is
+// taken from the account, never from the query, so a Class 6 student cannot
+// ask for Class 9 material.
+export async function getBank(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user || user.role !== "student") {
+    res.status(403).json({ error: "Only students can practise the question bank" });
+    return;
+  }
+
+  const { subject, chapterSlug, difficulty } = req.query as {
+    subject?: string;
+    chapterSlug?: string;
+    difficulty?: string;
+  };
+  if (!subject) {
+    res.status(400).json({ error: "subject is required" });
+    return;
+  }
+  const count = Math.min(Math.max(Number(req.query.count) || 10, 1), 50);
+
+  const match: Record<string, unknown> = {
+    className: user.className,
+    subject,
+    usage: BANK_USAGE,
+  };
+  if (chapterSlug) match.chapterSlug = chapterSlug;
+  if (["easy", "medium", "hard"].includes(String(difficulty))) match.difficulty = difficulty;
+
+  // Sampled rather than sorted: coming back to a chapter should not deal the
+  // same ten questions in the same order every time.
+  const picked = await Question.aggregate([{ $match: match }, { $sample: { size: count } }]);
+
+  res.json({
+    className: user.className,
+    subject,
+    chapterSlug: chapterSlug || "",
+    total: picked.length,
+    questions: picked.map((q) => publicQuestion(q as IQuestion)),
+  });
+}
+
+// POST /api/assessments/bank/answer   Body: { questionId, chosenIndex }
+// Grades one answer and returns the solution WITH its explanation — the point
+// of the bank is to learn the thing immediately, not at the end of a paper.
+export async function answerBankQuestion(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user || user.role !== "student") {
+    res.status(403).json({ error: "Only students can practise the question bank" });
+    return;
+  }
+
+  const { questionId } = req.body as { questionId?: string };
+  const chosenIndex = Number((req.body as { chosenIndex?: number }).chosenIndex);
+  if (!questionId || !mongoose.isValidObjectId(questionId)) {
+    res.status(400).json({ error: "A valid questionId is required" });
+    return;
+  }
+  if (!Number.isInteger(chosenIndex) || chosenIndex < 0) {
+    res.status(400).json({ error: "chosenIndex must be an option index" });
+    return;
+  }
+
+  const q = await Question.findById(questionId);
+  if (!q) {
+    res.status(404).json({ error: "Question not found" });
+    return;
+  }
+  // Same guard as serving: a student may only be graded on their own class's
+  // questions, so a guessed id from another class is refused rather than
+  // answered — which would also leak that question's correctIndex.
+  if (q.className !== user.className) {
+    res.status(403).json({ error: "That question is not for your class" });
+    return;
+  }
+  if (chosenIndex >= q.options.length) {
+    res.status(400).json({ error: "chosenIndex must be an option index" });
+    return;
+  }
+
+  const correct = chosenIndex === q.correctIndex;
+  let coins = { awarded: false, balance: user.progress?.coins ?? 0 };
+  if (correct) {
+    coins = await awardCoins(
+      String(user._id),
+      BANK_COINS_PER_FIRST_CORRECT,
+      "bank_correct",
+      `bank:${String(q._id)}`
+    );
+  }
+
+  res.json({
+    correct,
+    correctIndex: q.correctIndex,
+    explanation: q.explanation || "",
+    coinsAwarded: coins.awarded ? BANK_COINS_PER_FIRST_CORRECT : 0,
+    balance: coins.balance,
+  });
+}
+
+// GET /api/assessments/bank/chapters?subject=
+// How many bank questions each chapter has, so Learn can show a count and hide
+// the module on chapters with nothing in them yet.
+export async function bankChapterCounts(req: AuthRequest, res: Response): Promise<void> {
+  const user = await User.findById(req.user!.id);
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  const { subject } = req.query as { subject?: string };
+  if (!subject) {
+    res.status(400).json({ error: "subject is required" });
+    return;
+  }
+
+  const rows = await Question.aggregate([
+    { $match: { className: user.className, subject, usage: BANK_USAGE } },
+    { $group: { _id: "$chapterSlug", count: { $sum: 1 } } },
+  ]);
+
+  const chapters: Record<string, number> = {};
+  for (const r of rows) chapters[String(r._id || "")] = r.count as number;
+  res.json({ className: user.className, subject, chapters });
 }
