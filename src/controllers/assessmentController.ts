@@ -76,10 +76,19 @@ export async function createQuestion(req: AuthRequest, res: Response): Promise<v
 // GET /api/assessments/questions?className=&subject=  (teacher/admin)
 // Includes the answer so authors can review their bank.
 export async function listQuestions(req: AuthRequest, res: Response): Promise<void> {
-  const { className, subject } = req.query as { className?: string; subject?: string };
+  const { className, subject, chapterSlug, usage } = req.query as {
+    className?: string;
+    subject?: string;
+    chapterSlug?: string;
+    usage?: string;
+  };
   const filter: Record<string, unknown> = {};
   if (className) filter.className = className;
   if (subject) filter.subject = subject;
+  // Assigning homework is a per-chapter job, and without these a teacher had
+  // to page through every question for the class to find the ten they wanted.
+  if (chapterSlug) filter.chapterSlug = chapterSlug;
+  if (["mock", "challenge", "bank", "both"].includes(String(usage))) filter.usage = usage;
   const questions = await Question.find(filter).sort({ createdAt: -1 }).limit(200).lean();
   res.json({ total: questions.length, questions });
 }
