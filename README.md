@@ -1,4 +1,5 @@
-# EduLearn Backend
+# Bestbrainplus
+
 
 REST + WebSocket API for the [EduLearn](https://edulearn-platform-theta.vercel.app) learning platform —
 auth with refresh tokens, role-based access, offline progress sync, PAL AI chat, and live classes.
