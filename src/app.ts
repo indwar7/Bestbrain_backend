@@ -20,6 +20,7 @@ import noteRoutes from "./routes/noteRoutes";
 import curriculumRoutes from "./routes/curriculumRoutes";
 import assessmentRoutes from "./routes/assessmentRoutes";
 import homeworkRoutes from "./routes/homeworkRoutes";
+import subscriptionRoutes from "./routes/subscriptionRoutes";
 
 export const app = express();
 
@@ -84,7 +85,23 @@ app.use(
 );
 
 // Cap JSON body size — reject oversized payloads (DoS guard).
-app.use(express.json({ limit: "1mb" }));
+//
+// `verify` stashes the exact bytes before they are parsed. The Razorpay webhook
+// is signed over the raw body, and re-serialising the parsed object does not
+// reproduce it (key order, unicode escaping and whitespace all differ), so the
+// HMAC would never match without this. Only the webhook path is kept, because
+// holding a second copy of every request body would double body memory for no
+// reason.
+app.use(
+  express.json({
+    limit: "1mb",
+    verify(req, _res, buf) {
+      if (req.url?.startsWith("/api/subscription/webhook")) {
+        (req as express.Request & { rawBody?: Buffer }).rawBody = Buffer.from(buf);
+      }
+    },
+  })
+);
 app.use(cookieParser());
 app.use(requestLogger);
 
@@ -107,6 +124,7 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/curriculum", curriculumRoutes);
 app.use("/api/assessments", assessmentRoutes);
 app.use("/api/homework", homeworkRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 
 // 404 fallback
 app.use((_req, res) => {

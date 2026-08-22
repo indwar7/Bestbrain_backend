@@ -88,6 +88,33 @@ export const env = {
   twilioToken: process.env.TWILIO_AUTH_TOKEN ?? "",
   twilioFrom: process.env.TWILIO_FROM ?? "",
 
+  // ---- Razorpay (BestBrain Plus subscription) ----
+  // The subscription button is a *hosted* widget: Razorpay renders it, takes
+  // the payment, and tells us what happened over a webhook. So the only secret
+  // this server strictly needs is the webhook secret — without it we cannot
+  // verify that a webhook actually came from Razorpay, and an unverified
+  // webhook is an open endpoint that would let anyone grant themselves a
+  // subscription. `razorpayWebhookConfigured` is checked before any event is
+  // applied; when false the endpoint rejects everything rather than trusting it.
+  razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET ?? "",
+  // Key id/secret are only needed if we later create subscriptions from the
+  // server (see RAZORPAY-SETUP.md — "linking a payment to an account").
+  razorpayKeyId: process.env.RAZORPAY_KEY_ID ?? "",
+  razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET ?? "",
+  // The hosted button to render on /pricing. Served to the frontend by
+  // GET /api/subscription/config so the id is not hard-coded in the bundle.
+  razorpaySubscriptionButtonId:
+    process.env.RAZORPAY_SUBSCRIPTION_BUTTON_ID ?? "pl_TSKoRXpZy9rgRy",
+  // Display price, in paise. ₹900 = 90000 — matches the amount actually
+  // configured on the pl_TSKoRXpZy9rgRy Razorpay plan (verified against
+  // Razorpay's own API, not assumed). Razorpay's plan is still the source of
+  // truth for what is actually charged; this only drives the pricing copy.
+  subscriptionPricePaise: Number(process.env.SUBSCRIPTION_PRICE_PAISE ?? 90000),
+  subscriptionCurrency: process.env.SUBSCRIPTION_CURRENCY ?? "INR",
+  get razorpayWebhookConfigured(): boolean {
+    return !!this.razorpayWebhookSecret;
+  },
+
   // Error tracking (optional). When set, wire @sentry/node in index.ts (see
   // config/logger.ts). Unset → errors are structured-logged only.
   sentryDsn: process.env.SENTRY_DSN ?? "",
@@ -136,6 +163,12 @@ export function warnInsecureConfig(): void {
 
   if (!env.vertexConfigured) {
     problems.push("PAL has no credentials — set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
+  }
+
+  if (!env.razorpayWebhookConfigured) {
+    problems.push(
+      "RAZORPAY_WEBHOOK_SECRET is unset — the subscription webhook rejects every event, so paid subscriptions will never activate an account. See RAZORPAY-SETUP.md."
+    );
   }
 
   if (problems.length > 0) {

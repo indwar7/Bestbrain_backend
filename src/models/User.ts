@@ -58,6 +58,19 @@ export interface IUser extends Document {
   // ---------- PARENT fields ----------
   childLinks: IChildLink[];
 
+  // ---------- Subscription (BestBrain Plus) ----------
+  // Denormalised snapshot of this user's Razorpay subscription. The Subscription
+  // collection is the record of truth — this exists so a request that already
+  // loads the user can answer "is this account paid?" without a second query.
+  // Written only by subscriptionService.syncUserSnapshot().
+  subscription: {
+    status: string; // Razorpay status, or "none" when never subscribed
+    active: boolean; // derived: status + paidThrough, evaluated at write time
+    paidThrough: Date | null; // access lasts until this instant
+    razorpaySubscriptionId: string;
+    updatedAt: Date | null;
+  };
+
   // ---------- Preferences (all roles) ----------
   preferences: {
     language: string; // "en" | "hi"
@@ -135,6 +148,19 @@ const userSchema = new Schema<IUser>(
         },
       ],
       default: [],
+    },
+
+    // SUBSCRIPTION (all roles) — see the interface above.
+    // `active` is a stored derivation, not a live one: it is correct as of
+    // `paidThrough`, so any read that cares about expiry must compare
+    // paidThrough against now rather than trusting this flag alone. The
+    // requireSubscription middleware does exactly that.
+    subscription: {
+      status: { type: String, default: "none" },
+      active: { type: Boolean, default: false },
+      paidThrough: { type: Date, default: null },
+      razorpaySubscriptionId: { type: String, default: "" },
+      updatedAt: { type: Date, default: null },
     },
 
     // Preferences (all roles)
