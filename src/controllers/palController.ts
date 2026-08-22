@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { ChatSession } from "../models/ChatSession";
@@ -9,6 +10,49 @@ import {
 import { buildPalContext } from "../services/palContext";
 import { buildStudyDoc, checkTopic } from "../services/studyPdfService";
 import { User } from "../models/User";
+import { awardCoins, spendCoins } from "../services/coinService";
+
+// Coins — see the coin-economy design notes in subscriptionService.ts
+// (coinsForPayment): 3 coins is calibrated against real Gemini 2.5 Flash
+// pricing to sit safely above the actual per-question cost, while still
+// mapping cleanly onto the ₹1/question figure the coin budget was sized
+// around. Only students are metered — PAL's parent/teacher personas were
+// never part of that budget, so charging them would be pricing something
+// that was never costed.
+const PAL_QUESTION_COST = 3;
+
+type PalCharge = { ok: true; refId: string | null } | { ok: false; balance: number };
+
+async function chargePalQuestion(
+  userId: string,
+  role: "student" | "parent" | "teacher"
+): Promise<PalCharge> {
+  if (role !== "student") return { ok: true, refId: null };
+  // A fresh id per attempt, not a client-supplied one — PAL has no natural
+  // "message id" until after a reply exists. The cost of that: a genuine
+  // client retry of a request that actually succeeded charges again. The
+  // upfront-charge-then-refund-on-failure pattern below at least guarantees
+  // the far more common case — the model call itself failing — never costs
+  // the student anything.
+  const refId = `pal:${userId}:${crypto.randomUUID()}`;
+  const result = await spendCoins(userId, PAL_QUESTION_COST, "pal_question", refId);
+  if (!result.spent) return { ok: false, balance: result.balance };
+  return { ok: true, refId };
+}
+
+async function refundPalQuestion(userId: string, refId: string | null): Promise<void> {
+  if (!refId) return;
+  await awardCoins(userId, PAL_QUESTION_COST, "pal_question_refund", refId + ":refund");
+}
+
+function insufficientCoinsPayload(balance: number) {
+  return {
+    error: "Not enough coins for another PAL question.",
+    code: "insufficient_coins",
+    balance,
+    cost: PAL_QUESTION_COST,
+  };
+}
 
 // Validate the inbound message; returns a trimmed string or null (+ writes the
 // 400 response itself) so each handler can `if (!msg) return;`.
@@ -95,6 +139,12 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
     const session = await loadOrCreateSession(req, res, role);
     if (!session) return;
 
+    const charge = await chargePalQuestion(userId, role);
+    if (!charge.ok) {
+      res.status(402).json(insufficientCoinsPayload(charge.balance));
+      return;
+    }
+
     // Ground PAL in the user's REAL BestBrain data (own progress for a student,
     // child's for a parent, class snapshot for a teacher). Best-effort: if it
     // fails, PAL still answers without the data rather than erroring.
@@ -105,7 +155,13 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
       console.error("pal context build failed:", ctxErr);
     }
 
-    const reply = await generatePalReply(role, session.messages, message, context);
+    let reply: string;
+    try {
+      reply = await generatePalReply(role, session.messages, message, context);
+    } catch (genErr) {
+      await refundPalQuestion(userId, charge.refId);
+      throw genErr;
+    }
 
     // Persist both turns so context survives across requests.
     session.messages.push({ role: "user", content: message, at: new Date() });
@@ -135,6 +191,16 @@ async function runChatStream(
 
   const session = await loadOrCreateSession(req, res, role, voice ? "voice" : "text");
   if (!session) return;
+
+  // Charged before the stream opens, not after: once writeHead below sends
+  // 200 the status code can no longer carry "insufficient coins" — it would
+  // have to become an SSE error event instead, and a plain 402 here is
+  // simpler and matches the non-streaming /chat handler.
+  const charge = await chargePalQuestion(userId, role);
+  if (!charge.ok) {
+    res.status(402).json(insufficientCoinsPayload(charge.balance));
+    return;
+  }
 
   // Open the SSE stream.
   res.writeHead(200, {
@@ -177,6 +243,7 @@ async function runChatStream(
     send("done", { sessionId: session.id });
   } catch (err) {
     console.error("pal stream error:", err);
+    await refundPalQuestion(userId, charge.refId);
     // The 200 for the SSE stream is already sent, so the status can't carry
     // this — the event does. (The session is only saved on success above, so a
     // failed stream leaves no empty session behind.)

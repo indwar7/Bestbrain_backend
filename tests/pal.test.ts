@@ -14,11 +14,16 @@ vi.mock("../src/services/palService", () => ({
 import request from "supertest";
 import { app } from "../src/app";
 import { uniqueStudent } from "./setup";
+import { awardCoins } from "../src/services/coinService";
 import "./setup"; // register lifecycle hooks
 
+// PAL now costs coins per question for students (see palController's
+// chargePalQuestion) — a fresh signup has none, so every test here needs a
+// balance seeded first or it would 402 before ever reaching the mocked LLM.
 async function signupStudent() {
   const res = await request(app).post("/api/auth/signup/student").send(uniqueStudent());
   expect(res.status).toBe(201);
+  await awardCoins(res.body.user.id, 100, "test_seed", `test_seed:${res.body.user.id}`);
   return res.body.accessToken as string;
 }
 

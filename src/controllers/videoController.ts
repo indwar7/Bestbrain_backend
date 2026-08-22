@@ -6,8 +6,18 @@ import { Video } from "../models/Video";
 import { User } from "../models/User";
 import { AuthRequest } from "../middleware/auth";
 import { canViewVideo } from "../services/videoEligibility";
+import { spendCoins } from "../services/coinService";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "videos");
+
+// Coins — see the coin-economy design notes in subscriptionService.ts. Keyed
+// to the video id, not a per-view timestamp: a student is charged the first
+// time they watch a given video and rewatching it is free, the same shape as
+// coinService's bank-question idempotency (awardCoins there, spendCoins
+// here). Only students are metered, matching PAL's gate — the coin budget
+// was sized around a student's monthly usage, not a teacher previewing their
+// own upload or a parent checking content.
+const VIDEO_WATCH_COST = 25;
 
 // POST /api/videos — upload a video (teacher or admin). multer puts file on req.file.
 export async function uploadVideo(req: AuthRequest, res: Response): Promise<void> {
@@ -216,7 +226,36 @@ export async function recordView(req: AuthRequest, res: Response): Promise<void>
     res.status(404).json({ error: "Video not found" });
     return;
   }
-  await Video.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+  const videoId = req.params.id;
+
+  // Checked before charging, not after: a valid-shaped but nonexistent id
+  // (bad link, deleted video, probing) must never cost a student coins for
+  // nothing. The pre-existing $inc below only reached a missing doc as a
+  // silent no-op, which was harmless before there was a charge attached to
+  // this endpoint — it stops being harmless the moment there is.
+  const exists = await Video.exists({ _id: videoId });
+  if (!exists) {
+    res.status(404).json({ error: "Video not found" });
+    return;
+  }
+
+  if (req.user!.role === "student") {
+    const refId = `video:${videoId}`;
+    const charge = await spendCoins(req.user!.id, VIDEO_WATCH_COST, "video_watched", refId);
+    // duplicate === already charged for this exact video before (a rewatch,
+    // or a retried request) — proceed either way, just don't charge twice.
+    if (!charge.spent && !charge.duplicate) {
+      res.status(402).json({
+        error: "Not enough coins to watch this video.",
+        code: "insufficient_coins",
+        balance: charge.balance,
+        cost: VIDEO_WATCH_COST,
+      });
+      return;
+    }
+  }
+
+  await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } });
   res.json({ ok: true });
 }
 

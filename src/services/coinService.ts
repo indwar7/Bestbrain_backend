@@ -1,6 +1,12 @@
 import { User } from "../models/User";
 import { CoinLedger } from "../models/CoinLedger";
 
+export interface SpendResult {
+  spent: boolean;
+  duplicate?: boolean;
+  balance: number;
+}
+
 /**
  * Award coins to a student, at most once per refId.
  *
@@ -51,5 +57,62 @@ export async function awardCoins(
     await User.updateOne({ _id: userId }, { $inc: { "progress.coins": -delta } });
     const u = await User.findById(userId).select("progress.coins");
     return { awarded: false, balance: u?.progress?.coins ?? 0 };
+  }
+}
+
+/**
+ * Spend coins against a student's balance, at most once per refId.
+ *
+ * Extracted from coinsController's HTTP handler (which still owns the public
+ * /api/coins/spend endpoint, where amount/reason are client-supplied) so
+ * server-side gates — PAL questions, video views — can charge a
+ * SERVER-DECIDED amount without going through their own HTTP round-trip, and
+ * without trusting a client-supplied cost. Same idempotency contract as
+ * awardCoins: the ledger's unique {userId, refId} index is what makes a
+ * concurrent double-call charge at most once, not a read-then-write here.
+ */
+export async function spendCoins(
+  userId: string,
+  cost: number,
+  reason: string,
+  refId: string
+): Promise<SpendResult> {
+  if (!Number.isInteger(cost) || cost <= 0) {
+    const u = await User.findById(userId).select("progress.coins");
+    return { spent: false, balance: u?.progress?.coins ?? 0 };
+  }
+
+  const already = await CoinLedger.findOne({ userId, refId }).lean();
+  if (already) {
+    const u = await User.findById(userId).select("progress.coins");
+    return { spent: false, duplicate: true, balance: u?.progress?.coins ?? 0 };
+  }
+
+  // Deduct only if the balance actually covers it. The condition is part of
+  // the update rather than a read followed by a write, so two requests
+  // arriving together cannot both see the same balance and both succeed.
+  const updated = await User.findOneAndUpdate(
+    { _id: userId, "progress.coins": { $gte: cost } },
+    { $inc: { "progress.coins": -cost } },
+    { new: true }
+  ).select("progress.coins");
+
+  if (!updated) {
+    const u = await User.findById(userId).select("progress.coins");
+    return { spent: false, balance: u?.progress?.coins ?? 0 };
+  }
+
+  const balance = updated.progress?.coins ?? 0;
+
+  try {
+    await CoinLedger.create({ userId, delta: -cost, reason, refId, balanceAfter: balance });
+    return { spent: true, balance };
+  } catch {
+    // The unique index rejected it — a concurrent request for the same refId
+    // already recorded this spend, and this one has deducted a second time.
+    // Put that back: the ledger is what decides the balance.
+    await User.updateOne({ _id: userId }, { $inc: { "progress.coins": cost } });
+    const u = await User.findById(userId).select("progress.coins");
+    return { spent: false, duplicate: true, balance: u?.progress?.coins ?? 0 };
   }
 }

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { env } from "../config/env";
 import { logger } from "../config/logger";
 import { User } from "../models/User";
+import { awardCoins } from "./coinService";
 import {
   Subscription,
   ISubscription,
@@ -10,6 +11,17 @@ import {
   SUBSCRIPTION_STATUSES,
   isEntitling,
 } from "../models/Subscription";
+
+// Coins are credited 1-for-1 with what was actually paid, in rupees — ₹900
+// becomes 900 coins. That number is a DISPLAY choice (see coinService.ts's
+// spendCoins usage in pal/videoController for the real internal cost basis:
+// 3 coins ≈ ₹1 of actual compute budget, so 900 coins is calibrated to cover
+// roughly ₹300 of real usage, not ₹900 — see the coin-economy design notes).
+// Reading it off doc.amount rather than hard-coding 900 means a future price
+// change is a Razorpay-side config change, not a code change here.
+function coinsForPayment(amountPaise: number): number {
+  return Math.round(amountPaise / 100);
+}
 
 /**
  * BestBrain Plus subscriptions.
@@ -133,6 +145,12 @@ export async function applyWebhookEvent(
 
   const status = normaliseStatus(entity.status) ?? existing?.status ?? "created";
 
+  // Captured before doc.currentStart is overwritten below — this is what lets
+  // us tell "the same period, re-applied" apart from "a new period started",
+  // which is the only signal we have for "credit this cycle's coins" that
+  // doesn't depend on which specific event name Razorpay used to say so.
+  const previousCurrentStart = existing?.currentStart ?? null;
+
   const doc = existing ?? new Subscription({ razorpaySubscriptionId: subId });
   doc.razorpayCustomerId = asString(entity.customer_id) || doc.razorpayCustomerId;
   doc.razorpayPlanId = asString(entity.plan_id) || doc.razorpayPlanId;
@@ -161,6 +179,27 @@ export async function applyWebhookEvent(
 
   if (doc.userId) {
     await syncUserSnapshot(doc.userId.toString());
+
+    // A new billing period started (first activation counts too, since
+    // previousCurrentStart is null then) and it's a period the subscriber is
+    // actually entitled for — credit this cycle's coins, once, idempotently
+    // per (subscription, cycle) so a retried webhook can never double-credit.
+    const cycleChanged =
+      doc.currentStart != null &&
+      (!previousCurrentStart || previousCurrentStart.getTime() !== doc.currentStart.getTime());
+    if (cycleChanged && isEntitling(doc)) {
+      const coins = coinsForPayment(doc.amount);
+      if (coins > 0) {
+        const refId = `subscription:${subId}:cycle:${doc.currentStart!.toISOString()}`;
+        const result = await awardCoins(doc.userId.toString(), coins, "subscription_plus_monthly", refId);
+        if (result.awarded) {
+          logger.info(
+            { userId: doc.userId.toString(), subscriptionId: subId, coins, balance: result.balance },
+            "[subscription] credited coins for new billing cycle"
+          );
+        }
+      }
+    }
   } else {
     // Not an error: the payer has no BestBrain account yet. claimForUser()
     // picks this up when they sign up or log in with the same email.
@@ -276,16 +315,25 @@ export async function claimForUser(user: { id: string; email: string }): Promise
   const email = (user.email ?? "").toLowerCase().trim();
   if (!email) return getEntitlement(user.id);
 
-  const result = await Subscription.updateMany(
-    { userId: null, email },
-    { $set: { userId: user.id } }
-  );
-
-  if (result.modifiedCount > 0) {
+  // Found (not just updateMany'd) because a subscription claimed here — paid
+  // for before the account existed — never passed through applyWebhookEvent's
+  // cycle-detection with a userId attached, so its current cycle's coins were
+  // never credited. That has to happen here instead, once, for each one.
+  const unclaimed = await Subscription.find({ userId: null, email });
+  if (unclaimed.length > 0) {
+    await Subscription.updateMany({ userId: null, email }, { $set: { userId: user.id } });
     logger.info(
-      { userId: user.id, claimed: result.modifiedCount },
+      { userId: user.id, claimed: unclaimed.length },
       "[subscription] linked previously unclaimed subscription(s) to account"
     );
+
+    for (const sub of unclaimed) {
+      if (!isEntitling(sub) || !sub.currentStart) continue;
+      const coins = coinsForPayment(sub.amount);
+      if (coins <= 0) continue;
+      const refId = `subscription:${sub.razorpaySubscriptionId}:cycle:${sub.currentStart.toISOString()}`;
+      await awardCoins(user.id, coins, "subscription_plus_monthly", refId);
+    }
   }
 
   return syncUserSnapshot(user.id);

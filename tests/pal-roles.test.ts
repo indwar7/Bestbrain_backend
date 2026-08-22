@@ -15,14 +15,19 @@ vi.mock("../src/services/palService", () => ({
 import request from "supertest";
 import { app } from "../src/app";
 import { uniqueStudent, uniqueTeacher } from "./setup";
+import { awardCoins } from "../src/services/coinService";
 import "./setup";
 
 const auth = (t: string) => ({ Authorization: `Bearer ${t}` });
 
+// PAL now costs coins per question for students — seed a balance so these
+// tests exercise the role/context plumbing they're actually about, not the
+// coin gate (that has its own coverage in pal-coins.test.ts).
 async function studentToken() {
   const body = uniqueStudent();
   const res = await request(app).post("/api/auth/signup/student").send(body);
   expect(res.status).toBe(201);
+  await awardCoins(res.body.user.id, 100, "test_seed", `test_seed:${res.body.user.id}`);
   return { token: res.body.accessToken as string, body };
 }
 
