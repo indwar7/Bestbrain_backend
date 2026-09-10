@@ -78,7 +78,23 @@ function getClient(): GoogleGenAI {
 
     if (env.googleCredentialsJson) {
       // Parse the service-account JSON straight from the env var.
-      const credentials = JSON.parse(env.googleCredentialsJson);
+      //
+      // Guarded because the usual way this goes wrong is a multi-line paste:
+      // dotenv stops the value at the first newline, so the JSON arrives
+      // truncated and this throws a bare "Unexpected end of JSON input" —
+      // which matches none of isConfigFailure()'s patterns, so the student saw
+      // "PAL is unavailable right now" (a transient-sounding message) for a
+      // permanent setup mistake. Re-thrown with wording that pattern matches
+      // and that names the actual fix.
+      let credentials: Record<string, unknown>;
+      try {
+        credentials = JSON.parse(env.googleCredentialsJson);
+      } catch {
+        throw new Error(
+          "could not load the default credentials: GOOGLE_CREDENTIALS_JSON is not valid JSON. " +
+            "Paste the service-account file as a SINGLE line, keeping the \\n escapes inside private_key."
+        );
+      }
       client = new GoogleGenAI({
         ...base,
         googleAuthOptions: { credentials },

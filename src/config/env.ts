@@ -48,7 +48,41 @@ export const env = {
   googleCredentialsFile: process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "",
   googleCredentialsJson: process.env.GOOGLE_CREDENTIALS_JSON ?? "",
   get vertexConfigured() {
-    return !!(this.googleCredentialsFile || this.googleCredentialsJson);
+    // Vertex needs BOTH a credential and a project id. Checking only the
+    // credential let a half-configured deploy read as configured: the client
+    // then built fine and the first real call failed with "Unable to detect a
+    // Project", which surfaces to the student as a 503 rather than as the
+    // setup mistake it is. VERTEX_PROJECT has no safe default — it names
+    // someone's billing account — so it has to be set explicitly.
+    return !!((this.googleCredentialsFile || this.googleCredentialsJson) && this.vertexProject);
+  },
+
+  // Why the credential is unusable, or "" when it is fine. Kept separate from
+  // vertexConfigured so startup can say which half is missing instead of just
+  // "PAL has no credentials", which sends people looking for the wrong thing.
+  get vertexConfigProblem(): string {
+    const hasCred = !!(this.googleCredentialsFile || this.googleCredentialsJson);
+    if (!hasCred && !this.vertexProject) return "";
+    if (!hasCred) return "VERTEX_PROJECT is set but no credential is — set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS).";
+    if (!this.vertexProject) return "A Google credential is set but VERTEX_PROJECT is not — Vertex cannot infer the project and every PAL call will fail.";
+    if (this.googleCredentialsJson) {
+      let parsed: { project_id?: string; type?: string; private_key?: string };
+      try {
+        parsed = JSON.parse(this.googleCredentialsJson);
+      } catch {
+        // Almost always a multi-line paste: dotenv stops at the first newline,
+        // so the value arrives truncated. The JSON must be on ONE line.
+        return "GOOGLE_CREDENTIALS_JSON is not valid JSON — paste the service-account file as a single line, with the \\n escapes inside private_key left as-is.";
+      }
+      if (parsed.type !== "service_account") return "GOOGLE_CREDENTIALS_JSON is JSON but not a service-account key (its \"type\" is not \"service_account\").";
+      if (!parsed.private_key) return "GOOGLE_CREDENTIALS_JSON has no private_key.";
+      if (parsed.project_id && parsed.project_id !== this.vertexProject) {
+        // Not fatal — a key may legitimately be granted on another project —
+        // but it is far more often a typo, and silently wrong is worse.
+        return `VERTEX_PROJECT is "${this.vertexProject}" but the credential belongs to "${parsed.project_id}". If that is deliberate the key needs Vertex access on ${this.vertexProject}; otherwise one of the two is a typo.`;
+      }
+    }
+    return "";
   },
 
   // LiveKit (live video). If unset, the live-video endpoints return a clear
@@ -161,8 +195,14 @@ export function warnInsecureConfig(): void {
 
   const problems: string[] = [];
 
-  if (!env.vertexConfigured) {
-    problems.push("PAL has no credentials — set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
+  // Two distinct states, and conflating them cost real debugging time: nothing
+  // configured at all (PAL stubs, which is a choice), versus half-configured
+  // (PAL 503s on every call, which is a mistake). Say which one this is.
+  const vertexProblem = env.vertexConfigProblem;
+  if (vertexProblem) {
+    problems.push(`PAL is misconfigured and will fail on every request: ${vertexProblem}`);
+  } else if (!env.vertexConfigured) {
+    problems.push("PAL has no credentials — set GOOGLE_CREDENTIALS_JSON and VERTEX_PROJECT (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
   }
 
   if (!env.razorpayWebhookConfigured) {

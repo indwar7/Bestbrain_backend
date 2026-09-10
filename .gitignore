@@ -9,3 +9,14 @@ uploads/videos/*
 uploads/notes/*
 !uploads/notes/.gitkeep
 reference/
+
+# Service-account credentials. A Google service-account JSON is a live
+# private key: anything holding one must never be committed, and the
+# filename Google hands you (project-hash.json) is easy to drop into the
+# repo root without noticing. Match the shapes rather than one name.
+*-*.json.key
+*service-account*.json
+*credentials*.json
+gcp-*.json
+dev-abhay-*.json
+vertex-*.json
