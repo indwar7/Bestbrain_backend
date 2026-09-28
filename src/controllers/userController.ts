@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { User } from "../models/User";
 import { AuthRequest } from "../middleware/auth";
+import { getProgressInsights } from "../services/progressInsights";
 
 // GET /api/users/me , current user profile
 export async function getMe(req: AuthRequest, res: Response): Promise<void> {
@@ -19,7 +20,11 @@ export async function getProgress(req: AuthRequest, res: Response): Promise<void
     res.status(404).json({ error: "User not found" });
     return;
   }
-  res.json({ progress: user.progress });
+  // The stored `streak` is a client-reported counter; the dashboard shows the
+  // real one computed from events. Send that too so every chip agrees.
+  const insights = await getProgressInsights(String(user._id), new Date());
+  const progress = user.toObject({ minimize: false, flattenMaps: true }).progress;
+  res.json({ progress: { ...progress, dayStreak: insights.dayStreak } });
 }
 
 // Only these progress fields may be written by the client. Everything else in
