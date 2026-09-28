@@ -32,6 +32,16 @@ describe("Auth, signup", () => {
     expect(dup.status).toBe(409);
   });
 
+  it("signs up every role with only name, email, phone and password", async () => {
+    for (const role of ["student", "teacher", "parent"]) {
+      const res = await request(app)
+        .post(`/api/auth/signup/${role}`)
+        .send({ name: "Min " + role, email: `min-${role}-${Date.now()}@x.com`, phone: "9876543210", password: "Secret@123" });
+      expect(res.status).toBe(201);
+      expect(res.body.user.role).toBe(role);
+    }
+  });
+
   it("rejects signup missing required fields", async () => {
     const res = await request(app)
       .post("/api/auth/signup/student")

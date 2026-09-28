@@ -98,26 +98,26 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
     const { name, email, phone, password, rollNumber, className, section, board, subjects } =
       req.body;
 
-    if (!name || !email || !phone || !password || !rollNumber || !className || !section) {
-      res.status(400).json({
-        error:
-          "name, email, phone, password, rollNumber, className and section are required",
-      });
+    // Signup asks only for name, email, phone and password. Roll number,
+    // class and section are optional here and can be filled in later from
+    // the account settings.
+    if (!name || !email || !phone || !password) {
+      res.status(400).json({ error: "name, email, phone and password are required" });
       return;
     }
     if (await emailTaken(email)) {
       res.status(409).json({ error: "Email already registered" });
       return;
     }
-    if (await User.findOne({ rollNumber })) {
+    if (rollNumber && (await User.findOne({ rollNumber }))) {
       res.status(409).json({ error: "This roll number is already registered" });
       return;
     }
 
     // Trim so a stray space typed at signup ("Class 7 " vs "Class 7") can't
     // silently break the exact-match roster lookup a teacher relies on later.
-    const cleanClassName = String(className).trim();
-    const cleanSection = String(section).trim();
+    const cleanClassName = String(className ?? "").trim();
+    const cleanSection = String(section ?? "").trim();
 
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -126,12 +126,13 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
       phone,
       password: hashed,
       role: "student",
-      rollNumber,
+      // left unset (not "") when absent: the unique index is sparse
+      ...(rollNumber ? { rollNumber: String(rollNumber).trim() } : {}),
       className: cleanClassName,
       section: cleanSection,
       board: board ?? "",
       subjects: Array.isArray(subjects) ? subjects : [],
-      classLabel: `${cleanClassName} · ${cleanSection}`,
+      classLabel: [cleanClassName, cleanSection].filter(Boolean).join(" · "),
     });
 
     const accessToken = issueTokens(res, {
@@ -156,18 +157,17 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
     const { name, email, phone, password, teacherId, className, section, subject } =
       req.body;
 
-    if (!name || !email || !phone || !password || !teacherId || !className || !section) {
-      res.status(400).json({
-        error:
-          "name, email, phone, password, teacherId, className and section are required",
-      });
+    // Same four fields as every signup; teacher ID and the class taught are
+    // optional and can be added later.
+    if (!name || !email || !phone || !password) {
+      res.status(400).json({ error: "name, email, phone and password are required" });
       return;
     }
     if (await emailTaken(email)) {
       res.status(409).json({ error: "Email already registered" });
       return;
     }
-    if (await User.findOne({ teacherId })) {
+    if (teacherId && (await User.findOne({ teacherId }))) {
       res.status(409).json({ error: "This teacher ID is already registered" });
       return;
     }
@@ -181,14 +181,17 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
       phone,
       password: hashed,
       role: "teacher",
-      teacherId,
-      teaches: [
-        {
-          className: String(className).trim(),
-          section: String(section).trim(),
-          subject: subject ?? "General",
-        },
-      ],
+      ...(teacherId ? { teacherId: String(teacherId).trim() } : {}),
+      teaches:
+        className && section
+          ? [
+              {
+                className: String(className).trim(),
+                section: String(section).trim(),
+                subject: subject ?? "General",
+              },
+            ]
+          : [],
     });
 
     const accessToken = issueTokens(res, {
@@ -214,11 +217,8 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
     const { name, email, phone, password, childRollNumber, childName, childClass } =
       req.body;
 
-    if (!name || !email || !phone || !password || !childRollNumber || !childName || !childClass) {
-      res.status(400).json({
-        error:
-          "name, email, phone, password, childRollNumber, childName and childClass are required",
-      });
+    if (!name || !email || !phone || !password) {
+      res.status(400).json({ error: "name, email, phone and password are required" });
       return;
     }
     if (await emailTaken(email)) {
@@ -226,20 +226,31 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // Verify the child: roll number must exist AND name + class must match,
-    // so a fat-fingered roll number can't silently link the wrong student.
-    const hasRoll = !!(await User.findOne({ role: "student", rollNumber: childRollNumber }));
-    if (!hasRoll) {
-      res.status(404).json({ error: "No student found with that roll number" });
-      return;
-    }
-    const child = await findMatchingChild(childRollNumber, childName, childClass);
-    if (!child) {
-      res.status(400).json({
-        error:
-          "Student details don't match. Check the name and class for this roll number.",
-      });
-      return;
+    // Linking a child is optional at signup (it can be done later via
+    // relink-child). When details ARE given they are still verified: roll
+    // number must exist AND name + class must match, so a fat-fingered roll
+    // number can't silently link the wrong student.
+    let child: IUser | null = null;
+    if (childRollNumber || childName || childClass) {
+      if (!childRollNumber || !childName || !childClass) {
+        res.status(400).json({
+          error: "To link your child, give their roll number, name and class.",
+        });
+        return;
+      }
+      const hasRoll = !!(await User.findOne({ role: "student", rollNumber: childRollNumber }));
+      if (!hasRoll) {
+        res.status(404).json({ error: "No student found with that roll number" });
+        return;
+      }
+      child = await findMatchingChild(childRollNumber, childName, childClass);
+      if (!child) {
+        res.status(400).json({
+          error:
+            "Student details don't match. Check the name and class for this roll number.",
+        });
+        return;
+      }
     }
 
     const hashed = await bcrypt.hash(password, 10);
@@ -249,14 +260,16 @@ export async function signupParent(req: Request, res: Response): Promise<void> {
       phone,
       password: hashed,
       role: "parent",
-      childLinks: [
-        {
-          studentId: child._id,
-          rollNumber: childRollNumber,
-          relation: "guardian",
-          status: "verified",
-        },
-      ],
+      childLinks: child
+        ? [
+            {
+              studentId: child._id,
+              rollNumber: childRollNumber,
+              relation: "guardian",
+              status: "verified",
+            },
+          ]
+        : [],
     });
 
     const accessToken = issueTokens(res, {
