@@ -123,7 +123,7 @@ export async function startMock(req: AuthRequest, res: Response): Promise<void> 
 
   let pool = await Question.aggregate([{ $match: match }, { $sample: { size: count } }]);
 
-  // A shared chapter link with no matching questions yet shouldn't dead-end —
+  // A shared chapter link with no matching questions yet shouldn't dead-end ,
   // fall back to the subject's general pool rather than a bare 404.
   if (pool.length === 0 && chapterSlug) {
     delete match.chapterSlug;
@@ -182,7 +182,7 @@ export async function answerMockQuestion(req: AuthRequest, res: Response): Promi
   }
 
   // Record the choice as we go so a dropped connection doesn't lose the attempt.
-  // Once revealed, the answer is locked — you can't read the solution and then
+  // Once revealed, the answer is locked, you can't read the solution and then
   // change your mind. Repeating the same call is idempotent (safe on retry).
   if (!attempt.revealed.includes(index)) {
     const raw = Number(req.body?.chosenIndex);
@@ -227,7 +227,7 @@ export async function submitMock(req: AuthRequest, res: Response): Promise<void>
   const review = attempt.questionIds.map((qid, i) => {
     const q = byId.get(String(qid));
     // A question answered one-at-a-time (see answerMockQuestion) is already
-    // locked server-side — trust that over whatever the client posts now.
+    // locked server-side, trust that over whatever the client posts now.
     const chosen = attempt.revealed.includes(i)
       ? attempt.answers[i]
       : Number(answers[i]);
@@ -254,7 +254,7 @@ export async function submitMock(req: AuthRequest, res: Response): Promise<void>
 // POST /api/assessments/mock/record  Body: { subject, testName?, score, total, mastery? }
 // Persists a COMPLETED attempt from the client-side adaptive test engine. That
 // engine runs entirely in the browser with its own question bank, so there's no
-// server-side attempt to grade via submitMock — we just record the result so it
+// server-side attempt to grade via submitMock, we just record the result so it
 // survives re-login, syncs across devices, and is visible server-side.
 export async function recordMockAttempt(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
@@ -302,7 +302,7 @@ export async function recordMockAttempt(req: AuthRequest, res: Response): Promis
   });
 }
 
-// GET /api/assessments/mock/history — the student's past attempts.
+// GET /api/assessments/mock/history, the student's past attempts.
 export async function mockHistory(req: AuthRequest, res: Response): Promise<void> {
   const attempts = await MockAttempt.find({ userId: req.user!.id, finished: true })
     .select("subject testName score total mastery finishedAt")
@@ -316,7 +316,7 @@ export async function mockHistory(req: AuthRequest, res: Response): Promise<void
 // HOURLY CHALLENGE
 // ===========================================================================
 
-// GET /api/assessments/challenge — the current hour's question (one per hour,
+// GET /api/assessments/challenge, the current hour's question (one per hour,
 // shared by everyone in the student's class). Answer stripped.
 export async function getChallenge(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
@@ -354,7 +354,7 @@ export async function getChallenge(req: AuthRequest, res: Response): Promise<voi
     return;
   }
 
-  // Hash the hour key to an index — same hour → same question.
+  // Hash the hour key to an index, same hour → same question.
   let h = 0;
   for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const q = pool[h % pool.length];
@@ -424,7 +424,7 @@ export async function answerChallenge(req: AuthRequest, res: Response): Promise<
   }
 }
 
-// GET /api/assessments/challenge/leaderboard — top scorers for the current hour.
+// GET /api/assessments/challenge/leaderboard, top scorers for the current hour.
 export async function challengeLeaderboard(req: AuthRequest, res: Response): Promise<void> {
   const key = hourKey(new Date());
   const top = await ChallengeAttempt.find({ hourKey: key })
@@ -460,7 +460,7 @@ export async function challengeLeaderboard(req: AuthRequest, res: Response): Pro
 //
 // Coins are paid on the FIRST correct answer to each question and never again,
 // so drilling the same chapter twice is worth doing and worth nothing extra.
-// The ledger's unique refId is what holds that — see awardCoins.
+// The ledger's unique refId is what holds that, see awardCoins.
 // ===========================================================================
 
 // A question is available to the bank if it was authored for the bank, or for
@@ -469,7 +469,7 @@ export async function challengeLeaderboard(req: AuthRequest, res: Response): Pro
 const BANK_USAGE = { $in: ["bank", "both"] };
 
 // GET /api/assessments/bank?subject=&chapterSlug=&count=&difficulty=
-// Student only. Serves questions for the student's OWN class — className is
+// Student only. Serves questions for the student's OWN class, className is
 // taken from the account, never from the query, so a Class 6 student cannot
 // ask for Class 9 material.
 export async function getBank(req: AuthRequest, res: Response): Promise<void> {
@@ -512,7 +512,7 @@ export async function getBank(req: AuthRequest, res: Response): Promise<void> {
 }
 
 // POST /api/assessments/bank/answer   Body: { questionId, chosenIndex }
-// Grades one answer and returns the solution WITH its explanation — the point
+// Grades one answer and returns the solution WITH its explanation, the point
 // of the bank is to learn the thing immediately, not at the end of a paper.
 export async function answerBankQuestion(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
@@ -539,7 +539,7 @@ export async function answerBankQuestion(req: AuthRequest, res: Response): Promi
   }
   // Same guard as serving: a student may only be graded on their own class's
   // questions, so a guessed id from another class is refused rather than
-  // answered — which would also leak that question's correctIndex.
+  // answered, which would also leak that question's correctIndex.
   if (q.className !== user.className) {
     res.status(403).json({ error: "That question is not for your class" });
     return;

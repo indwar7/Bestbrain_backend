@@ -39,7 +39,7 @@ async function balanceOf(token: string) {
   return res.body.balance as number;
 }
 
-describe("PAL — coin gate (students)", () => {
+describe("PAL, coin gate (students)", () => {
   it("charges 3 coins for a successful question", async () => {
     const { token } = await signupStudent(100);
     const res = await request(app)
@@ -75,7 +75,7 @@ describe("PAL — coin gate (students)", () => {
       .set(auth(token))
       .send({ message: "explain fractions" });
     expect(res.status).toBe(500);
-    expect(await balanceOf(token)).toBe(100); // charged, then refunded — net zero
+    expect(await balanceOf(token)).toBe(100); // charged, then refunded, net zero
   });
 
   it("a student with exactly 3 coins can ask exactly one question", async () => {
@@ -101,7 +101,7 @@ describe("PAL — coin gate (students)", () => {
       .set(auth(token))
       .send({ message: "how is my class doing" });
     expect(res.status).toBe(200);
-    // No coin balance field on a teacher account — confirms the gate never
+    // No coin balance field on a teacher account, confirms the gate never
     // touched it (an attempt to charge a role with no such flow would 402
     // or error, not 200).
   });

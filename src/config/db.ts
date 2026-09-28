@@ -35,7 +35,7 @@ export async function connectDB(): Promise<void> {
     );
 
     // Mongoose's default autoIndex only ever ADDS indexes that are missing by
-    // name — it never alters an existing index's options. The users collection
+    // name, it never alters an existing index's options. The users collection
     // had a plain (non-unique) rollNumber index from before the schema added
     // `unique: true`, so duplicate roll numbers could still slip in and get
     // linked to the wrong parent. syncIndexes reconciles the real indexes with
@@ -47,7 +47,7 @@ export async function connectDB(): Promise<void> {
     } catch (err) {
       logger.error(
         { err },
-        "User.syncIndexes failed — check for duplicate rollNumber/teacherId values before retrying"
+        "User.syncIndexes failed, check for duplicate rollNumber/teacherId values before retrying"
       );
     }
 

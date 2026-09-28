@@ -38,7 +38,7 @@ async function makeQuestion(
   return res.body.id as string;
 }
 
-describe("Question bank — serving", () => {
+describe("Question bank, serving", () => {
   it("returns questions for the student's own class and chapter", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student"); // Class 7 by default
@@ -113,7 +113,7 @@ describe("Question bank — serving", () => {
   });
 });
 
-describe("Question bank — grading", () => {
+describe("Question bank, grading", () => {
   it("marks a right answer right and returns the explanation", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");
@@ -205,7 +205,7 @@ describe("Question bank — grading", () => {
   });
 });
 
-describe("Question bank — chapter counts", () => {
+describe("Question bank, chapter counts", () => {
   it("counts bank questions per chapter for the student's class", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");

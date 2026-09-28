@@ -68,7 +68,7 @@ export async function sendOtp(
       : `Your BestBrain verification code is ${code}. It expires in 10 minutes.`;
 
   // A provider failure (e.g. unverified recipient on a trial plan) must not
-  // crash the request — the code is already stored, only delivery failed. We
+  // crash the request, the code is already stored, only delivery failed. We
   // log it and, outside production, surface the code so the flow stays testable.
   let delivered = false;
   let via = "none";
@@ -120,7 +120,7 @@ export async function verifyOtp(
     return { ok: false, reason: "mismatch" };
   }
 
-  // Success — consume this code so it cannot be replayed.
+  // Success, consume this code so it cannot be replayed.
   otp.consumedAt = new Date();
   await otp.save();
 

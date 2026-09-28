@@ -3,7 +3,7 @@ import { env } from "./env";
 
 // -----------------------------------------------------------------------------
 // Structured application logger.
-//   - Production: JSON lines (one object per line) — ready for CloudWatch / Loki
+//   - Production: JSON lines (one object per line), ready for CloudWatch / Loki
 //     / any log aggregator, and for shipping to an error tracker.
 //   - Development: pretty, colourised, human-readable output.
 // Secrets are redacted so tokens/passwords/cookies never land in logs.
@@ -52,7 +52,7 @@ export function captureException(err: unknown, context?: Record<string, unknown>
   // so it's obvious the integration still needs the 3 steps above.
   if (env.sentryDsn && !warnedNoSentry) {
     warnedNoSentry = true;
-    logger.warn("SENTRY_DSN is set but @sentry/node is not installed — errors are logged only.");
+    logger.warn("SENTRY_DSN is set but @sentry/node is not installed, errors are logged only.");
   }
 }
 

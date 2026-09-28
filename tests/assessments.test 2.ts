@@ -31,7 +31,7 @@ async function seedQuestions(teacher: string, n = 5) {
   }
 }
 
-describe("Assessments — authoring", () => {
+describe("Assessments, authoring", () => {
   it("teacher can create a question; student cannot", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");
@@ -56,7 +56,7 @@ describe("Assessments — authoring", () => {
   });
 });
 
-describe("Assessments — mock test", () => {
+describe("Assessments, mock test", () => {
   let student: string;
   beforeEach(async () => {
     const teacher = await tokenFor("teacher");
@@ -95,7 +95,7 @@ describe("Assessments — mock test", () => {
   });
 });
 
-describe("Assessments — hourly challenge", () => {
+describe("Assessments, hourly challenge", () => {
   let student: string;
   beforeEach(async () => {
     const teacher = await tokenFor("teacher");

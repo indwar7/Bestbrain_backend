@@ -12,7 +12,7 @@ export interface IProgressEvent extends Document {
   clientEventId: string; // unique id generated on the client (for idempotency)
   type: ProgressEventType;
   payload: Record<string, unknown>;
-  occurredAt: Date; // client timestamp — used for chronological merge
+  occurredAt: Date; // client timestamp, used for chronological merge
   createdAt: Date;
 }
 

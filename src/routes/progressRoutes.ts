@@ -8,8 +8,8 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.get("/", asyncHandler(getProgress)); // GET  /api/progress       — current snapshot
-router.put("/", asyncHandler(saveProgress)); // PUT  /api/progress       — overwrite/merge snapshot
-router.post("/sync", asyncHandler(syncProgress)); // POST /api/progress/sync — batched offline events
+router.get("/", asyncHandler(getProgress)); // GET  /api/progress      , current snapshot
+router.put("/", asyncHandler(saveProgress)); // PUT  /api/progress      , overwrite/merge snapshot
+router.post("/sync", asyncHandler(syncProgress)); // POST /api/progress/sync, batched offline events
 
 export default router;

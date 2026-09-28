@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 // A chapter is a unit of content within a subject. `slug` is the stable key that
-// progress events reference as `chapterId` — it's backward-compatible with the
+// progress events reference as `chapterId`, it's backward-compatible with the
 // free-form keys used before curriculum management existed (e.g. "ch-fractions").
 export interface IChapter extends Document {
   subjectId: mongoose.Types.ObjectId;

@@ -16,7 +16,7 @@ function evt(id: string, type: string, payload: Record<string, unknown>, occurre
   return { clientEventId: id, type, payload, occurredAt };
 }
 
-describe("Progress — sync (idempotent offline events)", () => {
+describe("Progress, sync (idempotent offline events)", () => {
   let token: string;
   beforeEach(async () => {
     token = await studentToken();
@@ -38,7 +38,7 @@ describe("Progress — sync (idempotent offline events)", () => {
     expect(res.body.progress.minutes).toBe(35);
   });
 
-  it("is idempotent — re-sending the same clientEventId is skipped", async () => {
+  it("is idempotent, re-sending the same clientEventId is skipped", async () => {
     const now = new Date().toISOString();
     const first = await request(app)
       .post("/api/progress/sync")
@@ -80,7 +80,7 @@ describe("Progress — sync (idempotent offline events)", () => {
   });
 });
 
-describe("Progress — snapshot get/save", () => {
+describe("Progress, snapshot get/save", () => {
   it("returns an empty snapshot for a brand-new student (no fake data)", async () => {
     const token = await studentToken();
     const res = await request(app).get("/api/progress").set(auth(token));

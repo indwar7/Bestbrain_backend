@@ -10,7 +10,7 @@ import { initLiveSocket } from "./sockets/liveSocket";
 process.on("unhandledRejection", (reason) => captureException(reason, { kind: "unhandledRejection" }));
 process.on("uncaughtException", (err) => {
   captureException(err, { kind: "uncaughtException" });
-  // An uncaught exception leaves the process in an unknown state — exit so the
+  // An uncaught exception leaves the process in an unknown state, exit so the
   // orchestrator (pm2/systemd/ECS) can restart cleanly.
   process.exit(1);
 });
@@ -35,7 +35,7 @@ async function start() {
     logger.info("Socket.IO live events ready");
     // Surface the CORS policy at boot. A blocked origin shows up in the browser
     // only as an opaque "Failed to fetch", which is easy to misread as "the
-    // server is down" — printing the allowlist makes it a one-glance diagnosis.
+    // server is down", printing the allowlist makes it a one-glance diagnosis.
     logger.info(
       {
         allowedOrigins: env.clientOrigins,
@@ -43,7 +43,7 @@ async function start() {
       },
       `CORS: ${env.clientOrigins.length} configured origin(s)` +
         (env.isProd
-          ? " — production, CLIENT_ORIGIN only"
+          ? ", production, CLIENT_ORIGIN only"
           : " + any localhost port (development)")
     );
   });

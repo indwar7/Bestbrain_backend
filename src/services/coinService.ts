@@ -10,8 +10,8 @@ export interface SpendResult {
 /**
  * Award coins to a student, at most once per refId.
  *
- * Earning already existed in two places — progress sync writes ledger lines in
- * a batch, and spending deducts in coinsController — but neither is reusable
+ * Earning already existed in two places, progress sync writes ledger lines in
+ * a batch, and spending deducts in coinsController, but neither is reusable
  * for "pay for this one thing, and only the first time". The question bank
  * needs exactly that: a student may answer the same question again as often
  * as they like, and must be paid for it once.
@@ -53,7 +53,7 @@ export async function awardCoins(
     return { awarded: true, balance };
   } catch {
     // A concurrent request for the same refId already recorded this award, so
-    // this one has paid twice. Take it back — the ledger decides the balance.
+    // this one has paid twice. Take it back, the ledger decides the balance.
     await User.updateOne({ _id: userId }, { $inc: { "progress.coins": -delta } });
     const u = await User.findById(userId).select("progress.coins");
     return { awarded: false, balance: u?.progress?.coins ?? 0 };
@@ -65,7 +65,7 @@ export async function awardCoins(
  *
  * Extracted from coinsController's HTTP handler (which still owns the public
  * /api/coins/spend endpoint, where amount/reason are client-supplied) so
- * server-side gates — PAL questions, video views — can charge a
+ * server-side gates - PAL questions, video views, can charge a
  * SERVER-DECIDED amount without going through their own HTTP round-trip, and
  * without trusting a client-supplied cost. Same idempotency contract as
  * awardCoins: the ledger's unique {userId, refId} index is what makes a
@@ -108,7 +108,7 @@ export async function spendCoins(
     await CoinLedger.create({ userId, delta: -cost, reason, refId, balanceAfter: balance });
     return { spent: true, balance };
   } catch {
-    // The unique index rejected it — a concurrent request for the same refId
+    // The unique index rejected it, a concurrent request for the same refId
     // already recorded this spend, and this one has deducted a second time.
     // Put that back: the ledger is what decides the balance.
     await User.updateOne({ _id: userId }, { $inc: { "progress.coins": cost } });

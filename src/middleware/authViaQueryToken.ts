@@ -4,7 +4,7 @@ import { AuthRequest } from "./auth";
 
 // Same as requireAuth, but also accepts the access token via ?token= for
 // routes loaded by elements that can't set request headers (<video src>,
-// <img src>). Only use this on read-only media endpoints — never on routes
+// <img src>). Only use this on read-only media endpoints, never on routes
 // that mutate data, since query strings end up in server/proxy access logs.
 export function requireAuthViaQueryToken(
   req: AuthRequest,

@@ -5,7 +5,7 @@ import { env } from "../config/env";
 // works in development without any third-party account.
 //
 // To add a real provider later, implement the send call inside the matching
-// branch (the TODOs below) — no other code needs to change.
+// branch (the TODOs below), no other code needs to change.
 
 export type SendResult = { delivered: boolean; via: string };
 
@@ -53,7 +53,7 @@ export async function sendEmail(
     return { delivered: true, via: "sendgrid" };
   }
 
-  // No provider configured — log it (dev fallback).
+  // No provider configured, log it (dev fallback).
   console.log(`\n📧 [DEV EMAIL] to=${to}\n   subject: ${subject}\n   ${text}\n`);
   return { delivered: false, via: "console" };
 }

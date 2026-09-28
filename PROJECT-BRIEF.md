@@ -1,9 +1,9 @@
-# EduLearn — Project Brief
+# EduLearn - Project Brief
 
-> **Learn smarter, score better.** An iPrep-style K-12 learning platform for Bharat —
+> **Learn smarter, score better.** An iPrep-style K-12 learning platform for Bharat ,
 > CBSE / NCERT + state boards, Classes 6–9. Mobile-first, offline-first, English-only
-> for now (no language switcher), with adaptive AI at its core. Three roles —
-> **Student, Parent, Teacher** — each with its own dashboard and experience.
+> for now (no language switcher), with adaptive AI at its core. Three roles ,
+> **Student, Parent, Teacher**, each with its own dashboard and experience.
 
 _Last updated: 2026-06-22_
 
@@ -16,10 +16,10 @@ _Last updated: 2026-06-22_
 | **Live demo** | https://edulearn-platform-theta.vercel.app |
 | **Frontend repo** | https://github.com/indwar7/Edulearn-Platform- |
 | **Backend repo** | https://github.com/indwar7/edulearn-backend |
-| **Deploy (frontend)** | Vercel — static, auto-deploys on push to `main` |
+| **Deploy (frontend)** | Vercel, static, auto-deploys on push to `main` |
 
 > Tip: open the **live URL** (not a local file) so the webcam-based attention
-> monitoring works — camera access needs HTTPS.
+> monitoring works, camera access needs HTTPS.
 
 ---
 
@@ -35,7 +35,7 @@ _Last updated: 2026-06-22_
                                                               ┌─────────────────────────┼─────────────────────────┐
                                                               ▼                         ▼                         ▼
                                                        Vertex AI (Gemini)         LiveKit (video)          MongoDB Atlas / local
-                                                       — PAL AI bot               — live classes           — users, progress, chats
+                                                       - PAL AI bot              , live classes          , users, progress, chats
 ```
 
 - **Frontend** and **backend** are two separate repositories.
@@ -44,15 +44,15 @@ _Last updated: 2026-06-22_
 
 ---
 
-## 🎨 Frontend — status
+## 🎨 Frontend, status
 
-**Stack:** Plain HTML, CSS, vanilla JavaScript — **no framework, no build step**.
-Shared dark/light theme. English-only UI (Hindi toggle disabled — see note below).
+**Stack:** Plain HTML, CSS, vanilla JavaScript - **no framework, no build step**.
+Shared dark/light theme. English-only UI (Hindi toggle disabled, see note below).
 Per-browser state via `localStorage`. Deployed as static files on **Vercel**
 (auto-deploy on every push to `main`).
 
 > **Language:** the Hindi toggle exists in the code but is commented out
-> everywhere (nav, settings panel, marketing copy) — the platform is English-only
+> everywhere (nav, settings panel, marketing copy), the platform is English-only
 > with no way to switch. Re-enabling it needs Hindi translations for ~190 NCERT
 > chapter titles in `learn.html` first (currently English-only), plus removing
 > the comment-outs in `dashboard.html`, `learn.html` and `account-menu.js`.
@@ -60,24 +60,24 @@ Per-browser state via `localStorage`. Deployed as static files on **Vercel**
 | Page | What it does | Status |
 |---|---|---|
 | Landing | Animated, character-driven showcase (web + mobile) | ✅ |
-| Learn | Course browser — Classes 6–9 × 5 subjects, ~190 NCERT chapters, search, progress | ✅ |
+| Learn | Course browser - Classes 6–9 × 5 subjects, ~190 NCERT chapters, search, progress | ✅ |
 | Live classes | Booking + calendar invite, in-app classroom, **AI webcam attention monitoring** | ✅ |
-| PAL | GPT-style AI assistant — Student / Parent / Teacher modes | ✅ |
+| PAL | GPT-style AI assistant - Student / Parent / Teacher modes | ✅ |
 | Arena (challenge) | One timed question per hour, 45-sec window, speed scoring, streaks, leaderboard | ✅ |
-| Mock tests | **Adaptive** — difficulty rises/falls with the student | ✅ |
+| Mock tests | **Adaptive**, difficulty rises/falls with the student | ✅ |
 | Dashboards | Role-specific: Student, Parent, Teacher | ✅ |
 | Lesson player | AI animated video lectures | 🟡 in progress |
 | Auth (login / signup) | Role-tabbed login + signup | ✅ |
 | Admin / Upload / Videos | Content + video lecture management | ✅ |
 
 **Highlight features**
-- **AI attention monitoring** — real webcam gaze detection during live classes
+- **AI attention monitoring**, real webcam gaze detection during live classes
   (consent-first; video stays on device, only the focus score is saved) → reported to
   parent + teacher.
-- **PAL AI assistant** — doubts, notes, summaries, quizzes; separate role experiences.
-- **Adaptive mock tests** — visible difficulty ladder.
-- **Hourly Arena** — whole school sees the same question; speed is the anti-cheat.
-- **Bharat-first** — CBSE/NCERT/state boards, offline-oriented (English-only for now).
+- **PAL AI assistant**, doubts, notes, summaries, quizzes; separate role experiences.
+- **Adaptive mock tests**, visible difficulty ladder.
+- **Hourly Arena**, whole school sees the same question; speed is the anti-cheat.
+- **Bharat-first** - CBSE/NCERT/state boards, offline-oriented (English-only for now).
 
 > ⚠️ **To confirm before presenting:** the frontend README lists "Live LLM API behind
 > PAL" as a *roadmap* item, which suggests the deployed site may still use mock/local
@@ -86,7 +86,7 @@ Per-browser state via `localStorage`. Deployed as static files on **Vercel**
 
 ---
 
-## ⚙️ Backend — status
+## ⚙️ Backend, status
 
 **Stack:** Node.js + **Express 5** + **MongoDB (Mongoose 9)**, TypeScript. JWT auth
 (access + refresh), role-based access, Socket.IO for real-time. **Vitest** test suite.
@@ -129,8 +129,8 @@ Base URL: `/api` · All routes require `Authorization: Bearer <token>` unless no
 - `POST /login` · `POST /refresh` · `POST /logout` · `GET /me`
 
 **PAL (AI bot)** `/api/pal` _(chat endpoints rate-limited: 20/min/user)_
-- `POST /chat` — role-aware reply, grounded in real data
-- `POST /chat/stream` — Server-Sent Events token streaming
+- `POST /chat`, role-aware reply, grounded in real data
+- `POST /chat/stream` - Server-Sent Events token streaming
 - `GET /sessions` · `GET /sessions/:id` · `PATCH /sessions/:id` (rename) · `DELETE /sessions/:id`
 
 **Curriculum** `/api/curriculum`
@@ -141,7 +141,7 @@ Base URL: `/api` · All routes require `Authorization: Bearer <token>` unless no
 - `GET /` · `PUT /` · `POST /sync` (batched offline events, idempotent)
 
 **Dashboard** `/api/dashboard`
-- `GET /` — role-specific data
+- `GET /`, role-specific data
 
 **Live classes** `/api/live` _(+ Socket.IO real-time events)_
 - `GET /` · `POST /` (teacher) · `POST /:id/join` · `POST /:id/token` (LiveKit)
@@ -156,16 +156,16 @@ Base URL: `/api` · All routes require `Authorization: Bearer <token>` unless no
 
 ---
 
-## 🤖 PAL — the AI assistant (deep dive)
+## 🤖 PAL, the AI assistant (deep dive)
 
 PAL is the platform's standout AI feature. How it works:
 
 - **Provider:** Vertex AI (Gemini) via the official `@google/genai` Node SDK; credentials
   via a service-account JSON (path in `GOOGLE_APPLICATION_CREDENTIALS`).
 - **Role-aware:** persona is derived from the **authenticated user's account role**, not
-  the request body — a student can't pose as a teacher.
+  the request body, a student can't pose as a teacher.
 - **Grounded in real data:** every reply is given a live summary of the user's actual
-  EduLearn data — student → own progress, parent → child's, teacher → class snapshot —
+  EduLearn data, student → own progress, parent → child's, teacher → class snapshot ,
   and (via Curriculum) the real next chapter to study, by name.
 - **Resilient:** 30s timeout, retry + backoff on transient errors, history capped for
   responsiveness, graceful stub fallback if credentials are missing.
@@ -176,7 +176,7 @@ PAL is the platform's standout AI feature. How it works:
 
 ## 🧪 Running it (demo)
 
-**Backend** (in-memory DB — no MongoDB setup needed)
+**Backend** (in-memory DB, no MongoDB setup needed)
 ```bash
 cd edulearn-backend
 npm install
@@ -194,7 +194,7 @@ python3 -m http.server 8000
 # open http://localhost:8000/edutok/login.html
 ```
 
-**Demo accounts** — password for all: `Demo@2024`
+**Demo accounts**, password for all: `Demo@2024`
 
 | Role | Email | Lands on |
 |---|---|---|
@@ -229,9 +229,9 @@ Each user is locked to their own role view.
 
 ## 📊 Honest completion estimate
 
-- **For an MVP / demo:** ~90% — auth, PAL, progress, dashboards, live video, videos, and
+- **For an MVP / demo:** ~90%, auth, PAL, progress, dashboards, live video, videos, and
   curriculum all work and are partly tested.
-- **For a full production product:** ~65% — notifications, assignments/grading, payments,
+- **For a full production product:** ~65%, notifications, assignments/grading, payments,
   full test coverage, and CI/CD + monitoring are not built yet.
 
 Nothing is broken or half-built; remaining work is deliberate feature scope + engineering

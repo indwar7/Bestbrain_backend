@@ -2,7 +2,7 @@ import { Response } from "express";
 import { User } from "../models/User";
 import { AuthRequest } from "../middleware/auth";
 
-// GET /api/users/me  — current user profile
+// GET /api/users/me , current user profile
 export async function getMe(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id).select("-password");
   if (!user) {
@@ -12,7 +12,7 @@ export async function getMe(req: AuthRequest, res: Response): Promise<void> {
   res.json({ user });
 }
 
-// GET /api/users/me/progress  — replaces frontend localStorage `edutok_state`
+// GET /api/users/me/progress , replaces frontend localStorage `edutok_state`
 export async function getProgress(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id).select("progress");
   if (!user) {
@@ -27,7 +27,7 @@ export async function getProgress(req: AuthRequest, res: Response): Promise<void
 // server-managed state. (streak/minutes/badges are validated below.)
 const WRITABLE_PROGRESS_FIELDS = ["lang", "minutes", "streak", "badges", "chapters", "pal"];
 
-// PUT /api/users/me/progress  — save (whitelisted, validated) progress fields.
+// PUT /api/users/me/progress , save (whitelisted, validated) progress fields.
 export async function saveProgress(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
   if (!user) {
@@ -66,7 +66,7 @@ const EDITABLE_BY_ROLE: Record<string, string[]> = {
   parent: ["name"],
 };
 
-// PUT /api/users/me/profile — update own profile + preferences (role-aware).
+// PUT /api/users/me/profile, update own profile + preferences (role-aware).
 // Body: { name?, className?, ..., preferences?: { language, theme, emailNotifications } }
 export async function updateProfile(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);

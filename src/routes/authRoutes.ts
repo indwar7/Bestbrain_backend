@@ -31,7 +31,7 @@ router.post("/send-otp", otpLimiter, asyncHandler(requestOtp));
 router.post("/verify-otp", otpLimiter, asyncHandler(confirmOtp));
 
 // Password reset: ask for a code, then spend it on a new password. On the OTP
-// limiter rather than the auth one — these are code-issuing endpoints, and the
+// limiter rather than the auth one, these are code-issuing endpoints, and the
 // tighter budget is the point.
 router.post("/forgot-password", otpLimiter, asyncHandler(forgotPassword));
 router.post("/reset-password", otpLimiter, asyncHandler(resetPassword));

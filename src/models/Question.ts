@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 // A multiple-choice question, used by both Mock Tests and the hourly Challenge.
-// `correctIndex` is never sent to students — the controllers strip it.
+// `correctIndex` is never sent to students, the controllers strip it.
 export interface IQuestion extends Document {
   className: string; // e.g. "Class 7"
   subject: string; // e.g. "Maths"
@@ -12,8 +12,8 @@ export interface IQuestion extends Document {
   explanation: string; // shown after answering
   difficulty: "easy" | "medium" | "hard";
   // "bank" is the chapter practice pool: untimed, drilled as often as the
-  // student likes. "both" stays what it always meant — a question the mock
-  // test and the challenge may both draw — and the bank accepts it too, so
+  // student likes. "both" stays what it always meant, a question the mock
+  // test and the challenge may both draw, and the bank accepts it too, so
   // every question already seeded remains usable without a migration.
   usage: "mock" | "challenge" | "bank" | "both";
   createdById?: mongoose.Types.ObjectId;
@@ -48,7 +48,7 @@ const questionSchema = new Schema<IQuestion>(
 
 questionSchema.index({ className: 1, subject: 1, difficulty: 1 });
 // The bank and homework authoring both read one chapter at a time, which the
-// index above cannot serve — it has no chapterSlug, so those queries scanned
+// index above cannot serve, it has no chapterSlug, so those queries scanned
 // every question for the class and subject.
 questionSchema.index({ className: 1, subject: 1, chapterSlug: 1, usage: 1 });
 

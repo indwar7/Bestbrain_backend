@@ -30,7 +30,7 @@ function isGoogleMeetLink(url: string): boolean {
   return /^https:\/\/meet\.google\.com\/[a-z0-9-]+$/i.test(url.trim());
 }
 
-// POST /api/live  (teacher only) — create a targeted live class.
+// POST /api/live  (teacher only), create a targeted live class.
 // Body: { title, className, section, subject, meetLink? }
 // meetLink is a temporary fallback for while LiveKit is being set up in
 // production: if provided, students are sent to that Google Meet call
@@ -78,7 +78,7 @@ export async function createSession(req: AuthRequest, res: Response): Promise<vo
   res.status(201).json({ session });
 }
 
-// GET /api/live — list sessions the current user is eligible for.
+// GET /api/live, list sessions the current user is eligible for.
 //  - student → only live sessions for their class+section+subjects
 //  - teacher → their own live sessions
 export async function listSessions(req: AuthRequest, res: Response): Promise<void> {
@@ -133,7 +133,7 @@ function joinPayload(session: InstanceType<typeof LiveSession>) {
   };
 }
 
-// POST /api/live/:id/join — eligibility-checked join by session id.
+// POST /api/live/:id/join, eligibility-checked join by session id.
 // Returns the room info the frontend needs (video provider details added later).
 export async function joinSession(req: AuthRequest, res: Response): Promise<void> {
   const [user, session] = await Promise.all([
@@ -154,9 +154,9 @@ export async function joinSession(req: AuthRequest, res: Response): Promise<void
   res.json(joinPayload(session));
 }
 
-// POST /api/live/join-by-code — join using the short join code (e.g. "SCI-7A-4821").
+// POST /api/live/join-by-code, join using the short join code (e.g. "SCI-7A-4821").
 // Body: { code }. Same eligibility as by-id join: the code is a shortcut, not a
-// security bypass — a user still must belong to the class/section/subject.
+// security bypass, a user still must belong to the class/section/subject.
 export async function joinByCode(req: AuthRequest, res: Response): Promise<void> {
   const raw = (req.body?.code ?? "") as unknown;
   const code = String(raw).trim().toUpperCase();
@@ -188,7 +188,7 @@ export async function joinByCode(req: AuthRequest, res: Response): Promise<void>
   res.json(joinPayload(session));
 }
 
-// POST /api/live/:id/token — issue a LiveKit access token for the video room.
+// POST /api/live/:id/token, issue a LiveKit access token for the video room.
 // Eligibility is the SAME as joinSession. Teacher (owner) can publish;
 // students can only subscribe (watch).
 export async function getVideoToken(req: AuthRequest, res: Response): Promise<void> {
@@ -207,7 +207,7 @@ export async function getVideoToken(req: AuthRequest, res: Response): Promise<vo
     return;
   }
 
-  // This session was created with a Google Meet fallback link — no LiveKit
+  // This session was created with a Google Meet fallback link, no LiveKit
   // token needed, the frontend just opens the link.
   if (session.videoProvider === "google-meet") {
     res.json({ videoProvider: "google-meet", videoRoom: session.videoRoom });
@@ -251,7 +251,7 @@ export async function getVideoToken(req: AuthRequest, res: Response): Promise<vo
   });
 }
 
-// GET /api/live/:id/roster — the full eligible class for a session, each
+// GET /api/live/:id/roster, the full eligible class for a session, each
 // student marked present (joined) or not. Teacher (owner) only: this is the
 // "who's in / who's missing" panel for the live classroom.
 export async function getRoster(req: AuthRequest, res: Response): Promise<void> {
@@ -291,7 +291,7 @@ export async function getRoster(req: AuthRequest, res: Response): Promise<void> 
   });
 }
 
-// POST /api/live/:id/end  (teacher only) — end the owning teacher's session.
+// POST /api/live/:id/end  (teacher only), end the owning teacher's session.
 // Full teardown: flips DB status, tears down the LiveKit room (disconnecting
 // all participants server-side), and broadcasts `session-ended` over Socket.IO.
 export async function endSession(req: AuthRequest, res: Response): Promise<void> {
@@ -336,7 +336,7 @@ export async function endSession(req: AuthRequest, res: Response): Promise<void>
 // A parent can read their linked child's reports; a student reads their own.
 // =====================================================================
 
-// POST /api/live/reports — student submits one report (from the live classroom).
+// POST /api/live/reports, student submits one report (from the live classroom).
 export async function submitLiveReport(req: AuthRequest, res: Response): Promise<void> {
   const user = req.user!;
   if (user.role !== "student") {
@@ -381,7 +381,7 @@ export async function submitLiveReport(req: AuthRequest, res: Response): Promise
   res.status(201).json({ report });
 }
 
-// GET /api/live/reports — student: own reports; parent: a linked child's
+// GET /api/live/reports, student: own reports; parent: a linked child's
 // (?childId=<studentId>, defaults to the first linked child). Newest first.
 export async function listLiveReports(req: AuthRequest, res: Response): Promise<void> {
   const user = req.user!;

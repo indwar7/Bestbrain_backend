@@ -16,7 +16,7 @@ interface RawBodyRequest extends Request {
 
 // GET /api/subscription/config
 // Public. Lets the pricing page render without the button id or the price being
-// baked into the frontend bundle — changing the plan then means changing env
+// baked into the frontend bundle, changing the plan then means changing env
 // vars and restarting, not rebuilding and redeploying the site.
 export function getSubscriptionConfig(_req: Request, res: Response): void {
   res.json({
@@ -31,7 +31,7 @@ export function getSubscriptionConfig(_req: Request, res: Response): void {
 // GET /api/subscription/me
 // The signed-in user's entitlement. Read from the Subscription rows rather than
 // the denormalised user flag, so it is correct even if a snapshot write was
-// missed — and `claimForUser` runs first so a payment made before signup is
+// missed, and `claimForUser` runs first so a payment made before signup is
 // picked up the first time they ask.
 export async function getMySubscription(req: AuthRequest, res: Response): Promise<void> {
   const entitlement = await claimForUser({
@@ -59,14 +59,14 @@ export async function razorpayWebhook(req: RawBodyRequest, res: Response): Promi
   if (!env.razorpayWebhookConfigured) {
     // Refusing is deliberate. Accepting unverifiable events would mean any
     // POST to this URL could activate a subscription.
-    logger.error("[subscription] webhook received but RAZORPAY_WEBHOOK_SECRET is unset — rejecting");
+    logger.error("[subscription] webhook received but RAZORPAY_WEBHOOK_SECRET is unset, rejecting");
     res.status(503).json({ error: "Webhook not configured" });
     return;
   }
 
   if (!raw) {
     // app.ts must stash the raw buffer; without it the HMAC cannot be checked.
-    logger.error("[subscription] webhook raw body missing — check express.json verify hook in app.ts");
+    logger.error("[subscription] webhook raw body missing, check express.json verify hook in app.ts");
     res.status(500).json({ error: "Raw body unavailable" });
     return;
   }
@@ -85,13 +85,13 @@ export async function razorpayWebhook(req: RawBodyRequest, res: Response): Promi
     res.json({ ok: true, handled: result.handled });
   } catch (err) {
     captureException(err, { scope: "razorpay-webhook", eventId });
-    // A 500 here IS worth a retry — the event was genuine and we failed to
+    // A 500 here IS worth a retry, the event was genuine and we failed to
     // record it, so we want Razorpay to send it again.
     res.status(500).json({ error: "Could not process event" });
   }
 }
 
-// GET /api/subscription/status/:userId — admin-only sanity check.
+// GET /api/subscription/status/:userId, admin-only sanity check.
 // Guarded by requireAdminKey at the route level.
 export async function getSubscriptionForUser(req: Request, res: Response): Promise<void> {
   const entitlement = await getEntitlement(String(req.params.userId));

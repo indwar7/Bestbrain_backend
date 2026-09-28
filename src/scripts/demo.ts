@@ -94,7 +94,7 @@ async function start() {
     console.log("║    teacher@edulearn.com   → Teacher dashboard          ║");
     console.log("║    parent@edulearn.com    → Parent dashboard           ║");
     console.log("╚══════════════════════════════════════════════════════╝");
-    console.log("Watching requests below — registrations & logins appear live:\n");
+    console.log("Watching requests below, registrations & logins appear live:\n");
   });
 }
 

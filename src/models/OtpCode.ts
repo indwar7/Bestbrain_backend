@@ -6,7 +6,7 @@ export interface IOtpCode extends Document {
   userId: mongoose.Types.ObjectId;
   channel: "email" | "phone";
   // What the code entitles the holder to do. Without this a code sent to
-  // confirm an email address would also open a password reset — the two
+  // confirm an email address would also open a password reset, the two
   // flows would share one pool of codes, and the weaker one sets the bar.
   purpose: "verify" | "reset";
   destination: string; // the email or phone the code was sent to

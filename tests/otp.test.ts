@@ -11,7 +11,7 @@ async function signup() {
   return body;
 }
 
-describe("OTP — send & verify (dev/console mode)", () => {
+describe("OTP, send & verify (dev/console mode)", () => {
   it("sends an email OTP and returns a dev code in non-prod", async () => {
     const u = await signup();
     const res = await request(app)
@@ -77,7 +77,7 @@ describe("OTP — send & verify (dev/console mode)", () => {
   });
 });
 
-describe("OTP — login gate is ON by default", () => {
+describe("OTP, login gate is ON by default", () => {
   it("an unverified user is blocked when logging in", async () => {
     const u = await signup();
     const res = await request(app)

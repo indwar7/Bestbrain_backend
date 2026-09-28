@@ -13,7 +13,7 @@ async function tokenFor(kind: "student" | "teacher") {
 }
 const auth = (t: string) => ({ Authorization: `Bearer ${t}` });
 
-describe("Curriculum — authoring (teacher)", () => {
+describe("Curriculum, authoring (teacher)", () => {
   let teacher: string;
   beforeEach(async () => {
     teacher = await tokenFor("teacher");
@@ -75,7 +75,7 @@ describe("Curriculum — authoring (teacher)", () => {
   });
 });
 
-describe("Curriculum — permissions", () => {
+describe("Curriculum, permissions", () => {
   it("requires auth", async () => {
     const res = await request(app).get("/api/curriculum/subjects");
     expect(res.status).toBe(401);

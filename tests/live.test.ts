@@ -36,7 +36,7 @@ async function createSession(teacherToken: string) {
   return { ...s, id: s.id ?? s._id };
 }
 
-describe("Live — create + list", () => {
+describe("Live, create + list", () => {
   it("teacher creates a session with a join code; eligible student sees it", async () => {
     const teacher = await teacherFor();
     const session = await createSession(teacher);
@@ -49,7 +49,7 @@ describe("Live — create + list", () => {
   });
 });
 
-describe("Live — join by code", () => {
+describe("Live, join by code", () => {
   it("eligible student joins with the correct code", async () => {
     const teacher = await teacherFor();
     const session = await createSession(teacher);

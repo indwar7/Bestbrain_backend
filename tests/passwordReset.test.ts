@@ -30,7 +30,7 @@ async function requestCode(email: string) {
   return res.body.devCode as string | undefined;
 }
 
-describe("Password reset — requesting a code", () => {
+describe("Password reset, requesting a code", () => {
   it("answers identically for a registered and an unregistered email", async () => {
     const user = await signUp();
 
@@ -41,7 +41,7 @@ describe("Password reset — requesting a code", () => {
       .post("/api/auth/forgot-password")
       .send({ email: `nobody-${Date.now()}@nowhere.test` });
 
-    // Same status and same message — this endpoint must not become a way to
+    // Same status and same message, this endpoint must not become a way to
     // discover which addresses have accounts.
     expect(known.status).toBe(unknown.status);
     expect(known.body.message).toBe(unknown.body.message);
@@ -57,7 +57,7 @@ describe("Password reset — requesting a code", () => {
   });
 });
 
-describe("Password reset — spending a code", () => {
+describe("Password reset, spending a code", () => {
   it("resets the password, and the new one works while the old one stops", async () => {
     const user = await signUp();
     const code = await requestCode(user.email);
@@ -133,14 +133,14 @@ describe("Password reset — spending a code", () => {
     const res = await request(app)
       .post("/api/auth/reset-password")
       .send({ email: `nobody-${Date.now()}@nowhere.test`, code: "123456", password: "Whatever!789" });
-    // 400 with a generic message, not a 404 — otherwise this endpoint
+    // 400 with a generic message, not a 404, otherwise this endpoint
     // enumerates accounts even though forgot-password does not.
     expect(res.status).toBe(400);
     expect(String(res.body.error)).toMatch(/not valid/i);
   });
 });
 
-describe("Password reset — codes are scoped to their purpose", () => {
+describe("Password reset, codes are scoped to their purpose", () => {
   it("will not accept an email-verification code as a reset code", async () => {
     const user = await signUp();
 

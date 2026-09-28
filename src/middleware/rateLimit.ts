@@ -11,7 +11,7 @@ function ipKey(req: { ip?: string }): string {
   return ipKeyGenerator(req.ip ?? "anon");
 }
 
-// Per-user rate limit for PAL chat — Gemini calls cost money, so cap how fast a
+// Per-user rate limit for PAL chat - Gemini calls cost money, so cap how fast a
 // single account can fire them. Keyed by user id (falls back to IP) so one
 // noisy user can't exhaust the budget for everyone.
 export const palChatLimiter = rateLimit({
@@ -21,7 +21,7 @@ export const palChatLimiter = rateLimit({
   legacyHeaders: false,
   skip: () => isTest,
   keyGenerator: (req) => (req as AuthRequest).user?.id ?? ipKey(req),
-  message: { error: "Too many messages — please slow down and try again shortly." },
+  message: { error: "Too many messages, please slow down and try again shortly." },
 });
 
 // OTP send/verify is unauthenticated and abuse-prone (SMS/email cost, brute
@@ -33,7 +33,7 @@ export const otpLimiter = rateLimit({
   legacyHeaders: false,
   skip: () => isTest,
   keyGenerator: ipKey,
-  message: { error: "Too many requests — please try again later." },
+  message: { error: "Too many requests, please try again later." },
 });
 
 // Login/signup are unauthenticated and the prime target for credential
@@ -46,5 +46,5 @@ export const authLimiter = rateLimit({
   legacyHeaders: false,
   skip: () => isTest,
   keyGenerator: ipKey,
-  message: { error: "Too many attempts — please try again later." },
+  message: { error: "Too many attempts, please try again later." },
 });

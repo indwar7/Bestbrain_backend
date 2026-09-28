@@ -54,7 +54,7 @@ async function studentSummaryWithInsights(user: IUser, now: Date) {
   return { ...studentSummary(user), ...insightsFields(insights) };
 }
 
-// GET /api/dashboard — returns role-specific data for the logged-in user.
+// GET /api/dashboard, returns role-specific data for the logged-in user.
 export async function getDashboard(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
   if (!user) {
@@ -89,7 +89,7 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
       role: "student",
     });
     // Batch the insights + mastery for all children in two queries total
-    // (not two per child) — keeps parent dashboards cheap at scale.
+    // (not two per child), keeps parent dashboards cheap at scale.
     const [insightsMap, masteryMap] = await Promise.all([
       getProgressInsightsBatch(children.map((c) => String(c._id)), now),
       getMasteryInsightsBatch(children),
@@ -131,7 +131,7 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
         ? await User.find({ role: "student", $or: orFilters })
         : [];
 
-    // Enrich every student with real streak + weekly activity — batched into
+    // Enrich every student with real streak + weekly activity, batched into
     // ONE ProgressEvent query for the whole roster (was one query per student).
     const [insightsMap, masteryMap] = await Promise.all([
       getProgressInsightsBatch(roster.map((s) => String(s._id)), now),
@@ -176,7 +176,7 @@ export async function getDashboard(req: AuthRequest, res: Response): Promise<voi
       ),
     };
 
-    // How many were active in the last 7 days vs. dormant — useful at a glance.
+    // How many were active in the last 7 days vs. dormant, useful at a glance.
     const activeThisWeek = summaries.filter((s) => s.thisWeek.activeDays > 0).length;
 
     // Most engaged + needs-attention (by this-week minutes).

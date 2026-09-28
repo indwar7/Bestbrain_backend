@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 // A multiple-choice question, used by both Mock Tests and the hourly Challenge.
-// `correctIndex` is never sent to students — the controllers strip it.
+// `correctIndex` is never sent to students, the controllers strip it.
 export interface IQuestion extends Document {
   className: string; // e.g. "Class 7"
   subject: string; // e.g. "Maths"

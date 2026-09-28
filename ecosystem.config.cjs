@@ -1,4 +1,4 @@
-// PM2 process config — run the backend across all CPU cores so one EC2 box can
+// PM2 process config, run the backend across all CPU cores so one EC2 box can
 // handle far more concurrent users than a single Node process (Node is
 // single-threaded; without this, extra cores sit idle).
 //
@@ -15,7 +15,7 @@
 //   (a) Keep `instances` at a MODERATE number and put a sticky-session load
 //       balancer in front (nginx ip_hash / ALB stickiness), OR
 //   (b) Add the Socket.IO Redis adapter (@socket.io/redis-adapter) so any
-//       worker can deliver to any client — the proper multi-core answer.
+//       worker can deliver to any client, the proper multi-core answer.
 // Until (b) is wired, if live-class real-time misbehaves under cluster mode,
 // set instances: 1 (REST still scales via the LB across boxes) or run a
 // dedicated single-instance process just for sockets.
@@ -29,7 +29,7 @@ module.exports = {
       // Live classes use Socket.IO with IN-MEMORY rooms/presence. Under cluster
       // mode each worker has its own memory, so with >1 worker (and no Redis
       // adapter / sticky sessions) chat messages, roster and join signals don't
-      // cross workers — live chat and camera/mic joins appear broken/glitchy.
+      // cross workers, live chat and camera/mic joins appear broken/glitchy.
       // Pinned to a SINGLE instance so real-time works reliably. To scale across
       // cores again, wire @socket.io/redis-adapter first, then raise this.
       instances: 1,

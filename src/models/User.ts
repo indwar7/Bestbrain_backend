@@ -11,7 +11,7 @@ export interface IProgress {
   // Spendable balance. The running total lives here so a screen can render it
   // in one read; CoinLedger holds the entry behind every change, so the
   // balance can always be explained and re-derived. Coins are only ever
-  // awarded by the server, from events it has already accepted — a client
+  // awarded by the server, from events it has already accepted, a client
   // cannot ask to be given any.
   coins: number;
 }
@@ -60,7 +60,7 @@ export interface IUser extends Document {
 
   // ---------- Subscription (BestBrain Plus) ----------
   // Denormalised snapshot of this user's Razorpay subscription. The Subscription
-  // collection is the record of truth — this exists so a request that already
+  // collection is the record of truth, this exists so a request that already
   // loads the user can answer "is this account paid?" without a second query.
   // Written only by subscriptionService.syncUserSnapshot().
   subscription: {
@@ -150,7 +150,7 @@ const userSchema = new Schema<IUser>(
       default: [],
     },
 
-    // SUBSCRIPTION (all roles) — see the interface above.
+    // SUBSCRIPTION (all roles), see the interface above.
     // `active` is a stored derivation, not a live one: it is correct as of
     // `paidThrough`, so any read that cares about expiry must compare
     // paidThrough against now rather than trusting this flag alone. The

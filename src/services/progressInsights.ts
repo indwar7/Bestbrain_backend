@@ -31,7 +31,7 @@ export interface ProgressInsights {
   // needs a real per-day series; before this existed it only had `weekly`, so
   // 7 of its 56 cells could ever be true and the other 49 rendered as rest
   // days regardless of what the student had actually done. The per-day buckets
-  // were already being aggregated over a 60-day scan for the streak — this
+  // were already being aggregated over a 60-day scan for the streak, this
   // just exposes them instead of throwing them away.
   daily: DayPoint[];
   thisWeek: {
@@ -56,7 +56,7 @@ export async function getProgressInsights(
   userId: string,
   now: Date = new Date()
 ): Promise<ProgressInsights> {
-  // Look back 60 days — enough to compute a meaningful streak without scanning
+  // Look back 60 days, enough to compute a meaningful streak without scanning
   // the whole event history.
   const since = new Date(now.getTime() - 60 * 86400000);
   const events = await ProgressEvent.find({
@@ -70,7 +70,7 @@ export async function getProgressInsights(
 }
 
 // Batch version: compute insights for MANY users in a SINGLE DB query instead
-// of one query per user (the teacher/parent dashboards used to N+1 here — a
+// of one query per user (the teacher/parent dashboards used to N+1 here, a
 // 40-student class meant 40 round-trips). Returns a Map keyed by userId string.
 export async function getProgressInsightsBatch(
   userIds: string[],

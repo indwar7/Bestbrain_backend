@@ -95,7 +95,7 @@ async function backfillLegacy() {
         title: rawSlug.replace(/^ch-/, "").replace(/-/g, " ").trim() || rawSlug,
         slug: chSlug,
         order,
-        isPublished: false, // placeholder — not real content
+        isPublished: false, // placeholder, not real content
         createdByRole: "admin",
       });
       console.log(`  ~ backfilled legacy chapter [${chSlug}] under ${className}`);

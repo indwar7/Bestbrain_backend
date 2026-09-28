@@ -20,7 +20,7 @@ async function seed() {
 
   const hash = await bcrypt.hash(PASSWORD, 10);
 
-  // 1. STUDENT — Class 7, Section A, roll EDU-7A-021
+  // 1. STUDENT - Class 7, Section A, roll EDU-7A-021
   const student = await User.create({
     name: "Aarav Sharma",
     email: "student@edulearn.com",
@@ -45,7 +45,7 @@ async function seed() {
     },
   });
 
-  // 2. Another STUDENT — Class 7, Section B
+  // 2. Another STUDENT - Class 7, Section B
   await User.create({
     name: "Diya Mehta",
     email: "student2@edulearn.com",
@@ -61,7 +61,7 @@ async function seed() {
     progress: { lang: "en", minutes: 120, streak: 2, badges: [], chapters: {}, pal: {} },
   });
 
-  // 3. PARENT — linked to Aarav via roll number + name + class
+  // 3. PARENT, linked to Aarav via roll number + name + class
   await User.create({
     name: "Meera Sharma",
     email: "parent@edulearn.com",
@@ -78,7 +78,7 @@ async function seed() {
     ],
   });
 
-  // 4. TEACHER — teacherId TCH-104, teaches Class 7-A Science & Maths
+  // 4. TEACHER, teacherId TCH-104, teaches Class 7-A Science & Maths
   await User.create({
     name: "Mr. Verma",
     email: "teacher@edulearn.com",

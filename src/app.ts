@@ -24,7 +24,7 @@ import subscriptionRoutes from "./routes/subscriptionRoutes";
 
 export const app = express();
 
-// Behind a reverse proxy (CloudFront/nginx) — trust it so req.ip is the real
+// Behind a reverse proxy (CloudFront/nginx), trust it so req.ip is the real
 // client IP (rate limiting keys off it) and secure cookies work over the proxy.
 app.set("trust proxy", 1);
 
@@ -32,7 +32,7 @@ app.set("trust proxy", 1);
 // is relaxed so the video <src> endpoint can still be embedded cross-origin.
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
-// Gzip responses — but never SSE streams (compression buffers them and breaks
+// Gzip responses, but never SSE streams (compression buffers them and breaks
 // PAL's token-by-token streaming). Skip when the response is an event stream.
 app.use(
   compression({
@@ -49,7 +49,7 @@ app.use(
 //
 // The !isProd branch is DELIBERATE and must stay: in production only the
 // explicit CLIENT_ORIGIN list is honoured. Do not add localhost entries to the
-// production allowlist to make local development easier — with
+// production allowlist to make local development easier, with
 // credentials:'include' on the client, any page served from that port on any
 // machine could then call this API as a signed-in user and read real student
 // records. To develop against production data, serve the frontend from an
@@ -74,7 +74,7 @@ app.use(
         console.warn(
           `[cors] BLOCKED origin ${origin}. Allowed: ${env.clientOrigins.join(", ") || "(none)"}` +
             (env.isProd
-              ? ". Production only honours CLIENT_ORIGIN — serve the frontend from one of those origins."
+              ? ". Production only honours CLIENT_ORIGIN, serve the frontend from one of those origins."
               : ". Any localhost port is allowed in development.")
         );
       }
@@ -84,7 +84,7 @@ app.use(
   })
 );
 
-// Cap JSON body size — reject oversized payloads (DoS guard).
+// Cap JSON body size, reject oversized payloads (DoS guard).
 //
 // `verify` stashes the exact bytes before they are parsed. The Razorpay webhook
 // is signed over the raw body, and re-serialising the parsed object does not
@@ -131,7 +131,7 @@ app.use((_req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
-// Global error handler — catches thrown/rejected errors so the process never
+// Global error handler, catches thrown/rejected errors so the process never
 // leaks a stack trace to the client or crashes on an unhandled route error.
 // (Must be last, and must keep all four args for Express to treat it as one.)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -139,7 +139,7 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   if (res.headersSent) return;
 
   // Multer errors (oversized file, wrong mimetype) reach here as plain
-  // thrown errors — surface them as a clear 4xx instead of a generic 500 so
+  // thrown errors, surface them as a clear 4xx instead of a generic 500 so
   // the upload UI can show the real reason ("file too large" vs "server error").
   if (err instanceof MulterError) {
     const message =

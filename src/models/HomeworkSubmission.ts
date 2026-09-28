@@ -6,7 +6,7 @@ import mongoose, { Schema, Document } from "mongoose";
  * `isCorrect` is stored per answer rather than recomputed from the Question on
  * read. Homework references its questions, so a teacher correcting a wrong
  * correctIndex after work is submitted would otherwise change marks that had
- * already been given — silently, and only for students who had already
+ * already been given, silently, and only for students who had already
  * submitted. Recording the verdict at submission time means a mark is a fact
  * about what happened, not a re-derivation from data that has since moved.
  *

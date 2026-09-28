@@ -1,7 +1,7 @@
 # Bestbrainplus
 
 
-REST + WebSocket API for the [EduLearn](https://edulearn-platform-theta.vercel.app) learning platform —
+REST + WebSocket API for the [EduLearn](https://edulearn-platform-theta.vercel.app) learning platform ,
 auth with refresh tokens, role-based access, offline progress sync, PAL AI chat, and live classes.
 
 Built with **Node.js + Express + TypeScript + MongoDB + Socket.IO**.
@@ -34,7 +34,7 @@ npm run build && npm start        # production
 ```
 
 > **In-memory mode**: if `MONGODB_URI` is empty or `USE_MEMORY_DB=true`, the app
-> spins up a temporary MongoDB in memory — great for demos. Data resets on restart.
+> spins up a temporary MongoDB in memory, great for demos. Data resets on restart.
 
 ### Demo accounts (after `npm run seed`)
 
@@ -50,21 +50,21 @@ All use password **`Demo@2024`**:
 ## Auth model
 
 Two tokens:
-- **Access token** — short-lived (15 min), returned in the JSON body, sent as `Authorization: Bearer <token>`.
-- **Refresh token** — long-lived (7 days), stored in an **httpOnly cookie**, rotated on every `/auth/refresh`.
+- **Access token**, short-lived (15 min), returned in the JSON body, sent as `Authorization: Bearer <token>`.
+- **Refresh token**, long-lived (7 days), stored in an **httpOnly cookie**, rotated on every `/auth/refresh`.
 
 On app load, the frontend calls **`GET /api/auth/me`** to hydrate the session.
 When the access token expires, call **`POST /api/auth/refresh`** to get a new one.
 
 ## API Endpoints
 
-### Auth — three separate role-based signups + one role-aware login
+### Auth, three separate role-based signups + one role-aware login
 | Method | Route | Auth | Body |
 |--------|-------|------|------|
 | POST | `/api/auth/signup/student` | – | `{ name, email, password, rollNumber, className, section, board?, subjects? }` |
 | POST | `/api/auth/signup/teacher` | – | `{ name, email, password, teacherId, className, section, subject? }` |
 | POST | `/api/auth/signup/parent` | – | `{ name, email, password, childRollNumber, childName, childClass }` |
-| POST | `/api/auth/login` | – | `{ email, password, role }` — `role` is the tab the user picked; must match the account |
+| POST | `/api/auth/login` | – | `{ email, password, role }` - `role` is the tab the user picked; must match the account |
 | POST | `/api/auth/refresh` | cookie | New access token (rotates refresh cookie) |
 | POST | `/api/auth/logout` | – | Clears refresh cookie |
 | GET  | `/api/auth/me` | ✅ | Hydrate current user session (role-specific profile) |
@@ -99,7 +99,7 @@ teacher gets teacherId/teaches; parent gets their linked children).
   ]
 }
 ```
-Re-sending the same `clientEventId` is safe — already-applied events are skipped.
+Re-sending the same `clientEventId` is safe, already-applied events are skipped.
 
 ### PAL AI
 | Method | Route | Auth | Description |
@@ -109,11 +109,11 @@ Re-sending the same `clientEventId` is safe — already-applied events are skipp
 
 Set `GROQ_API_KEY` for real LLM replies; otherwise returns a stub so the flow works in dev.
 
-### Live classes (REST) — class + section + subject targeting
+### Live classes (REST), class + section + subject targeting
 | Method | Route | Auth | Description |
 |--------|-------|------|-------------|
 | GET  | `/api/live` | ✅ | Eligible live sessions (student → own class+section+subjects; teacher → own) |
-| POST | `/api/live` | ✅ teacher | Create `{ title, className, section, subject }` — teacher must be assigned to it |
+| POST | `/api/live` | ✅ teacher | Create `{ title, className, section, subject }`, teacher must be assigned to it |
 | POST | `/api/live/:id/join` | ✅ | **Eligibility-checked** join → returns room info |
 | POST | `/api/live/:id/end` | ✅ teacher | End a session |
 

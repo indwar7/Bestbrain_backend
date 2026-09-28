@@ -3,7 +3,7 @@ import { generatePalReply } from "./palService";
 /**
  * Structured study material for one topic.
  *
- * The shape is fixed and the client renders it — the model is never asked for
+ * The shape is fixed and the client renders it, the model is never asked for
  * HTML or PDF bytes. Free-form markup from a model is the one thing you cannot
  * safely drop into a page, and a fixed shape also means a missing or malformed
  * field degrades one section instead of the whole document.
@@ -12,7 +12,7 @@ export interface StudySection {
   heading: string;
   /** Prose paragraphs. */
   body?: string[];
-  /** Bulleted lines — definitions, key points, questions. */
+  /** Bulleted lines, definitions, key points, questions. */
   points?: string[];
 }
 
@@ -30,7 +30,7 @@ export interface StudyDoc {
  * for something else should say so rather than quietly produce a page of
  * plausible-sounding nonsense under a school's banner.
  *
- * The list is deliberately generous — it is a guard against obvious misuse,
+ * The list is deliberately generous, it is a guard against obvious misuse,
  * not a syllabus checker. A real chapter name that is not on it still passes
  * as long as it reads like a topic rather than a sentence.
  */
@@ -69,7 +69,7 @@ const SUBJECT_HINTS = [
 export function checkTopic(raw: string): { ok: boolean; reason?: string } {
   const topic = raw.trim();
   if (topic.length < 3) return { ok: false, reason: "Topic is too short." };
-  if (topic.length > 120) return { ok: false, reason: "Topic is too long — try a chapter name." };
+  if (topic.length > 120) return { ok: false, reason: "Topic is too long, try a chapter name." };
 
   const words = topic.split(/\s+/);
   if (words.length > 12) {
@@ -178,7 +178,7 @@ function outline(topic: string, className: string): StudySection[] {
       points: [
         `What ${topic} means, in one sentence of your own.`,
         "The terms your chapter introduces alongside it.",
-        "Where this sits in the chapter — what comes before and after.",
+        "Where this sits in the chapter, what comes before and after.",
       ],
     },
     {
@@ -186,7 +186,7 @@ function outline(topic: string, className: string): StudySection[] {
       points: [
         "The main idea, step by step.",
         "The process or rule involved, in order.",
-        "A diagram, if your chapter has one — copy it and label it.",
+        "A diagram, if your chapter has one, copy it and label it.",
       ],
     },
     {
@@ -236,7 +236,7 @@ export async function buildStudyDoc(
     );
     sections = parseSections(reply);
   } catch {
-    sections = null; // model unavailable or refused — the outline stands in
+    sections = null; // model unavailable or refused, the outline stands in
   }
 
   return {

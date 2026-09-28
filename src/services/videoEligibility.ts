@@ -6,7 +6,7 @@ export interface EligibilityResult {
   reason?: string;
 }
 
-// Class is stored inconsistently across callers ("Class 7", "7", 7) — compare
+// Class is stored inconsistently across callers ("Class 7", "7", 7), compare
 // by the digits only so a comparison from either shape still matches.
 function classDigits(v: unknown): string {
   return String(v ?? "").replace(/\D/g, "");

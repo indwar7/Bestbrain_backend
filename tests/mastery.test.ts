@@ -25,7 +25,7 @@ async function makeStudent(progress?: Partial<{ chapters: Record<string, unknown
   });
 }
 
-describe("masteryInsights — real, derived, honest", () => {
+describe("masteryInsights, real, derived, honest", () => {
   it("returns empty mastery + no badges for a brand-new student", async () => {
     const student = await makeStudent();
     const m = await getMasteryInsights(student);

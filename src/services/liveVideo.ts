@@ -22,7 +22,7 @@ function roomService(): RoomServiceClient | null {
 }
 
 // Delete (tear down) a LiveKit room. This disconnects ALL participants
-// server-side — the authoritative way to end a class for everyone.
+// server-side, the authoritative way to end a class for everyone.
 // Returns true if the delete request was issued, false if LiveKit isn't
 // configured. Swallows "room not found" since an already-empty room is fine.
 export async function deleteLiveKitRoom(roomName: string): Promise<boolean> {
@@ -33,7 +33,7 @@ export async function deleteLiveKitRoom(roomName: string): Promise<boolean> {
     return true;
   } catch (err: unknown) {
     // A room with no active participants may not exist on the LiveKit server.
-    // That's not an error for our purposes — the goal (no one connected) holds.
+    // That's not an error for our purposes, the goal (no one connected) holds.
     const msg = err instanceof Error ? err.message : String(err);
     if (/not\s*found|does not exist/i.test(msg)) return true;
     throw err;

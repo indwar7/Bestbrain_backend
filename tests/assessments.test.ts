@@ -31,7 +31,7 @@ async function seedQuestions(teacher: string, n = 5) {
   }
 }
 
-describe("Assessments — authoring", () => {
+describe("Assessments, authoring", () => {
   it("teacher can create a question; student cannot", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");
@@ -56,7 +56,7 @@ describe("Assessments — authoring", () => {
   });
 });
 
-describe("Assessments — mock test", () => {
+describe("Assessments, mock test", () => {
   let student: string;
   beforeEach(async () => {
     const teacher = await tokenFor("teacher");
@@ -156,13 +156,13 @@ describe("Assessments — mock test", () => {
     const rec = await request(app)
       .post("/api/assessments/mock/record")
       .set(auth(student))
-      .send({ subject: "Science", testName: "Class 7 Science — Cells", score: 7, total: 10, mastery: 82 });
+      .send({ subject: "Science", testName: "Class 7 Science - Cells", score: 7, total: 10, mastery: 82 });
     expect(rec.status).toBe(201);
-    expect(rec.body.attempt).toMatchObject({ subject: "Science", testName: "Class 7 Science — Cells", score: 7, total: 10, mastery: 82 });
+    expect(rec.body.attempt).toMatchObject({ subject: "Science", testName: "Class 7 Science - Cells", score: 7, total: 10, mastery: 82 });
 
     const hist = await request(app).get("/api/assessments/mock/history").set(auth(student));
     expect(hist.status).toBe(200);
-    const found = hist.body.attempts.find((a: { testName?: string }) => a.testName === "Class 7 Science — Cells");
+    const found = hist.body.attempts.find((a: { testName?: string }) => a.testName === "Class 7 Science - Cells");
     expect(found).toBeTruthy();
     expect(found).toMatchObject({ subject: "Science", score: 7, total: 10, mastery: 82 });
   });
@@ -176,7 +176,7 @@ describe("Assessments — mock test", () => {
   });
 });
 
-describe("Assessments — hourly challenge", () => {
+describe("Assessments, hourly challenge", () => {
   let student: string;
   beforeEach(async () => {
     const teacher = await tokenFor("teacher");

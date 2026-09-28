@@ -39,7 +39,7 @@ async function makeVideo() {
   return String(v._id);
 }
 
-describe("Video views — coin gate (students)", () => {
+describe("Video views, coin gate (students)", () => {
   it("charges 25 coins on the first view of a video", async () => {
     const { token } = await signupStudent(100);
     const videoId = await makeVideo();

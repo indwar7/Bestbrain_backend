@@ -19,7 +19,7 @@
   "keywords": [],
   "author": "Abhaydeep Indwar",
   "license": "MIT",
-  "description": "Backend API for EduLearn \u2014 auth, user progress, PAL, challenges, live classes",
+  "description": "Backend API for EduLearn, auth, user progress, PAL, challenges, live classes",
   "dependencies": {
     "@google/genai": "^2.9.0",
     "bcryptjs": "^3.0.3",

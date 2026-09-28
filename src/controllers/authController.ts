@@ -16,7 +16,7 @@ import { OtpCode } from "../models/OtpCode";
 // ---------- helpers ----------
 // Turn a Mongo duplicate-key error (E11000) into a friendly 409. This closes
 // the signup race: two concurrent requests both pass the findOne pre-check, but
-// the unique index rejects the second insert — we translate that here instead
+// the unique index rejects the second insert, we translate that here instead
 // of returning a 500. Returns true if it handled the error.
 function handleDuplicateKey(err: unknown, res: Response): boolean {
   const e = err as { code?: number; keyPattern?: Record<string, unknown> };
@@ -73,7 +73,7 @@ async function emailTaken(email: string): Promise<boolean> {
 const norm = (s: unknown) => String(s ?? "").trim().toLowerCase();
 
 // Roll number is meant to be globally unique (see the User schema), but a
-// parent's link is only ever as correct as the roll number they typed — so
+// parent's link is only ever as correct as the roll number they typed, so
 // name + class are checked too as a guard against a fat-fingered roll number
 // that happens to belong to a different student.
 async function findMatchingChild(
@@ -205,7 +205,7 @@ export async function signupTeacher(req: Request, res: Response): Promise<void> 
 }
 
 // =====================================================================
-// PARENT SIGNUP — self-register, then link to a child.
+// PARENT SIGNUP, self-register, then link to a child.
 // Body: { name, email, password, childRollNumber, childName, childClass }
 // The child must already exist as a student; we match rollNumber + name + class.
 // =====================================================================
@@ -320,7 +320,7 @@ export async function relinkChild(req: AuthRequest, res: Response): Promise<void
 }
 
 // =====================================================================
-// LOGIN — role-aware. Body: { email, password, role }
+// LOGIN, role-aware. Body: { email, password, role }
 // The `role` is the tab the user picked; it must match their account.
 // =====================================================================
 export async function login(req: Request, res: Response): Promise<void> {

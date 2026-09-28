@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { env } from "../config/env";
 
-// 7 days in milliseconds — keep in sync with REFRESH_TTL.
+// 7 days in milliseconds, keep in sync with REFRESH_TTL.
 const REFRESH_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 export function setRefreshCookie(res: Response, token: string): void {
@@ -12,7 +12,7 @@ export function setRefreshCookie(res: Response, token: string): void {
     maxAge: REFRESH_MAX_AGE,
     // Path must be "/": the deployed site reaches us through Vercel's
     // /backend-api/* rewrite, so the browser sees the refresh endpoint at
-    // /backend-api/api/auth/refresh — a "/api/auth" path would never match
+    // /backend-api/api/auth/refresh, a "/api/auth" path would never match
     // and the cookie would never be sent back through the proxy.
     path: "/",
   });

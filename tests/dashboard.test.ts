@@ -13,7 +13,7 @@ async function signup(kind: "student" | "teacher", overrides: Record<string, unk
   return { token: res.body.accessToken as string, body: { ...body, ...overrides } };
 }
 
-describe("Dashboard — role-specific, real data only", () => {
+describe("Dashboard, role-specific, real data only", () => {
   it("requires authentication", async () => {
     const res = await request(app).get("/api/dashboard");
     expect(res.status).toBe(401);

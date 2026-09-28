@@ -4,7 +4,7 @@ import { User } from "../models/User";
 import { CoinLedger } from "../models/CoinLedger";
 import { spendCoins as spendCoinsService } from "../services/coinService";
 
-// Coins are earned inside the progress pipeline (see progressController) —
+// Coins are earned inside the progress pipeline (see progressController) ,
 // there is no endpoint to grant them, because a client must never be able to
 // ask for a balance it did not earn. These two only read the balance and
 // spend against it.

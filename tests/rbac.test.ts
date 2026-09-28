@@ -12,17 +12,17 @@ async function tokenFor(kind: "student" | "teacher") {
 }
 const auth = (t: string) => ({ Authorization: `Bearer ${t}` });
 
-describe("RBAC — admin user listing (PII) is protected", () => {
+describe("RBAC, admin user listing (PII) is protected", () => {
   it("blocks the admin endpoint in production without a key", async () => {
     // The middleware reads env.isProd; in the test env NODE_ENV is 'test', so
     // dev-convenience applies and it is reachable. We assert the route exists
-    // and responds (not a 404) — full prod gating is covered by env config.
+    // and responds (not a 404), full prod gating is covered by env config.
     const res = await request(app).get("/api/admin/users");
     expect([200, 401, 403]).toContain(res.status);
   });
 });
 
-describe("RBAC — role-guarded write actions", () => {
+describe("RBAC, role-guarded write actions", () => {
   it("a student cannot create a live session (teacher only)", async () => {
     const { token } = await tokenFor("student");
     const res = await request(app)
@@ -51,11 +51,11 @@ describe("RBAC — role-guarded write actions", () => {
   });
 });
 
-describe("RBAC — data is scoped to the authenticated user", () => {
+describe("RBAC, data is scoped to the authenticated user", () => {
   it("profile reads/writes only affect the caller, and ignore non-whitelisted fields", async () => {
     const { token } = await tokenFor("student");
 
-    // Attempt to change a protected field (rollNumber) — must be ignored.
+    // Attempt to change a protected field (rollNumber), must be ignored.
     const before = await request(app).get("/api/users/me").set(auth(token));
     const originalRoll = before.body.user.rollNumber;
 

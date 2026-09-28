@@ -12,11 +12,11 @@ import {
   isEntitling,
 } from "../models/Subscription";
 
-// Coins are credited 1-for-1 with what was actually paid, in rupees — ₹900
+// Coins are credited 1-for-1 with what was actually paid, in rupees - ₹900
 // becomes 900 coins. That number is a DISPLAY choice (see coinService.ts's
 // spendCoins usage in pal/videoController for the real internal cost basis:
 // 3 coins ≈ ₹1 of actual compute budget, so 900 coins is calibrated to cover
-// roughly ₹300 of real usage, not ₹900 — see the coin-economy design notes).
+// roughly ₹300 of real usage, not ₹900, see the coin-economy design notes).
 // Reading it off doc.amount rather than hard-coding 900 means a future price
 // change is a Razorpay-side config change, not a code change here.
 function coinsForPayment(amountPaise: number): number {
@@ -27,7 +27,7 @@ function coinsForPayment(amountPaise: number): number {
  * BestBrain Plus subscriptions.
  *
  * Everything here is driven by Razorpay webhooks. We never ask the browser
- * whether a payment succeeded — a client can say anything, and the hosted
+ * whether a payment succeeded, a client can say anything, and the hosted
  * button gives it no proof it could not forge. The webhook is signed with a
  * shared secret, so it is the only statement about payment this server trusts.
  */
@@ -55,7 +55,7 @@ export function verifyWebhookSignature(rawBody: Buffer | string, signature: stri
   const a = Buffer.from(expected, "utf8");
   const b = Buffer.from(signature, "utf8");
   // timingSafeEqual throws on a length mismatch, which would itself leak the
-  // expected length through the error path — compare lengths first and bail.
+  // expected length through the error path, compare lengths first and bail.
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
 }
@@ -137,7 +137,7 @@ export async function applyWebhookEvent(
   }
 
   // The payment entity is the only place the payer's email/contact appears, and
-  // it is only present on charge events — so keep any previously learned value
+  // it is only present on charge events, so keep any previously learned value
   // when this event does not carry one.
   const payment = event.payload?.payment?.entity;
   const email = asString(payment?.email) || existing?.email || "";
@@ -145,7 +145,7 @@ export async function applyWebhookEvent(
 
   const status = normaliseStatus(entity.status) ?? existing?.status ?? "created";
 
-  // Captured before doc.currentStart is overwritten below — this is what lets
+  // Captured before doc.currentStart is overwritten below, this is what lets
   // us tell "the same period, re-applied" apart from "a new period started",
   // which is the only signal we have for "credit this cycle's coins" that
   // doesn't depend on which specific event name Razorpay used to say so.
@@ -165,7 +165,7 @@ export async function applyWebhookEvent(
   doc.lastEventAt = eventAt ?? doc.lastEventAt;
 
   // If we ever create subscriptions server-side we attach the account id in
-  // notes — that is unambiguous, so it wins over email matching. Supporting it
+  // notes, that is unambiguous, so it wins over email matching. Supporting it
   // now costs nothing and makes the upgrade path a config change.
   const noteUserId = extractUserIdFromNotes(entity.notes);
   if (noteUserId && mongoose.isValidObjectId(noteUserId)) {
@@ -182,7 +182,7 @@ export async function applyWebhookEvent(
 
     // A new billing period started (first activation counts too, since
     // previousCurrentStart is null then) and it's a period the subscriber is
-    // actually entitled for — credit this cycle's coins, once, idempotently
+    // actually entitled for, credit this cycle's coins, once, idempotently
     // per (subscription, cycle) so a retried webhook can never double-credit.
     const cycleChanged =
       doc.currentStart != null &&
@@ -205,7 +205,7 @@ export async function applyWebhookEvent(
     // picks this up when they sign up or log in with the same email.
     logger.warn(
       { subscriptionId: subId, email: email || "(none)" },
-      "[subscription] payment recorded but no matching account yet — will be claimed on signup/login"
+      "[subscription] payment recorded but no matching account yet, will be claimed on signup/login"
     );
   }
 
@@ -285,7 +285,7 @@ function bestEntitlement(subs: ISubscription[]): Entitlement {
     };
   }
 
-  // Nothing entitling — report the most recently updated row so the UI can say
+  // Nothing entitling, report the most recently updated row so the UI can say
   // "expired" or "payment failed" rather than "never subscribed".
   const latest = subs.reduce((a, b) => (b.updatedAt > a.updatedAt ? b : a));
   return {
@@ -307,7 +307,7 @@ export async function getEntitlement(userId: string): Promise<Entitlement> {
  * an account, then refresh their snapshot.
  *
  * This is what makes the hosted button work for someone who paid before they
- * had an account — the common case, since the button sits on a public pricing
+ * had an account, the common case, since the button sits on a public pricing
  * page. Safe to call on every login: it is a no-op once there is nothing
  * unlinked left to claim.
  */
@@ -315,8 +315,8 @@ export async function claimForUser(user: { id: string; email: string }): Promise
   const email = (user.email ?? "").toLowerCase().trim();
   if (!email) return getEntitlement(user.id);
 
-  // Found (not just updateMany'd) because a subscription claimed here — paid
-  // for before the account existed — never passed through applyWebhookEvent's
+  // Found (not just updateMany'd) because a subscription claimed here, paid
+  // for before the account existed, never passed through applyWebhookEvent's
   // cycle-detection with a userId attached, so its current cycle's coins were
   // never credited. That has to happen here instead, once, for each one.
   const unclaimed = await Subscription.find({ userId: null, email });

@@ -6,7 +6,7 @@
  * Idempotent: a question is identified by (className, subject, chapterSlug,
  * text), and homework by (className, subject, title). Re-running adds what is
  * missing and touches nothing else, so it is safe to run against an
- * environment that already has data — which is the only way a seed script is
+ * environment that already has data, which is the only way a seed script is
  * useful more than once.
  *
  * Run with: npm run seed:class6science
@@ -47,13 +47,13 @@ const BANK: Record<string, Seed[]> = {
   ],
   "components-of-food": [
     { text: "Which nutrient gives the body most of its energy?", options: ["Proteins", "Carbohydrates", "Vitamins", "Minerals"], correctIndex: 1, explanation: "Carbohydrates are the body's main and quickest energy source.", difficulty: "easy" },
-    { text: "Scurvy is caused by a deficiency of which vitamin?", options: ["Vitamin A", "Vitamin B1", "Vitamin C", "Vitamin D"], correctIndex: 2, explanation: "Too little Vitamin C causes scurvy — bleeding gums and slow healing.", difficulty: "medium" },
+    { text: "Scurvy is caused by a deficiency of which vitamin?", options: ["Vitamin A", "Vitamin B1", "Vitamin C", "Vitamin D"], correctIndex: 2, explanation: "Too little Vitamin C causes scurvy, bleeding gums and slow healing.", difficulty: "medium" },
     { text: "Proteins are called ____ because they help the body grow.", options: ["Energy giving", "Body building", "Protective", "Roughage"], correctIndex: 1, explanation: "Proteins build and repair body tissue, so they are body-building foods.", difficulty: "easy" },
     { text: "Which test is used to detect starch in food?", options: ["Copper sulphate test", "Iodine test", "Litmus test", "Flame test"], correctIndex: 1, explanation: "Iodine turns blue-black in the presence of starch.", difficulty: "medium" },
     { text: "Roughage (dietary fibre) mainly helps to?", options: ["Give energy", "Build muscle", "Move food through the gut", "Strengthen bones"], correctIndex: 2, explanation: "Fibre adds bulk and helps the body get rid of undigested food.", difficulty: "medium" },
     { text: "Deficiency of iron in the diet causes?", options: ["Rickets", "Anaemia", "Goitre", "Beri-beri"], correctIndex: 1, explanation: "Iron is needed to make haemoglobin; too little causes anaemia.", difficulty: "medium" },
     { text: "Which vitamin is made by our skin in sunlight?", options: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"], correctIndex: 2, explanation: "Sunlight on skin lets the body make Vitamin D.", difficulty: "easy" },
-    { text: "Goitre is caused by the deficiency of?", options: ["Iron", "Calcium", "Iodine", "Phosphorus"], correctIndex: 2, explanation: "Iodine deficiency causes the thyroid gland to swell — goitre.", difficulty: "medium" },
+    { text: "Goitre is caused by the deficiency of?", options: ["Iron", "Calcium", "Iodine", "Phosphorus"], correctIndex: 2, explanation: "Iodine deficiency causes the thyroid gland to swell, goitre.", difficulty: "medium" },
     { text: "A balanced diet is one that?", options: ["Has only proteins", "Has all nutrients in right amounts", "Has no fat at all", "Is only vegetarian"], correctIndex: 1, explanation: "A balanced diet supplies every nutrient in the quantity the body needs.", difficulty: "easy" },
     { text: "Which of these is the richest source of fat?", options: ["Butter", "Spinach", "Orange", "Rice"], correctIndex: 0, explanation: "Butter is almost entirely fat.", difficulty: "easy" },
     { text: "Night blindness is caused by a lack of?", options: ["Vitamin A", "Vitamin C", "Iron", "Calcium"], correctIndex: 0, explanation: "Vitamin A is needed for vision in dim light.", difficulty: "medium" },
@@ -111,7 +111,7 @@ const BANK: Record<string, Seed[]> = {
     { text: "Inflating a balloon is a change in its?", options: ["Shape and size", "Colour only", "Material", "Smell"], correctIndex: 0, explanation: "Blowing air in changes the balloon's shape and size.", difficulty: "easy" },
     { text: "Which of these is NOT an irreversible change?", options: ["Germination of a seed", "Folding a paper", "Burning a candle", "Cooking an egg"], correctIndex: 1, explanation: "A folded paper can simply be unfolded.", difficulty: "medium" },
     { text: "Setting of cement is which kind of change?", options: ["Reversible", "Irreversible", "Periodic", "Temporary"], correctIndex: 1, explanation: "Once set, cement cannot return to its powdered form.", difficulty: "medium" },
-    { text: "Water freezing into ice is an example of a change of?", options: ["State", "Colour", "Material", "Taste"], correctIndex: 0, explanation: "Liquid water becomes solid ice — a change of state.", difficulty: "easy" },
+    { text: "Water freezing into ice is an example of a change of?", options: ["State", "Colour", "Material", "Taste"], correctIndex: 0, explanation: "Liquid water becomes solid ice, a change of state.", difficulty: "easy" },
     { text: "Why are gaps left between rails on a railway track?", options: ["To save steel", "To allow expansion in heat", "To reduce noise", "For drainage"], correctIndex: 1, explanation: "Rails expand in summer heat; the gaps give them room.", difficulty: "hard" },
     { text: "Sawing a piece of wood is a change that is?", options: ["Reversible", "Irreversible", "Chemical only", "Periodic"], correctIndex: 1, explanation: "The sawn pieces cannot be joined back into the original log.", difficulty: "medium" },
   ],
@@ -176,14 +176,14 @@ const BANK: Record<string, Seed[]> = {
 // Two demonstrable assignments, keyed to chapters the bank now fills.
 const HOMEWORK = [
   {
-    title: "Food and its components — practice set",
+    title: "Food and its components, practice set",
     chapterSlug: "components-of-food",
     instructions: "Answer all questions. Revise the vitamin deficiency diseases before you start.",
     dueInDays: 7,
     take: 6,
   },
   {
-    title: "Light and shadows — chapter check",
+    title: "Light and shadows, chapter check",
     chapterSlug: "light-shadows",
     instructions: "Think about how light travels before answering. One attempt only.",
     dueInDays: 10,
@@ -215,7 +215,7 @@ async function main() {
         subject: SUBJECT,
         chapterSlug,
         ...q,
-        // "both" so these serve the bank AND remain available to mock tests —
+        // "both" so these serve the bank AND remain available to mock tests ,
         // Class 6 Science had almost nothing before this.
         usage: "both",
         createdByRole: "admin",
@@ -234,7 +234,7 @@ async function main() {
   // inventing a second one every run.
   const teacher = await User.findOne({ role: "teacher" }).select("_id");
   if (!teacher) {
-    console.log("\nNo teacher account found — skipping the sample homework.");
+    console.log("\nNo teacher account found, skipping the sample homework.");
     console.log("Create a teacher (npm run seed) and run this again to add it.");
     await mongoose.disconnect();
     return;

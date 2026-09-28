@@ -9,7 +9,7 @@ import { canViewVideo } from "../services/videoEligibility";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "notes");
 
-// POST /api/notes — upload a chapter note (teacher or admin). multer puts the
+// POST /api/notes, upload a chapter note (teacher or admin). multer puts the
 // file on req.file.
 export async function uploadNote(req: AuthRequest, res: Response): Promise<void> {
   const file = (req as Request & { file?: Express.Multer.File }).file;
@@ -43,7 +43,7 @@ export async function uploadNote(req: AuthRequest, res: Response): Promise<void>
       uploadedByRole: user?.role === "teacher" ? "teacher" : "admin",
     });
   } catch (err) {
-    // The file already made it to disk even though the DB write failed — remove
+    // The file already made it to disk even though the DB write failed, remove
     // the orphan instead of leaving it and returning a bare 500.
     fs.unlink(path.join(UPLOAD_DIR, file.filename), () => {});
     throw err;
@@ -79,7 +79,7 @@ function topicMatches(wantTopic: string, noteTopic: unknown): boolean {
   return want.every((w) => haveSet.has(w)) || have.every((w) => wantSet.has(w));
 }
 
-// GET /api/notes — list notes, optionally filtered by ?className= & ?subject=
+// GET /api/notes, list notes, optionally filtered by ?className= & ?subject=
 // & ?topic=. Filtered in-memory for the same reason videos are: the fields are
 // free text stored in inconsistent shapes.
 export async function listNotes(req: Request, res: Response): Promise<void> {
@@ -115,7 +115,7 @@ export async function listNotes(req: Request, res: Response): Promise<void> {
   });
 }
 
-// GET /api/notes/:id/file — serve the note file, gated by the same class/subject
+// GET /api/notes/:id/file, serve the note file, gated by the same class/subject
 // eligibility as lecture videos. A plain <a> can't send an Authorization
 // header, so this route accepts the token as ?token= (requireAuthViaQueryToken),
 // exactly like video streaming.
@@ -172,7 +172,7 @@ export async function downloadNote(req: AuthRequest, res: Response): Promise<voi
   fs.createReadStream(filePath).pipe(res);
 }
 
-// DELETE /api/notes/:id — the uploader can delete their own note (mirrors the
+// DELETE /api/notes/:id, the uploader can delete their own note (mirrors the
 // video delete rule, which is ownership-only).
 export async function deleteNote(req: AuthRequest, res: Response): Promise<void> {
   if (!mongoose.isValidObjectId(req.params.id)) {

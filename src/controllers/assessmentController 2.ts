@@ -175,7 +175,7 @@ export async function submitMock(req: AuthRequest, res: Response): Promise<void>
   res.json({ score, total: attempt.total, review });
 }
 
-// GET /api/assessments/mock/history — the student's past attempts.
+// GET /api/assessments/mock/history, the student's past attempts.
 export async function mockHistory(req: AuthRequest, res: Response): Promise<void> {
   const attempts = await MockAttempt.find({ userId: req.user!.id, finished: true })
     .select("subject score total finishedAt")
@@ -189,7 +189,7 @@ export async function mockHistory(req: AuthRequest, res: Response): Promise<void
 // HOURLY CHALLENGE
 // ===========================================================================
 
-// GET /api/assessments/challenge — the current hour's question (one per hour,
+// GET /api/assessments/challenge, the current hour's question (one per hour,
 // shared by everyone in the student's class). Answer stripped.
 export async function getChallenge(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
@@ -220,7 +220,7 @@ export async function getChallenge(req: AuthRequest, res: Response): Promise<voi
     return;
   }
 
-  // Hash the hour key to an index — same hour → same question.
+  // Hash the hour key to an index, same hour → same question.
   let h = 0;
   for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const q = pool[h % pool.length];
@@ -290,7 +290,7 @@ export async function answerChallenge(req: AuthRequest, res: Response): Promise<
   }
 }
 
-// GET /api/assessments/challenge/leaderboard — top scorers for the current hour.
+// GET /api/assessments/challenge/leaderboard, top scorers for the current hour.
 export async function challengeLeaderboard(req: AuthRequest, res: Response): Promise<void> {
   const key = hourKey(new Date());
   const top = await ChallengeAttempt.find({ hourKey: key })

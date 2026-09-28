@@ -42,7 +42,7 @@ async function balanceOf(token: string) {
   return res.body.balance as number;
 }
 
-describe("Coins — earning", () => {
+describe("Coins, earning", () => {
   it("starts at zero", async () => {
     const token = await signUp();
     expect(await balanceOf(token)).toBe(0);
@@ -99,7 +99,7 @@ describe("Coins — earning", () => {
   });
 });
 
-describe("Coins — spending", () => {
+describe("Coins, spending", () => {
   async function fundedStudent() {
     const token = await signUp();
     // four badges = 100 coins

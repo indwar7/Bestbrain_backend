@@ -16,7 +16,7 @@ interface IncomingEvent {
  *
  * Deliberately server-side: the client reports what happened, never what it
  * should be paid for it. And deliberately here rather than spread across the
- * cases below, so the whole earning scheme can be read — and changed — in one
+ * cases below, so the whole earning scheme can be read, and changed, in one
  * place instead of being reconstructed from five.
  */
 const COIN_RULES = {
@@ -130,7 +130,7 @@ export async function syncProgress(req: AuthRequest, res: Response): Promise<voi
     );
 
   // Coins are earned off the same events, and only off events accepted as
-  // fresh — so a replayed batch pays nothing, exactly as it changes nothing.
+  // fresh, so a replayed batch pays nothing, exactly as it changes nothing.
   if (typeof user.progress.coins !== "number") user.progress.coins = 0;
   const earnings: { refId: string; reason: string; delta: number; balanceAfter: number }[] = [];
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 
-// Same LLM mock as pal.test.ts — we're testing the role plumbing and the REAL
+// Same LLM mock as pal.test.ts, we're testing the role plumbing and the REAL
 // buildPalContext, not Gemini. `generatePalReply` is a spy so a test can make
 // it fail on demand.
 const generatePalReply = vi.fn(async () => "MOCK_REPLY");
@@ -20,7 +20,7 @@ import "./setup";
 
 const auth = (t: string) => ({ Authorization: `Bearer ${t}` });
 
-// PAL now costs coins per question for students — seed a balance so these
+// PAL now costs coins per question for students, seed a balance so these
 // tests exercise the role/context plumbing they're actually about, not the
 // coin gate (that has its own coverage in pal-coins.test.ts).
 async function studentToken() {
@@ -43,7 +43,7 @@ describe("PAL answers for every role", () => {
   });
 
   it("teacher gets a reply (class-snapshot context path)", async () => {
-    // A teacher with a real roster — exercises the roster/insights branch.
+    // A teacher with a real roster, exercises the roster/insights branch.
     await studentToken();
     const res0 = await request(app).post("/api/auth/signup/teacher").send(uniqueTeacher());
     expect(res0.status).toBe(201);

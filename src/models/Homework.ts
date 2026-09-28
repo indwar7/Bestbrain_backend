@@ -16,7 +16,7 @@ import mongoose, { Schema, Document } from "mongoose";
  * silently rewrite a mark.
  *
  * `isPublished` is what separates a draft from assigned work. Students only
- * ever see published homework for their own class — see the query in
+ * ever see published homework for their own class, see the query in
  * homeworkController, which takes className from the signed-in user and never
  * from the request.
  */

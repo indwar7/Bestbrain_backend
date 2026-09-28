@@ -87,7 +87,7 @@ export async function buildPalContext(
     const blocks: string[] = [];
     for (const child of children) {
       const lines = await studentContextLines(child, now);
-      blocks.push(`Child — ${child.name}:\n${lines.join("\n")}`);
+      blocks.push(`Child - ${child.name}:\n${lines.join("\n")}`);
     }
     return (
       `Here is real BestBrain progress for this parent's child/children. ` +

@@ -12,7 +12,7 @@ export interface ILiveSession extends Document {
   joinCode: string; // short code students can also use to join
   status: "scheduled" | "live" | "ended";
 
-  // Video provider details — filled in later when a SDK (LiveKit/100ms) is wired.
+  // Video provider details, filled in later when a SDK (LiveKit/100ms) is wired.
   // Kept provider-agnostic for now.
   videoProvider?: string; // e.g. "livekit"
   videoRoom?: string; // provider room id/name

@@ -13,7 +13,7 @@ import { HomeworkSubmission } from "../models/HomeworkSubmission";
  * The rule that shapes almost everything here is that a student's className
  * comes from their own account and never from the request. It is the only
  * thing standing between "list my homework" and "list Class 9's homework", and
- * it has to hold on every route a student can reach — listing, opening, and
+ * it has to hold on every route a student can reach, listing, opening, and
  * submitting alike, because each of those would otherwise leak the questions
  * or the answers of a class the student is not in.
  *
@@ -108,7 +108,7 @@ export async function createHomework(req: AuthRequest, res: Response): Promise<v
     dueAt,
     assignedById: req.user!.id,
     // requireRole("teacher") is the only way to reach this handler, and the
-    // JWT role in this codebase is student|parent|teacher — there is no admin
+    // JWT role in this codebase is student|parent|teacher, there is no admin
     // to distinguish here.
     assignedByRole: "teacher",
     isPublished: b.isPublished === undefined ? true : Boolean(b.isPublished),
@@ -117,7 +117,7 @@ export async function createHomework(req: AuthRequest, res: Response): Promise<v
   res.status(201).json({ homework: teacherView(hw) });
 }
 
-// GET /api/homework  (teacher) — the assignments this teacher created.
+// GET /api/homework  (teacher), the assignments this teacher created.
 export async function listHomework(req: AuthRequest, res: Response): Promise<void> {
   const { className, subject } = req.query as { className?: string; subject?: string };
   const filter: Record<string, unknown> = { assignedById: req.user!.id };
@@ -143,7 +143,7 @@ export async function listHomework(req: AuthRequest, res: Response): Promise<voi
   });
 }
 
-// PATCH /api/homework/:id  (teacher) — edit, publish or unpublish.
+// PATCH /api/homework/:id  (teacher), edit, publish or unpublish.
 export async function updateHomework(req: AuthRequest, res: Response): Promise<void> {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) {
@@ -225,7 +225,7 @@ export async function deleteHomework(req: AuthRequest, res: Response): Promise<v
   res.json({ deleted: true });
 }
 
-// GET /api/homework/:id/submissions  (teacher) — the roster with scores.
+// GET /api/homework/:id/submissions  (teacher), the roster with scores.
 export async function homeworkSubmissions(req: AuthRequest, res: Response): Promise<void> {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) {
@@ -317,7 +317,7 @@ export async function assignedHomework(req: AuthRequest, res: Response): Promise
   });
 }
 
-// GET /api/homework/:id  (student) — the questions, WITHOUT answers.
+// GET /api/homework/:id  (student), the questions, WITHOUT answers.
 export async function getHomeworkForStudent(req: AuthRequest, res: Response): Promise<void> {
   const user = await User.findById(req.user!.id);
   if (!user || user.role !== "student") {
@@ -400,7 +400,7 @@ export async function submitHomework(req: AuthRequest, res: Response): Promise<v
   const questions = await Question.find({ _id: { $in: hw.questionIds } });
   const byId = new Map(questions.map((q) => [String(q._id), q]));
 
-  // Grade every question the teacher set, not every answer the client sent —
+  // Grade every question the teacher set, not every answer the client sent ,
   // an omitted answer is a wrong answer, and an answer to a question that is
   // not on this homework is ignored rather than counted.
   const answers = [];

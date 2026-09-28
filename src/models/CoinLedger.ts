@@ -4,7 +4,7 @@ import mongoose, { Schema, Document } from "mongoose";
  * One line per change to a student's coin balance.
  *
  * The balance on the user is the running total; this is the reason it holds
- * that value. Without it a balance is a number nobody can explain — not to a
+ * that value. Without it a balance is a number nobody can explain, not to a
  * student who thinks they earned more, and not to us when the two disagree.
  * Every row carries the balance it produced, so the whole history can be
  * replayed and checked against the user document.

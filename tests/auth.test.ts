@@ -13,7 +13,7 @@ afterAll(() => {
   process.env.OTP_ENFORCED = prevOtp;
 });
 
-describe("Auth — signup", () => {
+describe("Auth, signup", () => {
   it("signs up a student and returns an access token + public user", async () => {
     const body = uniqueStudent();
     const res = await request(app).post("/api/auth/signup/student").send(body);
@@ -40,7 +40,7 @@ describe("Auth — signup", () => {
   });
 });
 
-describe("Auth — login (email + password, no OTP)", () => {
+describe("Auth, login (email + password, no OTP)", () => {
   it("logs in with correct credentials", async () => {
     const body = uniqueStudent();
     await request(app).post("/api/auth/signup/student").send(body);
@@ -56,7 +56,7 @@ describe("Auth — login (email + password, no OTP)", () => {
     expect(cookies?.some((c) => c.startsWith("edulearn_refresh="))).toBe(true);
   });
 
-  it("does NOT require an OTP (gate disabled) — login succeeds immediately", async () => {
+  it("does NOT require an OTP (gate disabled), login succeeds immediately", async () => {
     const body = uniqueStudent();
     await request(app).post("/api/auth/signup/student").send(body);
     const res = await request(app)
@@ -94,7 +94,7 @@ describe("Auth — login (email + password, no OTP)", () => {
   });
 });
 
-describe("Auth — refresh + me", () => {
+describe("Auth, refresh + me", () => {
   it("refreshes an access token from the refresh cookie", async () => {
     const body = uniqueTeacher();
     const signup = await request(app).post("/api/auth/signup/teacher").send(body);

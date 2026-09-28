@@ -59,7 +59,7 @@ async function makeHomework(
   return res;
 }
 
-describe("Homework — authoring", () => {
+describe("Homework, authoring", () => {
   it("a teacher can assign homework", async () => {
     const teacher = await tokenFor("teacher");
     const q1 = await makeQuestion(teacher);
@@ -146,7 +146,7 @@ describe("Homework — authoring", () => {
   });
 });
 
-describe("Homework — the class boundary", () => {
+describe("Homework, the class boundary", () => {
   it("a student only sees homework for their own class", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student"); // Class 7
@@ -173,7 +173,7 @@ describe("Homework — the class boundary", () => {
     const id = created.body.homework.id;
 
     const res = await request(app).get(`/api/homework/${id}`).set(auth(student));
-    // 404, not 403 — an id-prober learns nothing about what exists
+    // 404, not 403, an id-prober learns nothing about what exists
     expect(res.status).toBe(404);
     expect(JSON.stringify(res.body)).not.toContain("correctIndex");
   });
@@ -193,7 +193,7 @@ describe("Homework — the class boundary", () => {
   });
 });
 
-describe("Homework — doing the work", () => {
+describe("Homework, doing the work", () => {
   it("serves the questions without the answers", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");
@@ -306,7 +306,7 @@ describe("Homework — doing the work", () => {
   });
 });
 
-describe("Homework — the teacher's roster", () => {
+describe("Homework, the teacher's roster", () => {
   it("lists who submitted and what they scored", async () => {
     const teacher = await tokenFor("teacher");
     const student = await tokenFor("student");

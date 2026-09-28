@@ -10,16 +10,16 @@ import { spendCoins } from "../services/coinService";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "videos");
 
-// Coins — see the coin-economy design notes in subscriptionService.ts. Keyed
+// Coins, see the coin-economy design notes in subscriptionService.ts. Keyed
 // to the video id, not a per-view timestamp: a student is charged the first
 // time they watch a given video and rewatching it is free, the same shape as
 // coinService's bank-question idempotency (awardCoins there, spendCoins
-// here). Only students are metered, matching PAL's gate — the coin budget
+// here). Only students are metered, matching PAL's gate, the coin budget
 // was sized around a student's monthly usage, not a teacher previewing their
 // own upload or a parent checking content.
 const VIDEO_WATCH_COST = 25;
 
-// POST /api/videos — upload a video (teacher or admin). multer puts file on req.file.
+// POST /api/videos, upload a video (teacher or admin). multer puts file on req.file.
 export async function uploadVideo(req: AuthRequest, res: Response): Promise<void> {
   const file = (req as Request & { file?: Express.Multer.File }).file;
   if (!file) {
@@ -53,7 +53,7 @@ export async function uploadVideo(req: AuthRequest, res: Response): Promise<void
     });
   } catch (err) {
     // The file already made it to disk even though the DB write failed
-    // (e.g. a transient Mongo error) — without this it's an orphaned file
+    // (e.g. a transient Mongo error), without this it's an orphaned file
     // AND a generic 500 with no cleanup, on top of whatever upload error
     // the teacher was already retrying past.
     fs.unlink(path.join(UPLOAD_DIR, file.filename), () => {});
@@ -63,19 +63,19 @@ export async function uploadVideo(req: AuthRequest, res: Response): Promise<void
   res.status(201).json({ video });
 }
 
-// Class is stored inconsistently across callers ("Class 7", "7", 7) — compare
+// Class is stored inconsistently across callers ("Class 7", "7", 7), compare
 // by the digits only so a lookup from either shape still matches.
 function classDigits(v: unknown): string {
   return String(v ?? "").replace(/\D/g, "");
 }
 
-// Subject likewise varies in case/casing ("Science", "science") — compare
+// Subject likewise varies in case/casing ("Science", "science"), compare
 // case-insensitively on the first word so "Social Studies" still matches "social".
 function normalizeSubject(v: unknown): string {
   return String(v ?? "").trim().toLowerCase().split(/\s+/)[0] ?? "";
 }
 
-// Filler words that carry no chapter identity — dropped before matching so
+// Filler words that carry no chapter identity, dropped before matching so
 // "Sources of Food" and "food sources" compare as the same two words.
 const TOPIC_STOPWORDS = new Set(["of", "the", "a", "an", "to", "and", "or", "in", "on", "for", "with"]);
 
@@ -91,7 +91,7 @@ function topicWords(v: unknown): string[] {
 // type the topic by hand, so word order and filler drift ("Sources of Food",
 // "Introduction to Food Sources") relative to the chapter slug the lesson hub
 // sends ("food sources"). Compare the significant words as sets and accept when
-// one side's words are all contained in the other — a plain substring test
+// one side's words are all contained in the other, a plain substring test
 // missed every reorder or added descriptor, so real uploads never appeared
 // under their chapter. Both empty → no match (an untagged video is not claimed
 // by every chapter).
@@ -104,7 +104,7 @@ function topicMatches(wantTopic: string, videoTopic: unknown): boolean {
   return want.every((w) => haveSet.has(w)) || have.every((w) => wantSet.has(w));
 }
 
-// GET /api/videos — list videos, optionally filtered by ?className= & ?subject=
+// GET /api/videos, list videos, optionally filtered by ?className= & ?subject=
 // & ?topic=. Filtering is done in-memory (not via a Mongo query) because
 // className/subject are free-text and stored in inconsistent shapes
 // ("Class 7" vs "7", "Science" vs "science") depending on which UI wrote them.
@@ -142,11 +142,11 @@ export async function listVideos(req: Request, res: Response): Promise<void> {
   });
 }
 
-// GET /api/videos/:id/stream — stream the video with HTTP range support (seeking).
+// GET /api/videos/:id/stream, stream the video with HTTP range support (seeking).
 // Requires auth + the same class/subject eligibility as everything else (a
 // student can only stream lectures for their own class+subject, a parent only
 // for a linked child's, a teacher can stream any). Previously this route had
-// NO auth at all — any unauthenticated request could stream any video by id.
+// NO auth at all, any unauthenticated request could stream any video by id.
 export async function streamVideo(req: AuthRequest, res: Response): Promise<void> {
   // Guard against a non-ObjectId id (findById would otherwise throw CastError).
   if (!mongoose.isValidObjectId(req.params.id)) {
@@ -189,7 +189,7 @@ export async function streamVideo(req: AuthRequest, res: Response): Promise<void
   const range = req.headers.range;
 
   if (range) {
-    // Partial content — lets the browser seek. Validate + clamp the range so a
+    // Partial content, lets the browser seek. Validate + clamp the range so a
     // malformed/out-of-bounds header returns 416 instead of streaming garbage
     // (negative chunk size) or throwing on a NaN start.
     const parts = range.replace(/bytes=/, "").split("-");
@@ -220,7 +220,7 @@ export async function streamVideo(req: AuthRequest, res: Response): Promise<void
   }
 }
 
-// POST /api/videos/:id/view — increment view count (called when a student plays it).
+// POST /api/videos/:id/view, increment view count (called when a student plays it).
 export async function recordView(req: AuthRequest, res: Response): Promise<void> {
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(404).json({ error: "Video not found" });
@@ -232,7 +232,7 @@ export async function recordView(req: AuthRequest, res: Response): Promise<void>
   // (bad link, deleted video, probing) must never cost a student coins for
   // nothing. The pre-existing $inc below only reached a missing doc as a
   // silent no-op, which was harmless before there was a charge attached to
-  // this endpoint — it stops being harmless the moment there is.
+  // this endpoint, it stops being harmless the moment there is.
   const exists = await Video.exists({ _id: videoId });
   if (!exists) {
     res.status(404).json({ error: "Video not found" });
@@ -243,7 +243,7 @@ export async function recordView(req: AuthRequest, res: Response): Promise<void>
     const refId = `video:${videoId}`;
     const charge = await spendCoins(req.user!.id, VIDEO_WATCH_COST, "video_watched", refId);
     // duplicate === already charged for this exact video before (a rewatch,
-    // or a retried request) — proceed either way, just don't charge twice.
+    // or a retried request), proceed either way, just don't charge twice.
     if (!charge.spent && !charge.duplicate) {
       res.status(402).json({
         error: "Not enough coins to watch this video.",
@@ -259,7 +259,7 @@ export async function recordView(req: AuthRequest, res: Response): Promise<void>
   res.json({ ok: true });
 }
 
-// PATCH /api/videos/:id — edit a video's metadata (teacher). Only the
+// PATCH /api/videos/:id, edit a video's metadata (teacher). Only the
 // safe text fields; the file itself is never changed here. An admin may edit
 // any video; a teacher may edit only videos they uploaded.
 export async function updateVideo(req: AuthRequest, res: Response): Promise<void> {
@@ -289,7 +289,7 @@ export async function updateVideo(req: AuthRequest, res: Response): Promise<void
   res.json({ video });
 }
 
-// DELETE /api/videos/:id — remove a video (teacher/admin) and its file on disk.
+// DELETE /api/videos/:id, remove a video (teacher/admin) and its file on disk.
 // Admin may delete any video; a teacher only their own.
 export async function deleteVideo(req: AuthRequest, res: Response): Promise<void> {
   if (!mongoose.isValidObjectId(req.params.id)) {

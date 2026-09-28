@@ -16,16 +16,16 @@ const router = Router();
 
 router.use(requireAuth);
 
-// Authoring — teachers/admins.
+// Authoring, teachers/admins.
 router.post("/questions", requireRole("teacher"), createQuestion);
 router.get("/questions", requireRole("teacher"), listQuestions);
 
-// Mock tests — students.
+// Mock tests, students.
 router.post("/mock/start", startMock);
 router.post("/mock/:attemptId/submit", submitMock);
 router.get("/mock/history", mockHistory);
 
-// Hourly challenge — students.
+// Hourly challenge, students.
 router.get("/challenge", getChallenge);
 router.post("/challenge/answer", answerChallenge);
 router.get("/challenge/leaderboard", challengeLeaderboard);

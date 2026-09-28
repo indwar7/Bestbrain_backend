@@ -12,11 +12,11 @@ import { buildStudyDoc, checkTopic } from "../services/studyPdfService";
 import { User } from "../models/User";
 import { awardCoins, spendCoins } from "../services/coinService";
 
-// Coins — see the coin-economy design notes in subscriptionService.ts
+// Coins, see the coin-economy design notes in subscriptionService.ts
 // (coinsForPayment): 3 coins is calibrated against real Gemini 2.5 Flash
 // pricing to sit safely above the actual per-question cost, while still
 // mapping cleanly onto the ₹1/question figure the coin budget was sized
-// around. Only students are metered — PAL's parent/teacher personas were
+// around. Only students are metered - PAL's parent/teacher personas were
 // never part of that budget, so charging them would be pricing something
 // that was never costed.
 const PAL_QUESTION_COST = 3;
@@ -28,11 +28,11 @@ async function chargePalQuestion(
   role: "student" | "parent" | "teacher"
 ): Promise<PalCharge> {
   if (role !== "student") return { ok: true, refId: null };
-  // A fresh id per attempt, not a client-supplied one — PAL has no natural
+  // A fresh id per attempt, not a client-supplied one - PAL has no natural
   // "message id" until after a reply exists. The cost of that: a genuine
   // client retry of a request that actually succeeded charges again. The
   // upfront-charge-then-refund-on-failure pattern below at least guarantees
-  // the far more common case — the model call itself failing — never costs
+  // the far more common case, the model call itself failing, never costs
   // the student anything.
   const refId = `pal:${userId}:${crypto.randomUUID()}`;
   const result = await spendCoins(userId, PAL_QUESTION_COST, "pal_question", refId);
@@ -99,7 +99,7 @@ async function loadOrCreateSession(
 }
 
 // Credential/config failures (dead service account, missing project, malformed
-// key JSON) are permanent until an operator acts — they are not the transient
+// key JSON) are permanent until an operator acts, they are not the transient
 // "try again in a moment" the generic message promises. Separate them so the
 // user isn't told to retry something that can never succeed, and so the reason
 // is visible without shell access to the server.
@@ -114,7 +114,7 @@ function failChat(res: Response, err: unknown, where: string): void {
   console.error(`pal ${where} error:`, err);
   if (isConfigFailure(err)) {
     res.status(503).json({
-      error: "PAL is not set up correctly on the server — please contact support.",
+      error: "PAL is not set up correctly on the server, please contact support.",
       code: "pal_not_configured",
     });
     return;
@@ -193,7 +193,7 @@ async function runChatStream(
   if (!session) return;
 
   // Charged before the stream opens, not after: once writeHead below sends
-  // 200 the status code can no longer carry "insufficient coins" — it would
+  // 200 the status code can no longer carry "insufficient coins", it would
   // have to become an SSE error event instead, and a plain 402 here is
   // simpler and matches the non-streaming /chat handler.
   const charge = await chargePalQuestion(userId, role);
@@ -245,11 +245,11 @@ async function runChatStream(
     console.error("pal stream error:", err);
     await refundPalQuestion(userId, charge.refId);
     // The 200 for the SSE stream is already sent, so the status can't carry
-    // this — the event does. (The session is only saved on success above, so a
+    // this, the event does. (The session is only saved on success above, so a
     // failed stream leaves no empty session behind.)
     send("error", {
       error: isConfigFailure(err)
-        ? "PAL is not set up correctly on the server — please contact support."
+        ? "PAL is not set up correctly on the server, please contact support."
         : "PAL is unavailable right now",
       code: isConfigFailure(err) ? "pal_not_configured" : "pal_unavailable",
     });
@@ -269,12 +269,12 @@ export async function chatStream(req: AuthRequest, res: Response): Promise<void>
 
 // POST /api/pal/tutor/stream  (Server-Sent Events)
 // The live doubt session: same protocol as /chat/stream, but replies are
-// voice-optimized (short, plain, speakable) — the client reads them aloud.
+// voice-optimized (short, plain, speakable), the client reads them aloud.
 export async function tutorStream(req: AuthRequest, res: Response): Promise<void> {
   return runChatStream(req, res, true);
 }
 
-// POST /api/pal/study-pdf — structured study material for one science topic.
+// POST /api/pal/study-pdf, structured study material for one science topic.
 //
 // Returns the document as data, not as a file: the client already renders the
 // app's typography and can print to PDF with the browser's own engine, which
@@ -294,14 +294,14 @@ export async function studyPdf(req: AuthRequest, res: Response): Promise<void> {
   }
 
   /* The class shapes the depth of the explanation, and the token does not
-     carry it — read it from the profile rather than trusting the client. */
+     carry it, read it from the profile rather than trusting the client. */
   const profile = await User.findById(req.user!.id).select("className").lean();
   const className = profile?.className || "Class 6";
   const doc = await buildStudyDoc(topic.trim(), className);
   res.json(doc);
 }
 
-// GET /api/pal/sessions — list the current user's sessions (newest first,
+// GET /api/pal/sessions, list the current user's sessions (newest first,
 // without the full message bodies). Includes a short preview + counts.
 export async function listSessions(req: AuthRequest, res: Response): Promise<void> {
   const sessions = await ChatSession.find({ userId: req.user!.id })
@@ -327,7 +327,7 @@ export async function listSessions(req: AuthRequest, res: Response): Promise<voi
   res.json({ sessions: summaries });
 }
 
-// GET /api/pal/sessions/:id — fetch full history for a session.
+// GET /api/pal/sessions/:id, fetch full history for a session.
 export async function getSession(req: AuthRequest, res: Response): Promise<void> {
   const session = await ChatSession.findOne({
     _id: req.params.id,
@@ -340,7 +340,7 @@ export async function getSession(req: AuthRequest, res: Response): Promise<void>
   res.json({ session });
 }
 
-// PATCH /api/pal/sessions/:id — rename a session. Body: { title }
+// PATCH /api/pal/sessions/:id, rename a session. Body: { title }
 export async function renameSession(req: AuthRequest, res: Response): Promise<void> {
   const { title } = req.body as { title?: unknown };
   if (!title || typeof title !== "string" || !title.trim()) {
@@ -359,7 +359,7 @@ export async function renameSession(req: AuthRequest, res: Response): Promise<vo
   res.json({ id: session.id, title: session.title });
 }
 
-// DELETE /api/pal/sessions/:id — delete one of the user's sessions.
+// DELETE /api/pal/sessions/:id, delete one of the user's sessions.
 export async function deleteSession(req: AuthRequest, res: Response): Promise<void> {
   const result = await ChatSession.deleteOne({
     _id: req.params.id,

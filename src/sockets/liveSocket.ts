@@ -32,7 +32,7 @@ function roomPresence(sessionId: string): Map<string, Presence> {
   return m;
 }
 
-// The set of user IDs currently present in a session — used by the roster
+// The set of user IDs currently present in a session, used by the roster
 // endpoint to tick who has joined.
 export function getPresentUserIds(sessionId: string): string[] {
   const m = presence.get(sessionId);

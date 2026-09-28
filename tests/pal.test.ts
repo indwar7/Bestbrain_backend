@@ -18,7 +18,7 @@ import { awardCoins } from "../src/services/coinService";
 import "./setup"; // register lifecycle hooks
 
 // PAL now costs coins per question for students (see palController's
-// chargePalQuestion) — a fresh signup has none, so every test here needs a
+// chargePalQuestion), a fresh signup has none, so every test here needs a
 // balance seeded first or it would 402 before ever reaching the mocked LLM.
 async function signupStudent() {
   const res = await request(app).post("/api/auth/signup/student").send(uniqueStudent());

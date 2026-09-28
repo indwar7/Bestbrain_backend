@@ -4,7 +4,7 @@ dotenv.config();
 
 const isProd = (process.env.NODE_ENV ?? "development") === "production";
 
-// Insecure dev defaults — if these are still in use in production it's a real
+// Insecure dev defaults, if these are still in use in production it's a real
 // vulnerability, so we flag them on boot (see warnInsecureConfig below).
 const DEV_ACCESS_SECRET = "dev-access-secret-change-me";
 const DEV_REFRESH_SECRET = "dev-refresh-secret-change-me";
@@ -26,7 +26,7 @@ export const env = {
   /* 15 minutes was the default, and the refresh that was meant to cover it
      cannot run on the current deployment: the refresh cookie is SameSite=None,
      which a browser only stores with Secure, which it only honours over HTTPS.
-     Until the site and the API are both on TLS there is no refresh at all — so
+     Until the site and the API are both on TLS there is no refresh at all, so
      a 15-minute access token means a student is signed out in the middle of a
      chapter the product itself calls "about 24 minutes".
      Restore a short TTL the moment TLS lands and the cookie survives. */
@@ -37,7 +37,7 @@ export const env = {
   // Optional LLM key for PAL chat (falls back to a stub reply if unset).
   groqApiKey: process.env.GROQ_API_KEY ?? "",
 
-  // Vertex AI (Gemini) — powers PAL chat. Supply the service-account credentials
+  // Vertex AI (Gemini), powers PAL chat. Supply the service-account credentials
   // EITHER as a file path (GOOGLE_APPLICATION_CREDENTIALS, good for local dev)
   // OR as the raw JSON string (GOOGLE_CREDENTIALS_JSON, good for hosts with no
   // persistent filesystem like Render/Railway). If neither is set, PAL falls
@@ -52,8 +52,8 @@ export const env = {
     // credential let a half-configured deploy read as configured: the client
     // then built fine and the first real call failed with "Unable to detect a
     // Project", which surfaces to the student as a 503 rather than as the
-    // setup mistake it is. VERTEX_PROJECT has no safe default — it names
-    // someone's billing account — so it has to be set explicitly.
+    // setup mistake it is. VERTEX_PROJECT has no safe default, it names
+    // someone's billing account, so it has to be set explicitly.
     return !!((this.googleCredentialsFile || this.googleCredentialsJson) && this.vertexProject);
   },
 
@@ -63,8 +63,8 @@ export const env = {
   get vertexConfigProblem(): string {
     const hasCred = !!(this.googleCredentialsFile || this.googleCredentialsJson);
     if (!hasCred && !this.vertexProject) return "";
-    if (!hasCred) return "VERTEX_PROJECT is set but no credential is — set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS).";
-    if (!this.vertexProject) return "A Google credential is set but VERTEX_PROJECT is not — Vertex cannot infer the project and every PAL call will fail.";
+    if (!hasCred) return "VERTEX_PROJECT is set but no credential is, set GOOGLE_CREDENTIALS_JSON (or GOOGLE_APPLICATION_CREDENTIALS).";
+    if (!this.vertexProject) return "A Google credential is set but VERTEX_PROJECT is not - Vertex cannot infer the project and every PAL call will fail.";
     if (this.googleCredentialsJson) {
       let parsed: { project_id?: string; type?: string; private_key?: string };
       try {
@@ -72,12 +72,12 @@ export const env = {
       } catch {
         // Almost always a multi-line paste: dotenv stops at the first newline,
         // so the value arrives truncated. The JSON must be on ONE line.
-        return "GOOGLE_CREDENTIALS_JSON is not valid JSON — paste the service-account file as a single line, with the \\n escapes inside private_key left as-is.";
+        return "GOOGLE_CREDENTIALS_JSON is not valid JSON, paste the service-account file as a single line, with the \\n escapes inside private_key left as-is.";
       }
       if (parsed.type !== "service_account") return "GOOGLE_CREDENTIALS_JSON is JSON but not a service-account key (its \"type\" is not \"service_account\").";
       if (!parsed.private_key) return "GOOGLE_CREDENTIALS_JSON has no private_key.";
       if (parsed.project_id && parsed.project_id !== this.vertexProject) {
-        // Not fatal — a key may legitimately be granted on another project —
+        // Not fatal, a key may legitimately be granted on another project ,
         // but it is far more often a typo, and silently wrong is worse.
         return `VERTEX_PROJECT is "${this.vertexProject}" but the credential belongs to "${parsed.project_id}". If that is deliberate the key needs Vertex access on ${this.vertexProject}; otherwise one of the two is a typo.`;
       }
@@ -94,7 +94,7 @@ export const env = {
     return !!(this.livekitUrl && this.livekitApiKey && this.livekitApiSecret);
   },
 
-  // Admin API key — guards the user-listing endpoint (which exposes PII). When
+  // Admin API key, guards the user-listing endpoint (which exposes PII). When
   // unset, the admin endpoint is disabled in production and open only in dev.
   adminApiKey: process.env.ADMIN_API_KEY ?? "",
 
@@ -125,21 +125,21 @@ export const env = {
   // ---- Razorpay (BestBrain Plus subscription) ----
   // The subscription button is a *hosted* widget: Razorpay renders it, takes
   // the payment, and tells us what happened over a webhook. So the only secret
-  // this server strictly needs is the webhook secret — without it we cannot
+  // this server strictly needs is the webhook secret, without it we cannot
   // verify that a webhook actually came from Razorpay, and an unverified
   // webhook is an open endpoint that would let anyone grant themselves a
   // subscription. `razorpayWebhookConfigured` is checked before any event is
   // applied; when false the endpoint rejects everything rather than trusting it.
   razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET ?? "",
   // Key id/secret are only needed if we later create subscriptions from the
-  // server (see RAZORPAY-SETUP.md — "linking a payment to an account").
+  // server (see RAZORPAY-SETUP.md - "linking a payment to an account").
   razorpayKeyId: process.env.RAZORPAY_KEY_ID ?? "",
   razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET ?? "",
   // The hosted button to render on /pricing. Served to the frontend by
   // GET /api/subscription/config so the id is not hard-coded in the bundle.
   razorpaySubscriptionButtonId:
     process.env.RAZORPAY_SUBSCRIPTION_BUTTON_ID ?? "pl_TSKoRXpZy9rgRy",
-  // Display price, in paise. ₹900 = 90000 — matches the amount actually
+  // Display price, in paise. ₹900 = 90000, matches the amount actually
   // configured on the pl_TSKoRXpZy9rgRy Razorpay plan (verified against
   // Razorpay's own API, not assumed). Razorpay's plan is still the source of
   // truth for what is actually charged; this only drives the pricing copy.
@@ -164,7 +164,7 @@ export const env = {
   },
 };
 
-// FATAL config check — refuse to boot in production with a configuration that
+// FATAL config check, refuse to boot in production with a configuration that
 // is actively insecure or data-losing. These are not warnings: running with
 // dev JWT secrets lets anyone forge tokens, and an in-memory DB silently loses
 // every user on restart. Called once on startup, before the server listens.
@@ -174,17 +174,17 @@ export function assertProductionConfig(): void {
   const fatal: string[] = [];
 
   if (env.accessSecret === DEV_ACCESS_SECRET || env.refreshSecret === DEV_REFRESH_SECRET) {
-    fatal.push("JWT secrets are still the dev defaults — set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET (anyone can forge tokens otherwise).");
+    fatal.push("JWT secrets are still the dev defaults, set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET (anyone can forge tokens otherwise).");
   }
   if (!env.mongoUri || env.useMemoryDb) {
-    fatal.push("No persistent database — set MONGODB_URI (in-memory data is lost on every restart).");
+    fatal.push("No persistent database, set MONGODB_URI (in-memory data is lost on every restart).");
   }
 
   if (fatal.length > 0) {
     console.error("\n🛑 FATAL: refusing to start in production with insecure config:");
     for (const p of fatal) console.error(`   - ${p}`);
     console.error("");
-    throw new Error("Insecure production configuration — see the errors above.");
+    throw new Error("Insecure production configuration, see the errors above.");
   }
 }
 
@@ -202,12 +202,12 @@ export function warnInsecureConfig(): void {
   if (vertexProblem) {
     problems.push(`PAL is misconfigured and will fail on every request: ${vertexProblem}`);
   } else if (!env.vertexConfigured) {
-    problems.push("PAL has no credentials — set GOOGLE_CREDENTIALS_JSON and VERTEX_PROJECT (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
+    problems.push("PAL has no credentials, set GOOGLE_CREDENTIALS_JSON and VERTEX_PROJECT (or GOOGLE_APPLICATION_CREDENTIALS); PAL will return stub replies.");
   }
 
   if (!env.razorpayWebhookConfigured) {
     problems.push(
-      "RAZORPAY_WEBHOOK_SECRET is unset — the subscription webhook rejects every event, so paid subscriptions will never activate an account. See RAZORPAY-SETUP.md."
+      "RAZORPAY_WEBHOOK_SECRET is unset, the subscription webhook rejects every event, so paid subscriptions will never activate an account. See RAZORPAY-SETUP.md."
     );
   }
 

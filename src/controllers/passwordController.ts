@@ -15,7 +15,7 @@ const MIN_PASSWORD = 6; // matches the signup forms' minlength
 
 // POST /api/auth/forgot-password   Body: { email }
 // Always answers the same way. Whether an account exists is not something an
-// unauthenticated caller gets to learn — a differing response here turns this
+// unauthenticated caller gets to learn, a differing response here turns this
 // endpoint into a way to test which emails are registered.
 export async function forgotPassword(req: Request, res: Response): Promise<void> {
   const ok = {

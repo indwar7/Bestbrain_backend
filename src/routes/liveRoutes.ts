@@ -28,7 +28,7 @@ router.post("/reports", asyncHandler(submitLiveReport));
 router.get("/reports", asyncHandler(listLiveReports));
 router.post("/:id/join", asyncHandler(joinSession)); // eligibility-checked join
 router.post("/:id/token", asyncHandler(getVideoToken)); // LiveKit video token (eligibility-checked)
-router.get("/:id/roster", requireRole("teacher"), asyncHandler(getRoster)); // teacher only — class roster + presence
+router.get("/:id/roster", requireRole("teacher"), asyncHandler(getRoster)); // teacher only, class roster + presence
 router.post("/:id/end", requireRole("teacher"), asyncHandler(endSession)); // teacher only
 
 export default router;

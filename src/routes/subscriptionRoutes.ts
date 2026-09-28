@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-// Public — the pricing page needs the button id before anyone signs in.
+// Public, the pricing page needs the button id before anyone signs in.
 router.get("/config", getSubscriptionConfig);
 
 // Public by necessity: Razorpay has no session with us. Authenticated instead
@@ -19,7 +19,7 @@ router.get("/config", getSubscriptionConfig);
 router.post("/webhook", asyncHandler(razorpayWebhook));
 
 // There is deliberately NO endpoint for a client to declare itself subscribed.
-// Entitlement only ever changes from a signed webhook — a browser cannot prove
+// Entitlement only ever changes from a signed webhook, a browser cannot prove
 // a payment happened, and anything it could send, an attacker could send too.
 router.get("/me", requireAuth, asyncHandler(getMySubscription));
 

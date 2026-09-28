@@ -68,7 +68,7 @@ async function balanceOf(token: string) {
 
 const nowSec = () => Math.floor(Date.now() / 1000);
 
-describe("Subscription webhook — signature", () => {
+describe("Subscription webhook, signature", () => {
   it("rejects a wrong signature", async () => {
     const { email } = await signupStudent();
     const res = await postWebhook(
@@ -90,7 +90,7 @@ describe("Subscription webhook — signature", () => {
   });
 });
 
-describe("Subscription webhook — coin crediting", () => {
+describe("Subscription webhook, coin crediting", () => {
   it("credits coins equal to the rupee amount paid, for an already-linked account", async () => {
     const { token, email } = await signupStudent();
     const start = nowSec();
@@ -120,7 +120,7 @@ describe("Subscription webhook — coin crediting", () => {
     );
     expect(await balanceOf(token)).toBe(900);
 
-    // next month's renewal — current_start has moved on
+    // next month's renewal, current_start has moved on
     const cycle2Start = cycle1Start + 2592000;
     await postWebhook(
       activatedPayload({
@@ -155,7 +155,7 @@ describe("Subscription webhook — coin crediting", () => {
   it("credits coins on claim when the payment arrived before the account existed", async () => {
     const email = `preexisting-${Date.now()}@ex.com`;
     const start = nowSec();
-    // Payment webhook arrives first — no BestBrain account with this email yet.
+    // Payment webhook arrives first, no BestBrain account with this email yet.
     const res = await postWebhook(
       activatedPayload({ subId: "sub_7", email, amountPaise: 90000, currentStart: start, currentEnd: start + 2592000 }),
       "evt_preexisting"
@@ -166,7 +166,7 @@ describe("Subscription webhook — coin crediting", () => {
     const stored = await Subscription.findOne({ razorpaySubscriptionId: "sub_7" });
     expect(stored?.userId).toBeNull();
 
-    // Now they sign up with that same email — claimForUser runs on /auth/me
+    // Now they sign up with that same email, claimForUser runs on /auth/me
     // via getMySubscription, which is what /api/subscription/me calls.
     const signupRes = await request(app)
       .post("/api/auth/signup/student")

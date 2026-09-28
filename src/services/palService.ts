@@ -34,7 +34,7 @@ const VOICE_STYLE =
   "- Reply in the language the student spoke (English, Hindi or Hinglish).\n" +
   "- Be warm and encouraging, like a friendly teacher on a call.";
 
-// Voice replies are meant to be a few spoken sentences — a tighter cap keeps
+// Voice replies are meant to be a few spoken sentences, a tighter cap keeps
 // both latency and TTS duration down.
 const VOICE_MAX_OUTPUT_TOKENS = 512;
 
@@ -65,7 +65,7 @@ const MAX_RETRIES = 2; // total attempts = 1 + MAX_RETRIES
 export const MAX_MESSAGE_LENGTH = 4000;
 
 // Lazily build a single Vertex client. Credentials come from EITHER an inline
-// JSON env var (preferred for hosting — no filesystem needed) OR a file path
+// JSON env var (preferred for hosting, no filesystem needed) OR a file path
 // (convenient for local dev). See env.ts for the two supported variables.
 let client: GoogleGenAI | null = null;
 function getClient(): GoogleGenAI {
@@ -81,7 +81,7 @@ function getClient(): GoogleGenAI {
       //
       // Guarded because the usual way this goes wrong is a multi-line paste:
       // dotenv stops the value at the first newline, so the JSON arrives
-      // truncated and this throws a bare "Unexpected end of JSON input" —
+      // truncated and this throws a bare "Unexpected end of JSON input" ,
       // which matches none of isConfigFailure()'s patterns, so the student saw
       // "PAL is unavailable right now" (a transient-sounding message) for a
       // permanent setup mistake. Re-thrown with wording that pattern matches
@@ -151,7 +151,7 @@ export async function generatePalReply(
 
   if (!env.vertexConfigured) {
     // Stub reply so the endpoint works end-to-end without credentials in dev.
-    return `(${palRole} PAL — stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
+    return `(${palRole} PAL, stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
   }
 
   // Only replay the most recent turns so long sessions stay responsive.
@@ -187,7 +187,7 @@ export async function generatePalReply(
       const text = response.text?.trim();
       if (text) return text;
 
-      // Empty body usually means a safety/recitation block — surface it plainly.
+      // Empty body usually means a safety/recitation block, surface it plainly.
       const blocked = response.candidates?.[0]?.finishReason;
       throw new Error(`Gemini returned no text (finishReason: ${blocked ?? "unknown"})`);
     } catch (err) {
@@ -205,7 +205,7 @@ export async function generatePalReply(
 
 // Streaming variant: yields text chunks as Gemini produces them. The caller is
 // responsible for accumulating the full reply (e.g. to persist it). No retry
-// here — once bytes start flowing to the client we can't cleanly restart.
+// here, once bytes start flowing to the client we can't cleanly restart.
 export async function* streamPalReply(
   palRole: PalRole,
   history: IChatMessage[],
@@ -216,7 +216,7 @@ export async function* streamPalReply(
   const systemInstruction = buildSystemInstruction(palRole, context, voice);
 
   if (!env.vertexConfigured) {
-    yield `(${palRole} PAL — stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
+    yield `(${palRole} PAL, stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
     return;
   }
 

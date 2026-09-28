@@ -13,7 +13,7 @@ import mongoose, { Schema, Document } from "mongoose";
  *
  * Why `userId` is nullable
  * ------------------------
- * The hosted subscription button is a public widget — it takes a payment from
+ * The hosted subscription button is a public widget, it takes a payment from
  * whoever is on the page, and the webhook identifies them by the email/phone
  * they typed into Razorpay's form, not by a BestBrain session. So a payment can
  * legitimately arrive for an email that has no account yet. Rather than drop it,
@@ -54,7 +54,7 @@ export interface ISubscription extends Document {
   status: SubscriptionStatus;
 
   // The period the subscriber has paid through. `currentEnd` is what actually
-  // decides access — status alone is not enough, because a cancelled
+  // decides access, status alone is not enough, because a cancelled
   // subscription is still entitled until the period it already paid for ends.
   currentStart: Date | null;
   currentEnd: Date | null;

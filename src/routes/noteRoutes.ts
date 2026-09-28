@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB cap — notes are documents, not video
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB cap, notes are documents, not video
   fileFilter: (_req, file, cb) => {
     // PDFs primarily; also allow images (scanned/handwritten notes).
     if (file.mimetype === "application/pdf" || file.mimetype.startsWith("image/")) cb(null, true);
@@ -43,7 +43,7 @@ router.get("/:id/file", requireAuthViaQueryToken, asyncHandler(downloadNote));
 // Only teachers (admin treated as teacher here) can upload.
 router.post("/", requireAuth, requireRole("teacher"), upload.single("note"), asyncHandler(uploadNote));
 
-// Delete — teacher (own) or admin (any); ownership enforced in the controller.
+// Delete, teacher (own) or admin (any); ownership enforced in the controller.
 router.delete("/:id", requireAuth, requireRole("teacher"), asyncHandler(deleteNote));
 
 export default router;

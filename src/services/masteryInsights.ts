@@ -8,7 +8,7 @@ import { MockAttempt } from "../models/MockAttempt";
 //   - progress.chapters : per-chapter { video, practice, test, mastered } %s,
 //                          keyed like "c7-sci-photosynthesis" / "c7-math-fractions"
 //   - MockAttempt        : finished mock tests, scored per subject
-// If a student has done nothing, these return empty — never invented numbers.
+// If a student has done nothing, these return empty, never invented numbers.
 // ---------------------------------------------------------------------------
 
 export interface SubjectMastery {
@@ -62,7 +62,7 @@ function canonicalSubject(slug: string): { key: string; name: string } {
 // This used to return parts[1] only when length >= 3, so every 2-segment key
 // returned "" and canonicalSubject turned it into {key:"other", name:"Other"}.
 // A student who mastered a Science chapter saw a donut labelled "Other" at
-// 100% and "Science" at 0% — their real work filed under a subject that does
+// 100% and "Science" at 0%, their real work filed under a subject that does
 // not exist. Disambiguated by checking whether the first segment looks like a
 // class marker (c6/c7/class7/7) rather than by segment count alone, so a
 // 3-segment subject-first key like "science-light-shadows" still resolves.
@@ -95,7 +95,7 @@ function chapterScore(ch: Record<string, unknown>): number | null {
   }
   if (weightSum > 0) return Math.round(weighted / weightSum);
 
-  // No percentage signals — fall back to explicit completion flags.
+  // No percentage signals, fall back to explicit completion flags.
   if (ch.mastered === true || ch.completed === true) return 100;
   return null; // nothing to say about this chapter
 }
@@ -109,7 +109,7 @@ function clampPct(v: unknown): number {
 // ---------------------------------------------------------------------------
 // Main entry: derive subjects + badges for one student.
 // ---------------------------------------------------------------------------
-// A minimal finished-mock shape (subject + score/total) — all the mastery
+// A minimal finished-mock shape (subject + score/total), all the mastery
 // computation needs. Lets the batch path pass pre-fetched mocks.
 export interface MockLike {
   subject: string;

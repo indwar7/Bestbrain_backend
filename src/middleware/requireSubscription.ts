@@ -5,7 +5,7 @@ import { claimForUser } from "../services/subscriptionService";
 
 /**
  * Gates a route behind an active BestBrain Plus subscription.
- * Must run after `requireAuth` — it reads `req.user`.
+ * Must run after `requireAuth`, it reads `req.user`.
  *
  * Usage:  router.get("/x", requireAuth, requireSubscription, handler)
  *
@@ -27,7 +27,7 @@ export async function requireSubscription(
 
   if (hasLiveAccess(user.subscription)) return next();
 
-  // The snapshot says no — but it can be stale in the user's favour too: they
+  // The snapshot says no, but it can be stale in the user's favour too: they
   // may have just paid, or paid before signing up, and nothing has linked it
   // yet. Re-derive from the subscription rows once before refusing, so a
   // legitimate subscriber is never told to pay twice.
@@ -43,6 +43,6 @@ export async function requireSubscription(
 
 function hasLiveAccess(sub?: { active?: boolean; paidThrough?: Date | null }): boolean {
   if (!sub?.active) return false;
-  if (!sub.paidThrough) return true; // active with no end date — trust it
+  if (!sub.paidThrough) return true; // active with no end date, trust it
   return sub.paidThrough.getTime() > Date.now();
 }

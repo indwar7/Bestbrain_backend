@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 
-// GET /api/admin/users — list every registered user (no passwords).
+// GET /api/admin/users, list every registered user (no passwords).
 // Used by the admin DB viewer page to prove data is persisted.
 export async function listUsers(_req: Request, res: Response): Promise<void> {
   const users = await User.find()
