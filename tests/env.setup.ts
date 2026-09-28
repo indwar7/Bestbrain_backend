@@ -16,3 +16,6 @@ process.env.OTP_ENFORCED = "true";
 // (and therefore src/config/env.ts) is imported, which is exactly what this
 // setup file is for.
 process.env.RAZORPAY_WEBHOOK_SECRET = "test_webhook_secret";
+// Most coin suites assert exact balances from zero; the welcome bonus has its
+// own test that switches it on.
+process.env.WELCOME_COINS = "0";

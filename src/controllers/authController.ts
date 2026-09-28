@@ -12,6 +12,7 @@ import { env } from "../config/env";
 import { AuthRequest } from "../middleware/auth";
 import { isUserVerified } from "../services/otpService";
 import { OtpCode } from "../models/OtpCode";
+import { awardCoins } from "../services/coinService";
 
 // ---------- helpers ----------
 // Turn a Mongo duplicate-key error (E11000) into a friendly 409. This closes
@@ -36,6 +37,18 @@ function issueTokens(res: Response, payload: JwtPayload): string {
   const refreshToken = signRefreshToken(payload);
   setRefreshCookie(res, refreshToken);
   return accessToken;
+}
+
+// Starting coins for a student, once per account (the ledger's refId makes a
+// repeat a no-op). Called on signup and on login, so students who signed up
+// before the bonus existed get it the next time they sign in.
+async function grantWelcomeCoins(user: IUser): Promise<void> {
+  if (user.role !== "student" || env.welcomeCoins <= 0) return;
+  try {
+    await awardCoins(String(user._id), env.welcomeCoins, "welcome_bonus", `welcome:${user._id}`);
+  } catch (err) {
+    console.error("welcome coins failed:", err);
+  }
 }
 
 // Role-specific public view of a user (only the fields that role's dashboard needs).
@@ -134,6 +147,7 @@ export async function signupStudent(req: Request, res: Response): Promise<void> 
       subjects: Array.isArray(subjects) ? subjects : [],
       classLabel: [cleanClassName, cleanSection].filter(Boolean).join(" · "),
     });
+    await grantWelcomeCoins(user);
 
     const accessToken = issueTokens(res, {
       id: user.id,
@@ -398,6 +412,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       }
     }
 
+    await grantWelcomeCoins(user);
     const accessToken = issueTokens(res, {
       id: user.id,
       email: user.email,

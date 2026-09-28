@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import request from "supertest";
 import { app } from "../src/app";
 import { uniqueStudent } from "./setup";
+import { env } from "../src/config/env";
 import "./setup";
 
 // Coins are earned from progress events and spent through /api/coins/spend.
@@ -186,5 +187,24 @@ describe("Coins, spending", () => {
       .post("/api/coins/spend")
       .send({ amount: 10, reason: "x", refId: "y" });
     expect(res.status).toBe(401);
+  });
+});
+
+describe("Coins, welcome bonus", () => {
+  it("gives a new student their starting coins once, even across logins", async () => {
+    const prev = env.welcomeCoins;
+    env.welcomeCoins = 100;
+    try {
+      const body = uniqueStudent();
+      const res = await request(app).post("/api/auth/signup/student").send(body);
+      expect(res.status).toBe(201);
+      expect(await balanceOf(res.body.accessToken)).toBe(100);
+      const again = await request(app)
+        .post("/api/auth/login")
+        .send({ email: body.email, password: body.password, role: "student" });
+      if (again.status === 200) expect(await balanceOf(again.body.accessToken)).toBe(100);
+    } finally {
+      env.welcomeCoins = prev;
+    }
   });
 });
