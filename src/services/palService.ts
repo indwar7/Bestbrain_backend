@@ -131,7 +131,9 @@ const RAG_STYLE =
   "or class), say plainly that it isn't covered in their textbook and suggest a related " +
   "topic from the book they can ask about instead. Do not answer it anyway.\n" +
   "- You may still greet the student, encourage them, and answer questions about their own " +
-  "BestBrain progress using the progress data given above.";
+  "BestBrain progress using the progress data given above.\n" +
+  "- Never mention 'passages', 'retrieval' or searching; to the student it is simply " +
+  "'your textbook'.";
 
 // Lower than normal chat: in book-only mode PAL should restate the textbook,
 // not improvise around it.
