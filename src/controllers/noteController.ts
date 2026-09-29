@@ -6,6 +6,7 @@ import { Note } from "../models/Note";
 import { User } from "../models/User";
 import { AuthRequest } from "../middleware/auth";
 import { canViewVideo } from "../services/videoEligibility";
+import { topicMatches } from "../utils/topicMatch";
 
 const UPLOAD_DIR = path.join(process.cwd(), "uploads", "notes");
 
@@ -61,22 +62,6 @@ function classDigits(v: unknown): string {
 }
 function normalizeSubject(v: unknown): string {
   return String(v ?? "").trim().toLowerCase().split(/\s+/)[0] ?? "";
-}
-const TOPIC_STOPWORDS = new Set(["of", "the", "a", "an", "to", "and", "or", "in", "on", "for", "with"]);
-function topicWords(v: unknown): string[] {
-  return String(v ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]+/g, " ")
-    .split(/\s+/)
-    .filter((w) => w && !TOPIC_STOPWORDS.has(w));
-}
-function topicMatches(wantTopic: string, noteTopic: unknown): boolean {
-  const want = topicWords(wantTopic);
-  const have = topicWords(noteTopic);
-  if (!want.length || !have.length) return false;
-  const haveSet = new Set(have);
-  const wantSet = new Set(want);
-  return want.every((w) => haveSet.has(w)) || have.every((w) => wantSet.has(w));
 }
 
 // GET /api/notes, list notes, optionally filtered by ?className= & ?subject=
