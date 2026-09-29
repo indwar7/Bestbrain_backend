@@ -67,13 +67,16 @@ export const MAX_MESSAGE_LENGTH = 4000;
 // Lazily build a single Vertex client. Credentials come from EITHER an inline
 // JSON env var (preferred for hosting, no filesystem needed) OR a file path
 // (convenient for local dev). See env.ts for the two supported variables.
-let client: GoogleGenAI | null = null;
-function getClient(): GoogleGenAI {
+// One client per location: chat runs in env.vertexLocation, but a call that
+// retrieves from a RAG corpus has to run in the corpus's own region.
+const clients = new Map<string, GoogleGenAI>();
+function getClient(location: string = env.vertexLocation): GoogleGenAI {
+  let client = clients.get(location);
   if (!client) {
     const base = {
       vertexai: true as const,
       project: env.vertexProject,
-      location: env.vertexLocation,
+      location,
     };
 
     if (env.googleCredentialsJson) {
@@ -106,8 +109,40 @@ function getClient(): GoogleGenAI {
       );
       client = new GoogleGenAI(base);
     }
+    clients.set(location, client);
   }
   return client;
+}
+
+// How many textbook chunks RAG Engine hands the model per question.
+const RAG_TOP_K = 5;
+
+const RAG_STYLE =
+  "\n\nYou can retrieve passages from this student's NCERT textbook. For syllabus " +
+  "questions, base your explanation on those passages and use the textbook's own " +
+  "terms and examples. If the passages don't cover the question, answer from general " +
+  "knowledge as usual.";
+
+// Retrieval setup for a student's class, or null when that class has no corpus
+// (see PAL_RAG_CORPORA in env.ts). The location is read off the corpus name,
+// projects/<p>/locations/<loc>/ragCorpora/<id>.
+function ragFor(className: string) {
+  const ragCorpus = className ? env.palRagCorpora[className] : undefined;
+  if (!ragCorpus) return null;
+  const location = /\/locations\/([^/]+)\//.exec(ragCorpus)?.[1] ?? env.vertexLocation;
+  return {
+    location,
+    tools: [
+      {
+        retrieval: {
+          vertexRagStore: {
+            ragResources: [{ ragCorpus }],
+            ragRetrievalConfig: { topK: RAG_TOP_K },
+          },
+        },
+      },
+    ],
+  };
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -145,9 +180,16 @@ export async function generatePalReply(
   history: IChatMessage[],
   message: string,
   context = "",
-  voice = false
+  voice = false,
+  className = "",
+  // A chat reply fits in 2048 tokens; a whole structured study sheet does not,
+  // and a cut-off reply is unparseable JSON. Callers producing long documents
+  // raise this.
+  maxOutputTokens = 2048
 ): Promise<string> {
-  const systemInstruction = buildSystemInstruction(palRole, context, voice);
+  let rag = ragFor(className);
+  const systemInstruction = (rag: unknown) =>
+    buildSystemInstruction(palRole, context, voice) + (rag ? RAG_STYLE : "");
 
   if (!env.vertexConfigured) {
     // Stub reply so the endpoint works end-to-end without credentials in dev.
@@ -170,14 +212,15 @@ export async function generatePalReply(
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await withTimeout(
-        getClient().models.generateContent({
+        getClient(rag?.location).models.generateContent({
           model: env.vertexModel,
           contents,
           config: {
-            systemInstruction,
+            systemInstruction: systemInstruction(rag),
+            tools: rag?.tools,
             temperature: 0.7,
             topP: 0.95,
-            maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
+            maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : maxOutputTokens,
             safetySettings: SAFETY_SETTINGS,
           },
         }),
@@ -192,6 +235,14 @@ export async function generatePalReply(
       throw new Error(`Gemini returned no text (finishReason: ${blocked ?? "unknown"})`);
     } catch (err) {
       lastErr = err;
+      // A broken corpus (deleted, wrong region, no access) must not take PAL
+      // down with it: answer once more without retrieval.
+      if (rag && !isRetryable(err)) {
+        console.error("pal rag call failed, retrying without retrieval:", err);
+        rag = null;
+        attempt--;
+        continue;
+      }
       if (attempt < MAX_RETRIES && isRetryable(err)) {
         await sleep(400 * (attempt + 1)); // 400ms, 800ms backoff
         continue;
@@ -211,9 +262,10 @@ export async function* streamPalReply(
   history: IChatMessage[],
   message: string,
   context = "",
-  voice = false
+  voice = false,
+  className = ""
 ): AsyncGenerator<string, void, unknown> {
-  const systemInstruction = buildSystemInstruction(palRole, context, voice);
+  const base = buildSystemInstruction(palRole, context, voice);
 
   if (!env.vertexConfigured) {
     yield `(${palRole} PAL, stub) You said: "${message}". Set GOOGLE_APPLICATION_CREDENTIALS to enable real AI replies.`;
@@ -229,17 +281,31 @@ export async function* streamPalReply(
     { role: "user", parts: [{ text: message }] },
   ];
 
-  const stream = await getClient().models.generateContentStream({
-    model: env.vertexModel,
-    contents,
-    config: {
-      systemInstruction,
-      temperature: 0.7,
-      topP: 0.95,
-      maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
-      safetySettings: SAFETY_SETTINGS,
-    },
-  });
+  const open = (rag: ReturnType<typeof ragFor>) =>
+    getClient(rag?.location).models.generateContentStream({
+      model: env.vertexModel,
+      contents,
+      config: {
+        systemInstruction: base + (rag ? RAG_STYLE : ""),
+        tools: rag?.tools,
+        temperature: 0.7,
+        topP: 0.95,
+        maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
+        safetySettings: SAFETY_SETTINGS,
+      },
+    });
+
+  // Same fallback as generatePalReply, possible here only because nothing has
+  // been sent to the client yet when the stream fails to open.
+  const rag = ragFor(className);
+  let stream;
+  try {
+    stream = await open(rag);
+  } catch (err) {
+    if (!rag) throw err;
+    console.error("pal rag stream failed, retrying without retrieval:", err);
+    stream = await open(null);
+  }
 
   for await (const chunk of stream) {
     if (chunk.text) yield chunk.text;

@@ -232,7 +232,10 @@ export async function buildStudyDoc(
       "student",
       [],
       prompt(topic, className),
-      `The student is in ${className}.`
+      `The student is in ${className}.`,
+      false,
+      className,
+      8192
     );
     sections = parseSections(reply);
   } catch {
