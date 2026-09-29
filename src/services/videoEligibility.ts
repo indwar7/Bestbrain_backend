@@ -24,6 +24,14 @@ function normalizeSubject(v: unknown): string {
 //  - A student may watch it only if it matches their own class AND they take
 //    the subject (mirrors the live-class eligibility rule).
 //  - A parent may watch it if ANY of their linked children would be eligible.
+// Signup no longer asks for subjects, so most students have none listed. A
+// school student studies every subject of their class: an empty list means
+// "not restricted", and only a student who has an explicit list is held to it.
+function takesSubject(subjects: string[] | undefined, subject: string): boolean {
+  if (!subjects || subjects.length === 0) return true;
+  return subjects.some((s) => normalizeSubject(s) === normalizeSubject(subject));
+}
+
 export function canViewVideo(
   user: Pick<IUser, "role" | "className" | "subjects"> & { _id: unknown },
   video: Pick<IVideo, "uploadedById" | "className" | "subject">,
@@ -37,7 +45,7 @@ export function canViewVideo(
     if (classDigits(user.className) !== classDigits(video.className)) {
       return { allowed: false, reason: "This lecture isn't for your class" };
     }
-    if (!user.subjects?.some((s) => normalizeSubject(s) === normalizeSubject(video.subject))) {
+    if (!takesSubject(user.subjects, video.subject)) {
       return { allowed: false, reason: `You don't take ${video.subject}` };
     }
     return { allowed: true };
@@ -47,7 +55,7 @@ export function canViewVideo(
     const eligible = (children ?? []).some(
       (c) =>
         classDigits(c.className) === classDigits(video.className) &&
-        c.subjects?.some((s) => normalizeSubject(s) === normalizeSubject(video.subject))
+        takesSubject(c.subjects, video.subject)
     );
     return eligible
       ? { allowed: true }

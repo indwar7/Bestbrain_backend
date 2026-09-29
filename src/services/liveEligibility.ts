@@ -37,7 +37,9 @@ export function canJoinSession(
   if (user.section !== session.section) {
     return { allowed: false, reason: "You are not in this section" };
   }
-  if (!user.subjects?.includes(session.subject)) {
+  // No subjects listed means the student takes every subject of their class
+  // (signup no longer asks); an explicit list is still enforced.
+  if (user.subjects?.length && !user.subjects.includes(session.subject)) {
     return { allowed: false, reason: `You don't take ${session.subject}` };
   }
 

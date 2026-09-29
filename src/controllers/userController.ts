@@ -91,7 +91,7 @@ export async function updateProfile(req: AuthRequest, res: Response): Promise<vo
   }
   // Keep the student display label in sync.
   if (user.role === "student") {
-    user.classLabel = `${user.className} · ${user.section}`;
+    user.classLabel = [user.className, user.section].filter(Boolean).join(" · ");
   }
 
   // Merge preferences (partial update).
