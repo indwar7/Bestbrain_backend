@@ -122,6 +122,14 @@ function failChat(res: Response, err: unknown, where: string): void {
   res.status(500).json({ error: "PAL is unavailable right now" });
 }
 
+// The student's class picks which textbook corpus PAL retrieves from (see
+// PAL_RAG_CORPORA). Parents and teachers aren't tied to one class, so none.
+async function studentClass(userId: string, role: string): Promise<string> {
+  if (role !== "student") return "";
+  const profile = await User.findById(userId).select("className").lean();
+  return profile?.className ?? "";
+}
+
 // POST /api/pal/chat
 // Body: { message, sessionId? }
 // - The PAL persona is derived from the authenticated user's own role, so a
@@ -157,7 +165,14 @@ export async function chat(req: AuthRequest, res: Response): Promise<void> {
 
     let reply: string;
     try {
-      reply = await generatePalReply(role, session.messages, message, context);
+      reply = await generatePalReply(
+        role,
+        session.messages,
+        message,
+        context,
+        false,
+        await studentClass(userId, role)
+      );
     } catch (genErr) {
       await refundPalQuestion(userId, charge.refId);
       throw genErr;
@@ -225,7 +240,8 @@ async function runChatStream(
       session.messages,
       message,
       context,
-      voice
+      voice,
+      await studentClass(userId, role)
     )) {
       full += piece;
       send("chunk", { text: piece });

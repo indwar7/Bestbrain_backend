@@ -50,6 +50,15 @@ export const env = {
   vertexModel: process.env.VERTEX_MODEL ?? "gemini-2.5-flash",
   googleCredentialsFile: process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "",
   googleCredentialsJson: process.env.GOOGLE_CREDENTIALS_JSON ?? "",
+  // Vertex AI RAG Engine corpora PAL retrieves from, keyed by the student's
+  // className: "Class 7=projects/p/locations/asia-south1/ragCorpora/123;Class 6=...".
+  // Built with `npm run rag:ingest`. A class with no entry gets no retrieval.
+  palRagCorpora: Object.fromEntries(
+    (process.env.PAL_RAG_CORPORA ?? "")
+      .split(";")
+      .map((pair) => pair.split("=").map((s) => s.trim()))
+      .filter(([cls, corpus]) => cls && corpus)
+  ) as Record<string, string>,
   get vertexConfigured() {
     // Vertex needs BOTH a credential and a project id. Checking only the
     // credential let a half-configured deploy read as configured: the client

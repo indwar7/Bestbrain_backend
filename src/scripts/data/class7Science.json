@@ -1,0 +1,2186 @@
+{
+  "evolving-science": [
+    {
+      "text": "What was one source of inspiration for early inventors and modern engineers exploring flight?",
+      "options": [
+        "The structure of tiny cells in a leaf",
+        "The movement of the sun and stars",
+        "The study of bird wings and paper planes",
+        "The flow of water underground"
+      ],
+      "correctIndex": 2,
+      "explanation": "The dream of flying was inspired by simple observations, from early inventors studying bird wings to the flight of a paper plane.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Science is described as a process. What does this mean?",
+      "options": [
+        "It is a way of thinking that welcomes curiosity and asks questions.",
+        "It is only about learning facts from a textbook.",
+        "It is a list of rules that must be memorized.",
+        "It is a subject that can only be studied in a laboratory."
+      ],
+      "correctIndex": 0,
+      "explanation": "Science is described as a process and a way of thinking that involves being curious, asking questions, and being open to the unknown.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "How are different fields of science like physics, chemistry and biology related to each other?",
+      "options": [
+        "Ranked in order of importance",
+        "Completely separate subjects with no connection",
+        "All interconnected, with ideas in one area inspiring discoveries in another",
+        "Relevant only to scientists, not everyday life"
+      ],
+      "correctIndex": 2,
+      "explanation": "Different fields of science are all interconnected, and scientific ideas in one area often inspire discoveries or questions in another.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Exploring what kind of materials are needed to make a lamp glow leads to classifying them into which two groups?",
+      "options": [
+        "Sour and sweet",
+        "Reversible and irreversible",
+        "Metals and non-metals",
+        "Small and large"
+      ],
+      "correctIndex": 2,
+      "explanation": "Investigating which materials allow a lamp to glow leads to classifying materials based on their properties into metals and non-metals.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following is given as an example of a change that cannot be reversed?",
+      "options": [
+        "A torch battery running out",
+        "Water freezing into an ice cube",
+        "Water evaporating from the sea",
+        "Ice melting into water"
+      ],
+      "correctIndex": 0,
+      "explanation": "A torch battery that has run out cannot be used again, making it an example of a change that cannot be reversed.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What factor is mentioned as causing some changes, like the melting of an ice cube, to happen or to happen faster?",
+      "options": [
+        "Pressure",
+        "Light",
+        "Heat",
+        "Time"
+      ],
+      "correctIndex": 2,
+      "explanation": "Some changes happen, or happen faster, when things are heated, such as the melting of an ice cube in a glass.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Our bodies change rapidly during the middle-school years. This is an example of what larger idea?",
+      "options": [
+        "Life processes essential for the survival of all animals",
+        "The properties of metals and non-metals",
+        "The measurement of time",
+        "The formation of shadows"
+      ],
+      "correctIndex": 0,
+      "explanation": "Rapid changes in the human body are an example of the essential life processes, such as growth, that are necessary for the survival of all animals.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Before the invention of electric clocks, how did early humans tell the time?",
+      "options": [
+        "By observing the phases of the moon",
+        "By measuring how long it took a candle to burn",
+        "By counting their heartbeats",
+        "By using the position of shadows cast by objects in the Sun"
+      ],
+      "correctIndex": 3,
+      "explanation": "Long before modern clocks, early humans used the position of shadows cast by the sun to tell the time.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What causes the fascinating phenomena of eclipses?",
+      "options": [
+        "The Earth's atmosphere bending light",
+        "Storm clouds blocking the Sun or Moon",
+        "The Sun's light getting temporarily weaker",
+        "The Earth and the Moon casting shadows on each other"
+      ],
+      "correctIndex": 3,
+      "explanation": "Eclipses are caused when the Earth and the Moon cast shadows, blocking the light from the Sun.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "What causes the cycle of day and night on Earth?",
+      "options": [
+        "The Earth's rotation around its axis",
+        "The Earth's orbit around the Sun",
+        "The Sun moving across the sky",
+        "The Moon's orbit around the Earth"
+      ],
+      "correctIndex": 0,
+      "explanation": "Day and night depend on receiving light from the Sun, which is determined by how the Earth rotates around its axis.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "To fully understand phenomena like day, night, and eclipses, which three movements are essential to know?",
+      "options": [
+        "Movement of stars, flow of water, growth of plants",
+        "Earth's rotation, Moon's rotation, Sun's rotation",
+        "Earth's rotation, Moon's orbit around Earth, Earth's orbit around the Sun",
+        "Sun's orbit around Earth, Moon's orbit around Sun, Earth's rotation"
+      ],
+      "correctIndex": 2,
+      "explanation": "Understanding these phenomena requires knowing how the Earth rotates on its axis, how the Moon orbits the Earth, and how the Earth orbits the Sun.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the main goal of the 'Question the Answer' activity?",
+      "options": [
+        "To encourage asking creative and interesting questions, like a scientist",
+        "To prove that all questions have simple answers",
+        "To find the single correct question for an answer",
+        "To practice memorizing facts for tests"
+      ],
+      "correctIndex": 0,
+      "explanation": "The activity's purpose is to practice asking interesting and creative questions, which is as important for a scientist as finding answers.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Complete the saying: \"To be a wise person, you must be a...\"",
+      "options": [
+        "\"hows person.\"",
+        "\"whys person.\"",
+        "\"answer person.\"",
+        "\"book person.\""
+      ],
+      "correctIndex": 1,
+      "explanation": "The saying \"To be a wise person, you must be a whys person\" shows how important curiosity is.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "As a young science explorer, you will see how human activities are linked to what?",
+      "options": [
+        "Only the things that happen inside a laboratory",
+        "The natural world and the society we live in",
+        "The movement of distant stars and galaxies",
+        "The history of scientific inventions"
+      ],
+      "correctIndex": 1,
+      "explanation": "Science explorers learn how human activities are linked to the natural world and connected to society, which includes a sense of responsibility.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT an essential life process for animals?",
+      "options": [
+        "Blood circulating nutrients",
+        "Changing color for camouflage",
+        "Eating to get nutrients",
+        "Breathing"
+      ],
+      "correctIndex": 1,
+      "explanation": "Eating, breathing and blood circulation are essential life processes for animal survival.",
+      "difficulty": "medium"
+    }
+  ],
+  "acidic-basic-neutral": [
+    {
+      "text": "What happens when an acidic substance, like lemon juice, is tested with blue litmus paper?",
+      "options": [
+        "It remains blue.",
+        "It becomes colorless.",
+        "It turns red.",
+        "It turns green."
+      ],
+      "correctIndex": 2,
+      "explanation": "Substances that turn blue litmus paper to red are acidic in nature.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What are substances called that turn red litmus paper to blue?",
+      "options": [
+        "Basic",
+        "Indicators",
+        "Neutral",
+        "Acidic"
+      ],
+      "correctIndex": 0,
+      "explanation": "Substances that turn red litmus paper to blue are basic in nature.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Litmus, a common natural indicator, is extracted from what?",
+      "options": [
+        "Turmeric roots",
+        "Red roses",
+        "Lichens",
+        "Beetroot"
+      ],
+      "correctIndex": 2,
+      "explanation": "Litmus is a natural substance obtained from lichens.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the general taste of acidic substances?",
+      "options": [
+        "Salty",
+        "Sour",
+        "Bitter",
+        "Sweet"
+      ],
+      "correctIndex": 1,
+      "explanation": "Substances that taste sour tend to contain acids and are acidic in nature.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What color does red rose extract turn when a basic solution like soap solution is added to it?",
+      "options": [
+        "It remains unchanged.",
+        "Blue",
+        "Green",
+        "Red"
+      ],
+      "correctIndex": 2,
+      "explanation": "Red rose extract gives a green colour in a basic solution.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What happens to the yellow color of turmeric when a basic solution is applied to it?",
+      "options": [
+        "It turns blue.",
+        "It becomes colorless.",
+        "It turns red.",
+        "It remains yellow."
+      ],
+      "correctIndex": 2,
+      "explanation": "The yellow colour of turmeric turns red in basic solutions.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What happens to turmeric paper when an acidic or neutral substance is added?",
+      "options": [
+        "It becomes colorless.",
+        "It remains unchanged.",
+        "It turns blue.",
+        "It turns red."
+      ],
+      "correctIndex": 1,
+      "explanation": "The yellow colour of turmeric remains unchanged in acidic and neutral solutions.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the reaction between an acid and a base called?",
+      "options": [
+        "Neutralisation",
+        "Indication",
+        "Decomposition",
+        "Combination"
+      ],
+      "correctIndex": 0,
+      "explanation": "When the solution of an acid is mixed with the solution of a base in sufficient quantity, the reaction is called a neutralisation reaction.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What are the main products formed in a neutralisation reaction?",
+      "options": [
+        "Salt and Acid",
+        "Acid and Water",
+        "Base and Water",
+        "Salt and Water"
+      ],
+      "correctIndex": 3,
+      "explanation": "In a neutralisation reaction, salt and water are formed with the evolution of heat.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why is moist baking soda applied to an ant bite to relieve the stinging pain?",
+      "options": [
+        "Because baking soda is an acid that cancels the pain.",
+        "Because baking soda is a natural painkiller.",
+        "Because baking soda cools the skin.",
+        "Because baking soda is a base that neutralises the ant's acidic liquid."
+      ],
+      "correctIndex": 3,
+      "explanation": "When an ant bites, it injects an acidic liquid (formic acid), and the effect can be neutralised by rubbing moist baking soda, which is a base.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "How can soil that is too acidic be treated to help plants grow better?",
+      "options": [
+        "By adding organic matter like manure.",
+        "By adding a base like lime.",
+        "By adding an acid like vinegar.",
+        "By adding more chemical fertilisers."
+      ],
+      "correctIndex": 1,
+      "explanation": "When the soil is too acidic, plants do not grow well. It can be treated with lime, which is a base.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following is an example of a basic substance?",
+      "options": [
+        "Lemon juice",
+        "Soap solution",
+        "Vinegar",
+        "Sugar solution"
+      ],
+      "correctIndex": 1,
+      "explanation": "Substances like soap solution are basic in nature.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A solution turns red litmus paper blue, indicating it is basic. Excess addition of which of the following would reverse this change and turn it back to red?",
+      "options": [
+        "Lime water",
+        "Vinegar",
+        "Baking soda",
+        "Common salt solution"
+      ],
+      "correctIndex": 1,
+      "explanation": "Adding an acid like vinegar would neutralise the basic solution and, in excess, make it acidic, reversing the color change of the litmus.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "How do basic substances generally feel to the touch?",
+      "options": [
+        "Rough and dry",
+        "Soapy or slippery",
+        "Warm",
+        "Gritty"
+      ],
+      "correctIndex": 1,
+      "explanation": "Basic substances are generally slippery to touch.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What are substances whose odour changes in an acidic or basic medium called?",
+      "options": [
+        "Olfactory indicators",
+        "Litmus indicators",
+        "Visual indicators",
+        "Neutral indicators"
+      ],
+      "correctIndex": 0,
+      "explanation": "There are some substances whose odours change in an acidic or basic medium. These are called olfactory indicators.",
+      "difficulty": "medium"
+    }
+  ],
+  "electricity-circuits": [
+    {
+      "text": "What is the thin wire inside an incandescent lamp that gets hot and glows to produce light?",
+      "options": [
+        "Terminal",
+        "Insulator",
+        "Switch",
+        "Filament"
+      ],
+      "correctIndex": 3,
+      "explanation": "The glowing thin wire inside the glass bulb of an incandescent lamp is called the filament.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these materials is a good conductor of electricity?",
+      "options": [
+        "A metal key",
+        "Wood",
+        "A plastic scale",
+        "Rubber"
+      ],
+      "correctIndex": 0,
+      "explanation": "Materials through which electric current can flow easily are called conductors, and metals are conductors of electricity.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In a standard electric cell, what does the small protruding metal cap represent?",
+      "options": [
+        "The positive terminal",
+        "The negative terminal",
+        "The switch",
+        "The filament"
+      ],
+      "correctIndex": 0,
+      "explanation": "The metal cap is the positive terminal of the electric cell, while the flat metal disc is the negative terminal.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "How are two or more cells correctly connected to form a battery?",
+      "options": [
+        "Positive terminal to positive terminal",
+        "The cells are placed side-by-side without touching",
+        "Positive terminal of one cell to the negative terminal of the next",
+        "Negative terminal to negative terminal"
+      ],
+      "correctIndex": 2,
+      "explanation": "To form a battery, the positive terminal of one cell is connected to the negative terminal of the next cell.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why will a Light Emitting Diode (LED) not glow if its connections to a battery are reversed?",
+      "options": [
+        "The battery runs out of energy too quickly.",
+        "Electric current can pass through an LED in only one direction.",
+        "The wires become insulators when reversed.",
+        "The LED gets too hot and fuses."
+      ],
+      "correctIndex": 1,
+      "explanation": "An LED allows electric current to pass through it in only one direction. It glows only when connected correctly.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "What is the main function of a switch in an electrical circuit?",
+      "options": [
+        "To generate electricity",
+        "To produce light",
+        "To increase the current",
+        "To complete or break the circuit"
+      ],
+      "correctIndex": 3,
+      "explanation": "A switch is a simple device that either completes or breaks a circuit, controlling the flow of current.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In a circuit diagram, what does the symbol of a long line and a shorter, thicker line represent?",
+      "options": [
+        "An electric lamp",
+        "An electric cell",
+        "A battery",
+        "An open switch"
+      ],
+      "correctIndex": 1,
+      "explanation": "In the symbol for an electric cell, the long line represents the positive terminal and the short, thick line represents the negative terminal.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Materials that do not allow electric current to pass through them are called what?",
+      "options": [
+        "Terminals",
+        "Insulators",
+        "Filaments",
+        "Conductors"
+      ],
+      "correctIndex": 1,
+      "explanation": "The materials through which current cannot pass are called insulators or poor conductors of electricity.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the conventional direction of electric current in a closed electrical circuit?",
+      "options": [
+        "From the lamp to the switch",
+        "It flows in both directions at once",
+        "From the negative to the positive terminal of the cell",
+        "From the positive to the negative terminal of the cell"
+      ],
+      "correctIndex": 3,
+      "explanation": "The direction of electric current in an electrical circuit is taken to be from the positive to the negative terminal of the electric cell.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "For an LED to light up, how must its terminals be connected to a battery?",
+      "options": [
+        "The longer wire to the negative terminal and the shorter wire to the positive terminal",
+        "It does not matter how the wires are connected",
+        "The longer wire to the positive terminal and the shorter wire to the negative terminal",
+        "Both wires must be connected to the positive terminal"
+      ],
+      "correctIndex": 2,
+      "explanation": "An LED lights up only when its positive terminal (longer wire) connects to the positive terminal of the battery and its negative terminal (shorter wire) connects to the negative terminal.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A combination of two or more electric cells connected together is called a what?",
+      "options": [
+        "Battery",
+        "Switch",
+        "Circuit",
+        "Filament"
+      ],
+      "correctIndex": 0,
+      "explanation": "A combination of two or more cells is called a battery.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why does a lamp described as 'fused' not glow?",
+      "options": [
+        "The switch is broken.",
+        "The battery is too weak.",
+        "The filament inside is broken.",
+        "The glass bulb is cracked."
+      ],
+      "correctIndex": 2,
+      "explanation": "A lamp is 'fused' when its filament is broken. A broken filament stops the flow of current, preventing the lamp from glowing.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following is an example of an electrical insulator?",
+      "options": [
+        "A metal spoon",
+        "A plastic scale",
+        "Aluminium foil",
+        "A sewing needle"
+      ],
+      "correctIndex": 1,
+      "explanation": "Plastic is an insulator, meaning it does not allow electric current to pass through it easily.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What does it mean when an electric circuit is 'open'?",
+      "options": [
+        "The lamp is glowing brightly.",
+        "There is a gap in the circuit that prevents current flow.",
+        "The battery is fully charged.",
+        "Current is flowing continuously."
+      ],
+      "correctIndex": 1,
+      "explanation": "When a circuit is 'open', there is a gap that prevents current flow, and the lamp does not glow. This happens when the switch is in the 'OFF' position.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In a circuit with two lamps connected one after another in a single loop, what happens if the filament of one lamp breaks?",
+      "options": [
+        "The other lamp glows brighter.",
+        "The battery gets damaged.",
+        "The other lamp continues to glow normally.",
+        "The other lamp also stops glowing."
+      ],
+      "correctIndex": 3,
+      "explanation": "If the lamps are connected one after another, the broken filament in one lamp creates a break in the entire circuit, so current cannot flow and the other lamp will not glow.",
+      "difficulty": "hard"
+    }
+  ],
+  "metals-nonmetals": [
+    {
+      "text": "The property of a material that allows it to be beaten into thin sheets is called what?",
+      "options": [
+        "Malleability",
+        "Conduction",
+        "Ductility",
+        "Sonority"
+      ],
+      "correctIndex": 0,
+      "explanation": "The property by which materials can be beaten into thin sheets is called malleability. Most metals possess this property.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the property of metals that enables them to be drawn into wires?",
+      "options": [
+        "Malleability",
+        "Brittleness",
+        "Lustre",
+        "Ductility"
+      ],
+      "correctIndex": 3,
+      "explanation": "The property of materials by which they can be drawn into wires is called ductility. This property is mainly possessed by metals.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why are cooking vessels commonly made of metals?",
+      "options": [
+        "Because they are lustrous",
+        "Because they are sonorous",
+        "Because they are brittle",
+        "Because they are good conductors of heat"
+      ],
+      "correctIndex": 3,
+      "explanation": "Metals are good conductors of heat, which is why mostly metal vessels are used for cooking.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the name for the property of metals that causes them to produce a ringing sound when struck?",
+      "options": [
+        "Ductility",
+        "Sonority",
+        "Hardness",
+        "Corrosion"
+      ],
+      "correctIndex": 1,
+      "explanation": "The property of metals that enables them to produce a ringing sound is called sonority, and metals are said to be sonorous in nature.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which non-metal is essential for all living organisms to breathe and survive?",
+      "options": [
+        "Oxygen",
+        "Chlorine",
+        "Nitrogen",
+        "Carbon"
+      ],
+      "correctIndex": 0,
+      "explanation": "We breathe in oxygen, which is a non-metal, and without it, we would not be able to survive.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of the following materials would flatten when beaten with a hammer, rather than breaking into pieces?",
+      "options": [
+        "A block of wood",
+        "A lump of sulfur",
+        "A piece of coal",
+        "A piece of aluminium"
+      ],
+      "correctIndex": 3,
+      "explanation": "Objects such as a piece of copper, an iron nail, and a piece of aluminium become flat when beaten due to the property of malleability.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What are the two essential conditions for iron to rust?",
+      "options": [
+        "Presence of water and heat",
+        "Presence of dry air only",
+        "Presence of both air and water",
+        "Presence of air and light"
+      ],
+      "correctIndex": 2,
+      "explanation": "The presence of both water and air is essential for brown deposits (rust) to develop on objects made of iron.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When a metal like magnesium reacts with oxygen, it forms a metal oxide. What is the nature of this oxide?",
+      "options": [
+        "Salty",
+        "Neutral",
+        "Basic",
+        "Acidic"
+      ],
+      "correctIndex": 2,
+      "explanation": "The solution of magnesium oxide changes the colour of red litmus paper to blue; hence, it is basic in nature. Generally, oxides of metals are basic in nature.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When a non-metal like sulfur is burned in air, it forms an oxide. What is the nature of this oxide when dissolved in water?",
+      "options": [
+        "Neutral",
+        "Acidic",
+        "Basic",
+        "Amphoteric"
+      ],
+      "correctIndex": 1,
+      "explanation": "On dissolving sulfur dioxide gas in water, sulfurous acid is formed. Oxides of non-metals are acidic in nature.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The gradual deterioration of metal surfaces caused by air, water, or other substances is known as what?",
+      "options": [
+        "Galvanisation",
+        "Conduction",
+        "Corrosion",
+        "Ductility"
+      ],
+      "correctIndex": 2,
+      "explanation": "Gradual deterioration of metal surfaces caused by air, water, or other substances is known as corrosion.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following is a general property of non-metals?",
+      "options": [
+        "They are lustrous",
+        "They are poor conductors of heat",
+        "They are malleable",
+        "They are good conductors of electricity"
+      ],
+      "correctIndex": 1,
+      "explanation": "Substances like sulfur and phosphorus are poor conductors of heat and electricity. These are called non-metals.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which metal catches fire when it comes in contact with water?",
+      "options": [
+        "Aluminium",
+        "Copper",
+        "Sodium",
+        "Iron"
+      ],
+      "correctIndex": 2,
+      "explanation": "Sodium is a metal which reacts vigorously with oxygen and water, and a lot of heat is generated in the reaction.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why are handles of screwdrivers often covered with plastic?",
+      "options": [
+        "Because plastic is strong",
+        "Because plastic is a poor conductor of electricity",
+        "Because plastic is malleable",
+        "Because plastic is lustrous"
+      ],
+      "correctIndex": 1,
+      "explanation": "The plastic covering on screwdrivers protects the electrician from electric shock because plastic is a poor conductor of electricity.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which non-metal is commonly used in water purification?",
+      "options": [
+        "Carbon",
+        "Iodine",
+        "Chlorine",
+        "Sulfur"
+      ],
+      "correctIndex": 2,
+      "explanation": "Chlorine is a non-metal commonly used in water purification.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "While most metals are solid at room temperature, which metal is an exception and is found in a liquid state?",
+      "options": [
+        "Mercury",
+        "Potassium",
+        "Sodium",
+        "Gold"
+      ],
+      "correctIndex": 0,
+      "explanation": "There is one metal, mercury, that is found in a liquid state at room temperature.",
+      "difficulty": "hard"
+    }
+  ],
+  "physical-chemical-changes": [
+    {
+      "text": "Which of the following is an example of a physical change?",
+      "options": [
+        "A banana getting brown spots and a strong smell",
+        "Burning wood",
+        "A cube of ice melting into water",
+        "A bud becoming a flower"
+      ],
+      "correctIndex": 2,
+      "explanation": "In a physical change, only physical properties like shape, size, or state change, but no new substance is formed. Melting ice is a change of state from solid to liquid.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "When you blow exhaled air into lime water, it turns milky. This indicates a chemical change because...",
+      "options": [
+        "a new substance, calcium carbonate, is formed.",
+        "bubbles are formed.",
+        "the water changes its state.",
+        "the water gets warmer."
+      ],
+      "correctIndex": 0,
+      "explanation": "A chemical change is one in which one or more new substances are formed. Carbon dioxide from exhaled air reacts with lime water to form a new white substance called calcium carbonate.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the process called when a substance reacts with oxygen and produces heat and/or light?",
+      "options": [
+        "Combustion",
+        "Weathering",
+        "Rusting",
+        "Melting"
+      ],
+      "correctIndex": 0,
+      "explanation": "Combustion is a chemical reaction in which a substance reacts with oxygen and produces heat and/or light. Substances that undergo this reaction are called combustible.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "When a magnesium ribbon is burnt in air, what new substance is formed?",
+      "options": [
+        "Iron oxide",
+        "Magnesium carbonate",
+        "Carbon dioxide",
+        "Magnesium oxide"
+      ],
+      "correctIndex": 3,
+      "explanation": "When a magnesium ribbon is burnt, it reacts with oxygen from the air to form a new substance, which is a white powder called magnesium oxide.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the minimum temperature at which a substance catches fire called?",
+      "options": [
+        "Melting point",
+        "Ignition temperature",
+        "Combustion temperature",
+        "Boiling point"
+      ],
+      "correctIndex": 1,
+      "explanation": "The ignition temperature is the minimum temperature at which a substance catches fire. A substance will not burn below its ignition temperature.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The burning of a candle involves both physical and chemical changes. Which of the following is a physical change observed during this process?",
+      "options": [
+        "The burning of wax vapour to produce a flame",
+        "The melting of the solid wax",
+        "The production of heat and light",
+        "The formation of new substances"
+      ],
+      "correctIndex": 1,
+      "explanation": "The melting of wax, its solidification, and evaporation are physical changes because the wax only changes its state but remains wax. The burning of the vapour is the chemical change.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of the following changes can be reversed?",
+      "options": [
+        "Chopping vegetables",
+        "Boiling water to form steam",
+        "Making popcorn from corn",
+        "Ripening of fruits"
+      ],
+      "correctIndex": 1,
+      "explanation": "A change is reversible if the original substance can be brought back. When water evaporates (boils), it can be condensed back into liquid water.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In an experiment, a burning candle is covered with a glass tumbler. Why does the flame go out after some time?",
+      "options": [
+        "Too much carbon dioxide is produced.",
+        "The temperature inside the tumbler drops.",
+        "The candle wax is completely used up.",
+        "The continuous supply of oxygen is cut off."
+      ],
+      "correctIndex": 3,
+      "explanation": "Combustion requires a continuous supply of oxygen. Covering the candle with a tumbler cuts off the supply of air, so the flame gets extinguished.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following is NOT a required condition for combustion?",
+      "options": [
+        "Heat (to reach ignition temperature)",
+        "Oxygen",
+        "Carbon dioxide",
+        "A combustible substance (fuel)"
+      ],
+      "correctIndex": 2,
+      "explanation": "The three requirements for combustion to occur are a combustible substance (fuel), oxygen, and heat that allows the fuel to reach its ignition temperature.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The process of converting leaves into compost is an example of a:",
+      "options": [
+        "Chemical change",
+        "Reversible change",
+        "Physical change",
+        "Temporary change"
+      ],
+      "correctIndex": 0,
+      "explanation": "The decomposition of leaves into compost involves the formation of new substances through the action of bacteria and fungi, which is a chemical change.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What gas is produced when you mix vinegar (or lemon juice) with baking soda?",
+      "options": [
+        "Hydrogen",
+        "Carbon dioxide",
+        "Oxygen",
+        "Nitrogen"
+      ],
+      "correctIndex": 1,
+      "explanation": "When vinegar reacts with baking soda, a new substance, carbon dioxide, is formed, which can be observed as fizzing bubbles.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The breaking up of large rocks into smaller pieces due to temperature changes or growing roots is a type of:",
+      "options": [
+        "Physical weathering",
+        "Erosion",
+        "Combustion",
+        "Chemical weathering"
+      ],
+      "correctIndex": 0,
+      "explanation": "Physical changes, such as breaking up large rocks into smaller pieces due to temperature changes or freezing water, are part of the process of weathering.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following statements correctly defines a chemical change?",
+      "options": [
+        "A change that can always be easily reversed.",
+        "A change in which only physical properties like shape and size change.",
+        "A change in which one or more new substances are formed.",
+        "A change that only involves a change of state, like melting or boiling."
+      ],
+      "correctIndex": 2,
+      "explanation": "A chemical change is a change in which one or more new substances are formed. It involves a process called a chemical reaction.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The light produced by fireflies is a result of a chemical change in their bodies. What is this process called?",
+      "options": [
+        "Bioluminescence",
+        "Photosynthesis",
+        "Combustion",
+        "Ignition"
+      ],
+      "correctIndex": 0,
+      "explanation": "Bioluminescence is the production of light (without heat) in living organisms, such as fireflies, which is caused by a chemical change.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of the following is considered an undesirable change?",
+      "options": [
+        "Changing of milk into curd",
+        "Rusting of iron",
+        "Cooking of food",
+        "Ripening of fruits"
+      ],
+      "correctIndex": 1,
+      "explanation": "Some changes are undesirable, such as the rusting of iron or the decay of food during storage, as they damage the original substance.",
+      "difficulty": "easy"
+    }
+  ],
+  "adolescence": [
+    {
+      "text": "What is the typical age range for the period of adolescence?",
+      "options": [
+        "10-19 years",
+        "5-10 years",
+        "20-30 years",
+        "0-5 years"
+      ],
+      "correctIndex": 0,
+      "explanation": "Adolescence is a period of rapid growth and development, typically occurring between the ages of 10–19.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In adolescent boys, the growth of the voice box can sometimes be seen as a bump in the throat. What is this bump called?",
+      "options": [
+        "Vocal cord",
+        "Larynx",
+        "Throat bone",
+        "Adam's apple"
+      ],
+      "correctIndex": 3,
+      "explanation": "The growth of the voice box in adolescent boys may be seen as a bump in the throat region and is called the Adam's apple.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What causes the emergence of pimples, a common condition called acne, during adolescence?",
+      "options": [
+        "Eating too much sugar",
+        "A lack of vitamins",
+        "Not washing the face enough",
+        "An increase in oily secretions from the skin"
+      ],
+      "correctIndex": 3,
+      "explanation": "Acne occurs due to an increase in oily secretions from the skin during adolescence that can clog the skin pores and lead to infections.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the name for the phase of the menstrual cycle when blood discharge occurs from the body?",
+      "options": [
+        "Adolescence",
+        "Ovulation",
+        "Puberty",
+        "Menstruation"
+      ],
+      "correctIndex": 3,
+      "explanation": "The phase of the cycle when blood discharge occurs from the body is referred to as menstruation.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Changes like the growth of facial hair in boys and the development of breasts in girls are examples of what?",
+      "options": [
+        "Nutritional deficiencies",
+        "Secondary sexual characteristics",
+        "Emotional changes",
+        "Primary reproductive changes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Characteristic changes that help distinguish males from females but are not directly involved in reproduction are called secondary sexual characteristics.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What are the chemicals produced in our bodies that are primarily responsible for the changes during adolescence?",
+      "options": [
+        "Hormones",
+        "Enzymes",
+        "Antibodies",
+        "Vitamins"
+      ],
+      "correctIndex": 0,
+      "explanation": "Many changes in adolescence are mainly due to hormones, which are certain chemicals produced in our bodies that regulate various aspects of growth and development.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which nutrient, found in foods like spinach and kidney beans, helps in the formation of blood?",
+      "options": [
+        "Fats",
+        "Calcium",
+        "Protein",
+        "Iron"
+      ],
+      "correctIndex": 3,
+      "explanation": "Iron, found in foods like spinach, kidney beans, and dried fruits, helps in the formation of blood.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When a person develops a strong urge to take harmful substances like tobacco or alcohol again and again, what is this condition called?",
+      "options": [
+        "Curiosity",
+        "Peer pressure",
+        "Substance abuse",
+        "Adolescence"
+      ],
+      "correctIndex": 2,
+      "explanation": "When people start consuming addictive substances regularly over time because they develop a strong urge to take them again, it is called substance abuse.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the name of the stage when an adolescent's body undergoes changes to become capable of reproduction?",
+      "options": [
+        "Puberty",
+        "Childhood",
+        "Infancy",
+        "Adulthood"
+      ],
+      "correctIndex": 0,
+      "explanation": "Puberty is the stage in which the body of an adolescent undergoes external and internal changes to develop into an adult capable of reproduction.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why is it important to maintain personal hygiene, particularly in the armpits and pubic region, during adolescence?",
+      "options": [
+        "To prevent pimples",
+        "To make the voice deeper",
+        "To increase height",
+        "To protect from potential infections"
+      ],
+      "correctIndex": 3,
+      "explanation": "Maintaining body hygiene, particularly in the armpits and the pubic region, may protect us from potential infections.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is a positive way for adolescents to handle strong emotions like increased sensitivity?",
+      "options": [
+        "Mimicking the behavior of peers",
+        "Showing compassion and getting involved in social work",
+        "Avoiding social interaction",
+        "Suppressing all feelings"
+      ],
+      "correctIndex": 1,
+      "explanation": "Strong emotions can lead to increased sensitivity, which can be channeled into positive growth through compassion and involvement in social work.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "While the menstrual cycle generally recurs every 28-30 days, what is the typical range for a healthy cycle in many girls?",
+      "options": [
+        "50-60 days",
+        "40-45 days",
+        "10-15 days",
+        "21-35 days"
+      ],
+      "correctIndex": 3,
+      "explanation": "Many healthy girls may have longer or shorter menstrual cycles ranging from 21-35 days.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "What is the term for using digital devices to harass others by sending misleading messages or spreading false rumours?",
+      "options": [
+        "Social networking",
+        "Responsible interaction",
+        "Cyberbullying",
+        "Collaborative learning"
+      ],
+      "correctIndex": 2,
+      "explanation": "Cyberbullying involves the use of digital devices such as phones or computers to harass others by sending misleading messages or spreading false rumours.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which nutrient, found in milk, curd, and cheese, is particularly important for optimal bone growth during adolescence?",
+      "options": [
+        "Vitamin C",
+        "Carbohydrates",
+        "Iron",
+        "Calcium"
+      ],
+      "correctIndex": 3,
+      "explanation": "Calcium, which we get from food sources like milk, curd, and cheese, helps in optimal bone growth.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following physical changes during adolescence is observed only in girls?",
+      "options": [
+        "Growth of hair in armpits",
+        "Pimples on the face",
+        "Growth of hair in the pubic region",
+        "Development of breasts"
+      ],
+      "correctIndex": 3,
+      "explanation": "The development of breasts is a physical change observed only in girls during adolescence.",
+      "difficulty": "medium"
+    }
+  ],
+  "heat-transfer": [
+    {
+      "text": "Why are cooking utensils, like pans, generally made of metals?",
+      "options": [
+        "They are poor conductors of heat.",
+        "They are lightweight.",
+        "They are shiny.",
+        "They are good conductors of heat."
+      ],
+      "correctIndex": 3,
+      "explanation": "Metals are good conductors of heat, which means they allow heat to pass through them easily, a property needed for cooking.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the process of heat transfer from the hotter part of an object to the colder part, where particles do not move from their positions?",
+      "options": [
+        "Convection",
+        "Evaporation",
+        "Radiation",
+        "Conduction"
+      ],
+      "correctIndex": 3,
+      "explanation": "Conduction is the process of heat transfer from a hotter part to a colder part of an object without the movement of particles from their positions.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Materials like wood, glass, and air do not allow heat to pass through them easily. What are these materials called?",
+      "options": [
+        "Radiators",
+        "Convectors",
+        "Poor conductors (insulators)",
+        "Good conductors"
+      ],
+      "correctIndex": 2,
+      "explanation": "Materials that do not allow heat to pass through them easily are called poor conductors or insulators of heat.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In an experiment, four pins (I, II, III, IV) are attached with wax in a line along a metal strip. If the end near pin I is heated, what will be observed?",
+      "options": [
+        "The pins will fall in the order I, then II, then III, then IV.",
+        "The pins will not fall at all.",
+        "Pin IV will fall first.",
+        "All pins will fall at the same time."
+      ],
+      "correctIndex": 0,
+      "explanation": "Heat is transferred by conduction from the hot end along the strip, melting the wax for each pin in sequence from nearest to farthest.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why do two thin blankets often feel warmer than one single thick blanket?",
+      "options": [
+        "The material of thin blankets is warmer.",
+        "The air trapped between the two blankets acts as an insulator.",
+        "Two blankets are heavier.",
+        "Thick blankets allow heat to escape."
+      ],
+      "correctIndex": 1,
+      "explanation": "Air is a poor conductor of heat, so the layer of air trapped between two blankets reduces heat flow from our bodies to the surroundings.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What happens to air when it gets heated, for example, by a candle flame?",
+      "options": [
+        "It expands, becomes lighter, and rises.",
+        "Its properties do not change.",
+        "It becomes cooler and sinks.",
+        "It contracts and becomes heavier."
+      ],
+      "correctIndex": 0,
+      "explanation": "When air is heated, it expands, occupies more space, becomes lighter, and rises up.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The process of heat transfer that involves the actual movement of particles, which occurs in liquids and gases, is called:",
+      "options": [
+        "Radiation",
+        "Conduction",
+        "Infiltration",
+        "Convection"
+      ],
+      "correctIndex": 3,
+      "explanation": "Convection is the process of heat transfer where the entire volume of a liquid or gas gets heated through the actual movement of its particles.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "During the day in a coastal area, a cool breeze blows from the sea to the land. What is this phenomenon called?",
+      "options": [
+        "Monsoon",
+        "Convection current",
+        "Sea breeze",
+        "Land breeze"
+      ],
+      "correctIndex": 2,
+      "explanation": "The movement of cooler air from the sea to the land during the day is called a sea breeze.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "At night in coastal areas, a breeze blows from the land to the sea. What is this called?",
+      "options": [
+        "Night wind",
+        "Coastal current",
+        "Sea breeze",
+        "Land breeze"
+      ],
+      "correctIndex": 3,
+      "explanation": "At night, land cools down faster than the sea, so cooler air from the land moves towards the sea, creating a land breeze.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why is it more comfortable to wear dark-coloured clothes in winter?",
+      "options": [
+        "They are better insulators.",
+        "They reflect most of the heat.",
+        "They absorb more heat.",
+        "They are thicker than light clothes."
+      ],
+      "correctIndex": 2,
+      "explanation": "Dark surfaces absorb more heat than light-coloured surfaces, which helps to keep us feel more comfortable during winters.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In the water cycle, what is the process of water turning into water vapour due to heat from the Sun called?",
+      "options": [
+        "Condensation",
+        "Precipitation",
+        "Infiltration",
+        "Evaporation"
+      ],
+      "correctIndex": 3,
+      "explanation": "Water in oceans, rivers, and lakes gets heated by the Sun and evaporates as water vapour.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Rain, snow, and hail are all forms of which process in the water cycle?",
+      "options": [
+        "Precipitation",
+        "Evaporation",
+        "Transpiration",
+        "Condensation"
+      ],
+      "correctIndex": 0,
+      "explanation": "When water vapour in clouds cools and condenses, it falls back to Earth as rain, snow, or hail, a process called precipitation.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The process of surface water seeping through soil and rocks to become groundwater is called:",
+      "options": [
+        "Water cycle",
+        "Aquifer",
+        "Infiltration",
+        "Precipitation"
+      ],
+      "correctIndex": 2,
+      "explanation": "Infiltration is the process of surface water seeping through soil and rocks.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Underground layers of sediments and rocks that store water in their pore spaces are known as:",
+      "options": [
+        "Groundwater",
+        "Wells",
+        "Aquifers",
+        "Recharge pits"
+      ],
+      "correctIndex": 2,
+      "explanation": "Aquifers are the underground layers of sediments and rocks that store water in pore spaces.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "If you compare the seepage of water through clay, sand, and gravel, through which material will water seep the slowest?",
+      "options": [
+        "Sand",
+        "Clay",
+        "It is the same for all three.",
+        "Gravel"
+      ],
+      "correctIndex": 1,
+      "explanation": "Water seeps slowest through clay because the spaces between its particles are smaller compared to those in sand and gravel.",
+      "difficulty": "medium"
+    }
+  ],
+  "time-and-motion": [
+    {
+      "text": "Which ancient device measured time using the changing position of a shadow cast by the sun?",
+      "options": [
+        "Hourglass",
+        "Water clock",
+        "Sundial",
+        "Candle clock"
+      ],
+      "correctIndex": 2,
+      "explanation": "A sundial uses the shadow of an object, cast by sunlight, to determine the time of day.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the SI unit of time?",
+      "options": [
+        "minute (min)",
+        "hour (h)",
+        "day",
+        "second (s)"
+      ],
+      "correctIndex": 3,
+      "explanation": "The standard international (SI) unit for measuring time is the second, and its symbol is s.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the name of the small metallic ball suspended by a thread in a simple pendulum?",
+      "options": [
+        "The oscillator",
+        "The anchor",
+        "The bob",
+        "The weight"
+      ],
+      "correctIndex": 2,
+      "explanation": "The small metallic ball at the end of a pendulum's thread is called the bob.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "How is the speed of an object calculated?",
+      "options": [
+        "Total distance minus total time taken",
+        "Total time taken divided by total distance",
+        "Total distance multiplied by total time",
+        "Total distance divided by total time taken"
+      ],
+      "correctIndex": 3,
+      "explanation": "The speed of an object is calculated by dividing the total distance it covered by the total time it took.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which instrument in a vehicle measures the total distance it has travelled?",
+      "options": [
+        "Speedometer",
+        "Manometer",
+        "Odometer",
+        "Thermometer"
+      ],
+      "correctIndex": 2,
+      "explanation": "An odometer is the instrument in a vehicle that measures the total distance travelled.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the term for the time a pendulum takes to complete one full swing back and forth?",
+      "options": [
+        "Frequency",
+        "Mean position",
+        "Oscillation",
+        "Time period"
+      ],
+      "correctIndex": 3,
+      "explanation": "The time period of a pendulum is the time it takes to complete one oscillation.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the SI unit of speed?",
+      "options": [
+        "minute/metre (min/m)",
+        "kilometre/hour (km/h)",
+        "metre/second (m/s)",
+        "second/kilometre (s/km)"
+      ],
+      "correctIndex": 2,
+      "explanation": "Since speed is distance divided by time, its SI unit is the SI unit of distance (metre) divided by the SI unit of time (second), which is metre/second (m/s).",
+      "difficulty": "medium"
+    },
+    {
+      "text": "An object is said to be in uniform linear motion if it moves along a straight line and...",
+      "options": [
+        "continuously changes its speed.",
+        "starts fast and then slows down.",
+        "covers unequal distances in equal time intervals.",
+        "covers equal distances in equal time intervals."
+      ],
+      "correctIndex": 3,
+      "explanation": "Uniform linear motion is defined as an object moving in a straight line covering equal distances in equal intervals of time, meaning it has a constant speed.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the function of a speedometer in a car?",
+      "options": [
+        "To measure the distance travelled.",
+        "To measure the time taken for a trip.",
+        "To measure the fuel level.",
+        "To measure and display the vehicle's speed."
+      ],
+      "correctIndex": 3,
+      "explanation": "A speedometer is an instrument that measures and displays the current speed of a vehicle, usually in km/h.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "If two people run for the same amount of time, how can you tell which one is faster?",
+      "options": [
+        "The one who covered less distance.",
+        "The one who started first.",
+        "The one who covered more distance.",
+        "The one who has a heavier build."
+      ],
+      "correctIndex": 2,
+      "explanation": "A faster person is someone who covers more distance in the same given interval of time.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which ancient time-measuring device worked based on the flow of sand from one bulb to another?",
+      "options": [
+        "Sundial",
+        "Hourglass",
+        "Water clock",
+        "Candle clock"
+      ],
+      "correctIndex": 1,
+      "explanation": "An hourglass measures time based on the principle of a fixed amount of sand flowing from an upper bulb to a lower one.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A bicycle travels 3.6 km in 15 minutes. What is its speed in m/s?",
+      "options": [
+        "4 m/s",
+        "1.5 m/s",
+        "14.4 m/s",
+        "240 m/s"
+      ],
+      "correctIndex": 0,
+      "explanation": "To find the speed in m/s, convert distance to metres (3.6 km = 3600 m) and time to seconds (15 min = 900 s). Speed = 3600 m / 900 s = 4 m/s.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When is an object's motion described as non-uniform linear motion?",
+      "options": [
+        "When it moves in a circle at a constant speed.",
+        "When it moves along a straight line at a constant speed.",
+        "When it moves along a straight line with a changing speed.",
+        "When it is at rest."
+      ],
+      "correctIndex": 2,
+      "explanation": "Non-uniform linear motion occurs when an object moves along a straight line but its speed is not constant; it keeps changing.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What was Galileo Galilei's key conclusion after experimenting with pendulums?",
+      "options": [
+        "The time for one swing is always the same for a pendulum of a given length.",
+        "The time for one swing depends on the mass of the bob.",
+        "The time for one swing decreases as the pendulum swings.",
+        "The time for one swing depends on how far it is pushed."
+      ],
+      "correctIndex": 0,
+      "explanation": "Galileo concluded that for a pendulum of a specific length, the time period (time for one oscillation) is constant.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "An experiment is done by measuring the time period of several pendulums. What factor is found to affect the time period?",
+      "options": [
+        "The mass of the bob",
+        "The length of the string",
+        "The time of day the experiment is done",
+        "The color of the bob"
+      ],
+      "correctIndex": 1,
+      "explanation": "The time period of a simple pendulum depends on its length, but not on the mass of the bob.",
+      "difficulty": "hard"
+    }
+  ],
+  "life-processes-animals": [
+    {
+      "text": "Which of the following are all considered life processes essential for the survival of living beings?",
+      "options": [
+        "Seeing, hearing, and tasting",
+        "Nutrition, respiration, and excretion",
+        "Walking, talking, and sleeping",
+        "Reading, writing, and thinking"
+      ],
+      "correctIndex": 1,
+      "explanation": "Processes essential for survival, such as nutrition, respiration, excretion, and reproduction, are collectively called life processes.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the initial breakdown of food into smaller pieces by the processes of crushing and chewing called?",
+      "options": [
+        "Chemical digestion",
+        "Egestion",
+        "Absorption",
+        "Mechanical digestion"
+      ],
+      "correctIndex": 3,
+      "explanation": "The process of initial breakdown of food into fine pieces by the teeth is called mechanical digestion.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why does starchy food like rice start to taste sweet after being chewed for a long time?",
+      "options": [
+        "The tongue adds a sweet substance to the food.",
+        "The food mixes with air and becomes sweet.",
+        "Saliva contains a digestive juice that breaks down starch into sugar.",
+        "The teeth release sugar into the food."
+      ],
+      "correctIndex": 2,
+      "explanation": "Saliva contains a digestive juice that helps break down starch, which is a type of carbohydrate, into sugar.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In an experiment, iodine solution is added to a test tube containing boiled rice that has been chewed for a minute. What is the expected result?",
+      "options": [
+        "The solution turns bright red.",
+        "The solution shows little to no color change.",
+        "The solution turns green.",
+        "The solution turns dark blue-black."
+      ],
+      "correctIndex": 1,
+      "explanation": "Saliva breaks down the starch in the chewed rice into simple sugars. Since iodine tests for the presence of starch, there will be no significant color change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the function of the mucus secreted by the inner lining of the stomach?",
+      "options": [
+        "To kill harmful bacteria in the food.",
+        "To protect the stomach lining from acid.",
+        "To break down proteins into simpler components.",
+        "To absorb nutrients from the partially digested food."
+      ],
+      "correctIndex": 1,
+      "explanation": "The mucus protects the stomach lining from the acid secreted in the stomach, preventing damage.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which part of the human alimentary canal is the longest, measuring almost 6 metres?",
+      "options": [
+        "Small intestine",
+        "Oesophagus",
+        "Large intestine",
+        "Stomach"
+      ],
+      "correctIndex": 0,
+      "explanation": "The small intestine is the longest part of the alimentary canal.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Bile is a digestive secretion from the liver. What are its main functions?",
+      "options": [
+        "To digest proteins and carbohydrates.",
+        "To neutralize acids from the stomach and break down fats.",
+        "To absorb water and salts from undigested food.",
+        "To make the food in the small intestine more acidic."
+      ],
+      "correctIndex": 1,
+      "explanation": "Bile neutralises acids present in the food moving down from the stomach and breaks down fats into tiny droplets, making its digestion easier.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The inner lining of the small intestine has thousands of finger-like projections called villi. What is their purpose?",
+      "options": [
+        "To increase the surface area for efficient nutrient absorption.",
+        "To fight off bacteria.",
+        "To secrete acid for digestion.",
+        "To move food along the intestine."
+      ],
+      "correctIndex": 0,
+      "explanation": "The finger-like projections, or villi, increase the surface area of the small intestine for efficient nutrient absorption into the blood.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the main function of the large intestine in the digestive system?",
+      "options": [
+        "To complete the digestion of proteins and fats.",
+        "To absorb water and some salts from undigested food.",
+        "To secrete bile and pancreatic juice.",
+        "To store food before it enters the stomach."
+      ],
+      "correctIndex": 1,
+      "explanation": "The large intestine absorbs water and some salts from the undigested food, thus making the waste semi-solid.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the process called when grass-eating animals like cows bring partially digested food back from the stomach to the mouth for further chewing?",
+      "options": [
+        "Respiration",
+        "Egestion",
+        "Rumination",
+        "Absorption"
+      ],
+      "correctIndex": 2,
+      "explanation": "The process where partially digested food is brought back to the mouth for gradual chewing is called rumination, and these animals are called ruminants.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "How do birds, which do not have teeth, mechanically break down their food?",
+      "options": [
+        "Using a muscular chamber called a gizzard.",
+        "By only consuming liquid food.",
+        "By swallowing strong acids that dissolve it.",
+        "Using a very strong beak to crush it."
+      ],
+      "correctIndex": 0,
+      "explanation": "Birds have a chamber called a gizzard where food is broken down by contraction and relaxation of its walls, often with the help of grit.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What happens to the ribs and diaphragm when we inhale (breathe in)?",
+      "options": [
+        "The ribs move down and inwards, and the diaphragm moves up.",
+        "The ribs move down and inwards, and the diaphragm moves down.",
+        "The ribs move up and outwards, and the diaphragm moves down.",
+        "The ribs move up and outwards, and the diaphragm moves up."
+      ],
+      "correctIndex": 2,
+      "explanation": "During inhalation, the chest expands as the ribs move up and outwards and the diaphragm moves downwards, increasing the space inside the chest for air to enter.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "What causes air to be pushed out of the lungs during exhalation (breathing out)?",
+      "options": [
+        "The alveoli actively pump the air out.",
+        "The diaphragm moves down, increasing chest space.",
+        "The ribs move up and outwards, pulling air out.",
+        "The ribs move down and inwards, and the diaphragm moves up, reducing chest space."
+      ],
+      "correctIndex": 3,
+      "explanation": "When you exhale, the ribs move down and inwards, and the diaphragm moves upwards, reducing space in the chest and pushing air out of the lungs.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "When exhaled air is blown through a straw into lime water, the lime water turns milky. What does this indicate?",
+      "options": [
+        "Exhaled air is colder than inhaled air.",
+        "Exhaled air contains more oxygen than inhaled air.",
+        "Exhaled air contains more carbon dioxide than inhaled air.",
+        "Exhaled air contains more water vapor."
+      ],
+      "correctIndex": 2,
+      "explanation": "Lime water turns milky when it reacts with carbon dioxide. This experiment shows that exhaled air contains more carbon dioxide than the air we inhale.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Where in the lungs does the exchange of oxygen and carbon dioxide between the air and the blood take place?",
+      "options": [
+        "In the diaphragm muscle",
+        "In the nasal passages",
+        "In the windpipe",
+        "In the small, balloon-like sacs called alveoli"
+      ],
+      "correctIndex": 3,
+      "explanation": "The exchange of gases occurs in the alveoli, where oxygen passes from the air into the blood, and carbon dioxide passes from the blood into the air.",
+      "difficulty": "medium"
+    }
+  ],
+  "life-processes-plants": [
+    {
+      "text": "Which of the following, together, are essential for growth?",
+      "options": [
+        "Carbon dioxide only",
+        "Nutrients and water",
+        "Sunlight and soil only",
+        "Oxygen and flowers"
+      ],
+      "correctIndex": 1,
+      "explanation": "Food provides nutrients like carbohydrates, fats, proteins, vitamins and minerals, which, along with water, are all essential for growth.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the green pigment in plant leaves that helps in capturing sunlight?",
+      "options": [
+        "Starch",
+        "Stomata",
+        "Chlorophyll",
+        "Xylem"
+      ],
+      "correctIndex": 2,
+      "explanation": "Leaves are mostly green because of the presence of a green pigment called chlorophyll, that helps in capturing sunlight efficiently.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the process by which plants use sunlight, water, and carbon dioxide to create their own food?",
+      "options": [
+        "Transpiration",
+        "Transportation",
+        "Respiration",
+        "Photosynthesis"
+      ],
+      "correctIndex": 3,
+      "explanation": "The process by which plants prepare food in the presence of sunlight and chlorophyll using carbon dioxide and water is called photosynthesis.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What are the tiny pores, usually on the surface of leaves, that help in the exchange of gases?",
+      "options": [
+        "Xylem",
+        "Stomata",
+        "Chloroplasts",
+        "Phloem"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tiny pores on the surface of leaves, called stomata, help in the exchange of oxygen and carbon dioxide.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which gas is released by plants during photosynthesis?",
+      "options": [
+        "Methane",
+        "Carbon dioxide",
+        "Nitrogen",
+        "Oxygen"
+      ],
+      "correctIndex": 3,
+      "explanation": "Oxygen is released during the process of photosynthesis. An experiment shows this gas can cause a lit matchstick to produce an intense flame.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the purpose of boiling a leaf in alcohol before testing it for starch with iodine?",
+      "options": [
+        "To add nutrients to the leaf",
+        "To remove the green pigment chlorophyll",
+        "To kill any bacteria on the leaf",
+        "To soften the leaf"
+      ],
+      "correctIndex": 1,
+      "explanation": "Decolourisation of a leaf by removing chlorophyll enables us to easily observe the colour change from the iodine test, and thus, the presence of starch.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "An experiment is set up with three pots: Pot A (sunlight, water), Pot B (sunlight, no water), and Pot C (dark, water). Which plant is expected to show the most growth?",
+      "options": [
+        "All plants will grow equally",
+        "The plant in Pot A",
+        "The plant in Pot B",
+        "The plant in Pot C"
+      ],
+      "correctIndex": 1,
+      "explanation": "The results of the experiment indicate that plants require both sunlight and water for their growth, so the plant with both will grow best.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What color change indicates the presence of starch when iodine solution is added to a decolourised leaf?",
+      "options": [
+        "The leaf turns blue-black",
+        "The leaf becomes colorless",
+        "The leaf turns green",
+        "The leaf turns yellow"
+      ],
+      "correctIndex": 0,
+      "explanation": "If the colour of the leaf changes to blue-black after adding diluted iodine solution, it indicates the presence of starch.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the food produced during photosynthesis, which is a simple carbohydrate that can be converted to starch for storage?",
+      "options": [
+        "Oxygen",
+        "Glucose",
+        "Protein",
+        "Chlorophyll"
+      ],
+      "correctIndex": 1,
+      "explanation": "During photosynthesis, food is actually produced in the form of glucose, a simple carbohydrate, which later gets converted into starch for storage.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which tissue in a plant is responsible for transporting water and minerals from the roots to the other parts of the plant?",
+      "options": [
+        "Stomata",
+        "Phloem",
+        "Epidermis",
+        "Xylem"
+      ],
+      "correctIndex": 3,
+      "explanation": "Water and minerals are transported to the leaves and other parts of plants through the thin tube-like structure called the xylem.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which tissue transports the food prepared in the leaves to all other parts of the plant?",
+      "options": [
+        "Roots",
+        "Stomata",
+        "Xylem",
+        "Phloem"
+      ],
+      "correctIndex": 3,
+      "explanation": "The food prepared by plants in the leaves is transported to all parts of the plant through another set of thin tube-like structures called the phloem.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What are the products of the process of respiration in plants?",
+      "options": [
+        "Sunlight and chlorophyll",
+        "Carbon dioxide, water, and energy",
+        "Glucose and oxygen",
+        "Starch and water"
+      ],
+      "correctIndex": 1,
+      "explanation": "During respiration, glucose is broken down in the presence of oxygen, releasing carbon dioxide, water, and energy.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In an experiment, half of a leaf is enclosed in a bottle containing caustic soda (which absorbs carbon dioxide). After being in sunlight, which part of the leaf will test positive for starch?",
+      "options": [
+        "Neither part will test positive",
+        "The part inside the bottle",
+        "The part outside the bottle",
+        "Both parts will test positive"
+      ],
+      "correctIndex": 2,
+      "explanation": "The part of the leaf outside the bottle has access to carbon dioxide and will produce starch, while the part inside will not because carbon dioxide is essential for photosynthesis.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A leaf with both green and non-green patches is kept in sunlight and then tested for starch. What is the expected result?",
+      "options": [
+        "The entire leaf will turn blue-black.",
+        "Only the green patches will turn blue-black.",
+        "There will be no change in color.",
+        "Only the non-green patches will turn blue-black."
+      ],
+      "correctIndex": 1,
+      "explanation": "Starch is produced only in the green patches where chlorophyll is present to perform photosynthesis. Therefore, only these patches will turn blue-black with iodine.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "An experiment with germinating seeds shows that the air they release turns limewater milky. What does this demonstrate?",
+      "options": [
+        "Seeds use carbon dioxide for germination.",
+        "Seeds produce carbon dioxide during respiration.",
+        "Seeds produce oxygen during respiration.",
+        "Seeds produce starch during germination."
+      ],
+      "correctIndex": 1,
+      "explanation": "Limewater turns milky due to the presence of carbon dioxide. The experiment shows that additional carbon dioxide is produced by the seeds as they respire.",
+      "difficulty": "hard"
+    }
+  ],
+  "light-shadows": [
+    {
+      "text": "Which of the following is a non-luminous object?",
+      "options": [
+        "Sun",
+        "Pole Star",
+        "Firefly",
+        "Moon"
+      ],
+      "correctIndex": 3,
+      "explanation": "Non-luminous objects do not emit their own light. The Moon is a non-luminous object that shines by reflecting the light from the Sun.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "An activity shows that a candle flame can be seen through a straight pipe but not through a bent one. What does this observation suggest?",
+      "options": [
+        "Light travels in a straight line.",
+        "Light can be reflected.",
+        "Light is a form of energy.",
+        "Light forms shadows."
+      ],
+      "correctIndex": 0,
+      "explanation": "The inability to see the light through a bent pipe demonstrates that light travels in a straight line and cannot go around the bend.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is a material called if it allows light to pass through it only partially?",
+      "options": [
+        "Translucent",
+        "Opaque",
+        "Luminous",
+        "Transparent"
+      ],
+      "correctIndex": 0,
+      "explanation": "Light passes partially through translucent materials. It passes almost completely through transparent materials and does not pass through opaque materials.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What three things are needed to observe a shadow?",
+      "options": [
+        "A light source, a transparent object, and a wall",
+        "A mirror, a translucent object, and a screen",
+        "Only a light source and an opaque object",
+        "A light source, an opaque object, and a screen"
+      ],
+      "correctIndex": 3,
+      "explanation": "To form a shadow, we need a source of light, an opaque object to block the light, and a screen on which the shadow is formed.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the change in the direction of light by a mirror called?",
+      "options": [
+        "Reflection",
+        "Shadowing",
+        "Inversion",
+        "Absorption"
+      ],
+      "correctIndex": 0,
+      "explanation": "A shiny surface or a mirror changes the direction of light that falls upon it. This change in direction is called the reflection of light.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of the following is a key characteristic of the image formed by a plane mirror?",
+      "options": [
+        "It can be obtained on a screen.",
+        "It is inverted (upside down).",
+        "It is of the same size as the object.",
+        "It is smaller than the object."
+      ],
+      "correctIndex": 2,
+      "explanation": "The image formed by a plane mirror is of the same size as the object, is erect, and cannot be obtained on a screen.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In a plane mirror, the left side of an object appears as the right side of the image. What is this phenomenon called?",
+      "options": [
+        "Erection",
+        "Upright inversion",
+        "Lateral inversion",
+        "Reflection"
+      ],
+      "correctIndex": 2,
+      "explanation": "The perceived left-right reversal in the images formed by a plane mirror is called lateral inversion.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What kind of image is formed by a pinhole camera?",
+      "options": [
+        "Inverted and colored",
+        "Erect and larger",
+        "Inverted and smaller",
+        "Erect and black-and-white"
+      ],
+      "correctIndex": 0,
+      "explanation": "A pinhole camera creates an inverted (upside down) image of an object on a screen, and the image shows the colours of the object.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which device uses two plane mirrors in a Z-shaped box to allow someone to see over an obstacle?",
+      "options": [
+        "Binoculars",
+        "Periscope",
+        "Pinhole camera",
+        "Kaleidoscope"
+      ],
+      "correctIndex": 1,
+      "explanation": "A simple periscope can be made by placing two plane mirrors in a Z-shaped box, enabling a user to see objects that are not directly visible.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "An object is placed between a fixed torch and a screen. What will happen to its shadow if the object is moved closer to the torch?",
+      "options": [
+        "The shadow will become smaller.",
+        "The shadow's color will change.",
+        "The shadow will disappear.",
+        "The shadow will become larger."
+      ],
+      "correctIndex": 3,
+      "explanation": "When an object is moved closer to the light source, keeping the screen fixed, the shadow it casts becomes larger.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these objects forms the darkest shadow when placed in the path of light?",
+      "options": [
+        "A piece of tracing paper",
+        "A clean water surface",
+        "A cardboard sheet",
+        "A clear glass sheet"
+      ],
+      "correctIndex": 2,
+      "explanation": "Opaque objects, like cardboard, block light completely and therefore form darker shadows than translucent or transparent objects.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the principle behind the working of a kaleidoscope?",
+      "options": [
+        "The formation of shadows",
+        "Light travels in a straight line",
+        "Multiple reflections from mirrors",
+        "Lateral inversion"
+      ],
+      "correctIndex": 2,
+      "explanation": "A kaleidoscope uses three mirrors, and the multiple images formed due to reflections of reflections create many interesting patterns.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of the following statements about shadows is correct?",
+      "options": [
+        "A shadow is a type of reflection.",
+        "Changing the colour of an opaque object does not change the colour of its shadow.",
+        "The color of the shadow depends on the color of the object.",
+        "Transparent objects form dark shadows."
+      ],
+      "correctIndex": 1,
+      "explanation": "A shadow is an area where light is blocked. Changing the colour of the opaque object does not change the colour of the shadow.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these can form an image on a screen?",
+      "options": [
+        "A plane mirror",
+        "A kaleidoscope",
+        "A shiny spoon",
+        "A pinhole camera"
+      ],
+      "correctIndex": 3,
+      "explanation": "A pinhole camera forms an image on a screen, while the image formed by a plane mirror cannot be obtained on a screen.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "If you stand 3 meters in front of a plane mirror, how far away does your image appear to be from you?",
+      "options": [
+        "1.5 meters",
+        "9 meters",
+        "6 meters",
+        "3 meters"
+      ],
+      "correctIndex": 2,
+      "explanation": "The image in a plane mirror appears to be as far behind the mirror as the object is in front. Therefore, the total distance is 3m (object to mirror) + 3m (mirror to image).",
+      "difficulty": "hard"
+    }
+  ],
+  "earth-moon-sun": [
+    {
+      "text": "Why does the Sun appear to move across the sky from East to West?",
+      "options": [
+        "Because the Earth is moving closer to and then farther from the Sun.",
+        "Because the Moon's gravity pulls the Sun across the sky.",
+        "Because the Earth is turning around on its own axis.",
+        "Because the Sun is orbiting the Earth."
+      ],
+      "correctIndex": 2,
+      "explanation": "The Sun appears to be moving because we view it from the Earth, which is turning around itself.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Approximately how long does it take for the Earth to complete one rotation on its axis?",
+      "options": [
+        "About 12 hours",
+        "About 365 days",
+        "About 30 days",
+        "About 24 hours"
+      ],
+      "correctIndex": 3,
+      "explanation": "The Earth completes one rotation in about 24 hours.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the primary cause of the day and night cycle on Earth?",
+      "options": [
+        "The tilt of the Earth's axis.",
+        "The Moon blocking the Sun's light.",
+        "The Earth's revolution around the Sun.",
+        "The Earth's rotation from West to East."
+      ],
+      "correctIndex": 3,
+      "explanation": "The Earth's rotation from West to East causes the day-night cycle.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the term for the motion of an object around another object?",
+      "options": [
+        "Rotation",
+        "Eclipse",
+        "Axis",
+        "Revolution"
+      ],
+      "correctIndex": 3,
+      "explanation": "Revolution is the motion of an object around another object.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A solar eclipse occurs when which celestial body comes in between the Sun and the Earth?",
+      "options": [
+        "Venus",
+        "The Pole Star",
+        "The Moon",
+        "Another planet"
+      ],
+      "correctIndex": 2,
+      "explanation": "At certain times, the Moon can come in between the Sun and the Earth in a way that obstructs the light from the Sun from reaching us, which is known as a solar eclipse.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What happens during a lunar eclipse?",
+      "options": [
+        "The Earth comes between the Sun and the Moon.",
+        "The Sun comes between the Earth and the Moon.",
+        "The Moon's shadow falls on the Sun.",
+        "The Moon comes between the Sun and the Earth."
+      ],
+      "correctIndex": 0,
+      "explanation": "A lunar eclipse occurs when the Earth comes in between the Sun and the Moon, blocking sunlight from reaching the Moon.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "When viewed from above the North Pole, in which direction does the Earth rotate?",
+      "options": [
+        "North to South",
+        "Clockwise (East to West)",
+        "South to North",
+        "Anti-clockwise (West to East)"
+      ],
+      "correctIndex": 3,
+      "explanation": "When viewed from the top of the North Pole, the Earth is rotating in the anti-clockwise direction, that is, from West to East.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why does the Pole Star (Dhruva Tara) appear to be nearly stationary in the sky?",
+      "options": [
+        "It is the brightest star in the sky.",
+        "It is much closer to Earth than other stars.",
+        "It does not move like other stars.",
+        "The Earth's axis of rotation points very close to it."
+      ],
+      "correctIndex": 3,
+      "explanation": "The Earth's axis of rotation points very close to the Pole Star in the Northern Hemisphere, therefore, the Pole Star appears nearly stationary.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What are the two main factors that cause seasons on Earth?",
+      "options": [
+        "The Earth's rotation and its revolution.",
+        "The number of solar eclipses and lunar eclipses.",
+        "The Earth's distance from the Sun and its speed of rotation.",
+        "The tilt of the Earth's axis and its spherical shape."
+      ],
+      "correctIndex": 3,
+      "explanation": "The tilt of the Earth's axis and the spherical shape of the Earth gives rise to seasons.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "How long does it take for the Earth to complete one revolution around the Sun?",
+      "options": [
+        "About 24 hours",
+        "About 29 days",
+        "About 10 years",
+        "About 365 days and 6 hours"
+      ],
+      "correctIndex": 3,
+      "explanation": "The Earth completes one revolution around the Sun in about 365 days and 6 hours.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why do we see different stars in the night sky during different months of the year?",
+      "options": [
+        "Because of the changing seasons and weather.",
+        "Because the stars themselves are moving away.",
+        "Because of the Earth's daily rotation on its axis.",
+        "Because the Earth revolves around the Sun, changing our direction of view."
+      ],
+      "correctIndex": 3,
+      "explanation": "As the Earth revolves around the Sun continuously, the stars seen in the night sky after sunset gradually change over a year as we look in different directions.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What happens on the days of an equinox?",
+      "options": [
+        "The Sun does not set at the poles.",
+        "The day is the longest of the year.",
+        "The daytime lasts for 12 hours.",
+        "The night is the longest of the year."
+      ],
+      "correctIndex": 2,
+      "explanation": "Around 21 March and 23 September, the daytime lasts for 12 hours. These days are called the spring and the autumn equinox.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why is it dangerous to look directly at the Sun, even during a solar eclipse?",
+      "options": [
+        "The Moon reflects harmful rays.",
+        "The Sun is still intense enough to damage the eyes and cause blindness.",
+        "The darkness makes your pupils too large.",
+        "It is only dangerous if you use a telescope."
+      ],
+      "correctIndex": 1,
+      "explanation": "Even during an eclipse, the Sun is intense enough to damage the eyes and cause blindness, so directly viewing it must be strictly avoided.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "If you are on a merry-go-round turning in an anti-clockwise direction, how will stationary objects like trees appear to move?",
+      "options": [
+        "They will appear to move anti-clockwise.",
+        "They will appear to move towards you.",
+        "They will not appear to move at all.",
+        "They will appear to move in a clockwise direction."
+      ],
+      "correctIndex": 3,
+      "explanation": "While you turn in the anti-clockwise direction, the objects appear to turn around you in the opposite direction, that is, in the clockwise direction.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What is the term for the imaginary line that passes through an object, around which all its parts move in circles?",
+      "options": [
+        "Axis of rotation",
+        "Orbit",
+        "Hemisphere",
+        "Equator"
+      ],
+      "correctIndex": 0,
+      "explanation": "Rotation is the motion of an object in which all its parts move in circles around an imaginary line that passes through it. This line is called the axis of rotation.",
+      "difficulty": "medium"
+    }
+  ]
+}

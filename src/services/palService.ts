@@ -117,11 +117,25 @@ function getClient(location: string = env.vertexLocation): GoogleGenAI {
 // How many textbook chunks RAG Engine hands the model per question.
 const RAG_TOP_K = 5;
 
+// Book-only mode: for a class with an uploaded textbook, PAL must not fall
+// back on general knowledge. Only the retrieved passages (and the student's
+// own progress data above) are allowed sources.
 const RAG_STYLE =
-  "\n\nYou can retrieve passages from this student's NCERT textbook. For syllabus " +
-  "questions, base your explanation on those passages and use the textbook's own " +
-  "terms and examples. If the passages don't cover the question, answer from general " +
-  "knowledge as usual.";
+  "\n\nSTRICT TEXTBOOK MODE. You can retrieve passages from this student's uploaded " +
+  "NCERT textbook, and those passages are your ONLY source for any academic answer.\n" +
+  "- Answer only with facts, definitions, examples and activities found in the retrieved " +
+  "passages. Use the book's own terms, and name the chapter the answer comes from.\n" +
+  "- Do NOT add facts, numbers, examples or explanations from general knowledge, even if " +
+  "you are sure they are correct.\n" +
+  "- If the passages don't answer the question (including questions from another subject " +
+  "or class), say plainly that it isn't covered in their textbook and suggest a related " +
+  "topic from the book they can ask about instead. Do not answer it anyway.\n" +
+  "- You may still greet the student, encourage them, and answer questions about their own " +
+  "BestBrain progress using the progress data given above.";
+
+// Lower than normal chat: in book-only mode PAL should restate the textbook,
+// not improvise around it.
+const RAG_TEMPERATURE = 0.2;
 
 // Retrieval setup for a student's class, or null when that class has no corpus
 // (see PAL_RAG_CORPORA in env.ts). The location is read off the corpus name,
@@ -187,7 +201,7 @@ export async function generatePalReply(
   // raise this.
   maxOutputTokens = 2048
 ): Promise<string> {
-  let rag = ragFor(className);
+  const rag = ragFor(className);
   const systemInstruction = (rag: unknown) =>
     buildSystemInstruction(palRole, context, voice) + (rag ? RAG_STYLE : "");
 
@@ -218,7 +232,7 @@ export async function generatePalReply(
           config: {
             systemInstruction: systemInstruction(rag),
             tools: rag?.tools,
-            temperature: 0.7,
+            temperature: rag ? RAG_TEMPERATURE : 0.7,
             topP: 0.95,
             maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : maxOutputTokens,
             safetySettings: SAFETY_SETTINGS,
@@ -235,14 +249,6 @@ export async function generatePalReply(
       throw new Error(`Gemini returned no text (finishReason: ${blocked ?? "unknown"})`);
     } catch (err) {
       lastErr = err;
-      // A broken corpus (deleted, wrong region, no access) must not take PAL
-      // down with it: answer once more without retrieval.
-      if (rag && !isRetryable(err)) {
-        console.error("pal rag call failed, retrying without retrieval:", err);
-        rag = null;
-        attempt--;
-        continue;
-      }
       if (attempt < MAX_RETRIES && isRetryable(err)) {
         await sleep(400 * (attempt + 1)); // 400ms, 800ms backoff
         continue;
@@ -288,24 +294,17 @@ export async function* streamPalReply(
       config: {
         systemInstruction: base + (rag ? RAG_STYLE : ""),
         tools: rag?.tools,
-        temperature: 0.7,
+        temperature: rag ? RAG_TEMPERATURE : 0.7,
         topP: 0.95,
         maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
         safetySettings: SAFETY_SETTINGS,
       },
     });
 
-  // Same fallback as generatePalReply, possible here only because nothing has
-  // been sent to the client yet when the stream fails to open.
-  const rag = ragFor(className);
-  let stream;
-  try {
-    stream = await open(rag);
-  } catch (err) {
-    if (!rag) throw err;
-    console.error("pal rag stream failed, retrying without retrieval:", err);
-    stream = await open(null);
-  }
+  // No fallback to a retrieval-free call: for a book-only class that would
+  // be exactly the general-knowledge answer book-only mode forbids, so a
+  // broken corpus surfaces as "PAL is unavailable" instead.
+  const stream = await open(ragFor(className));
 
   for await (const chunk of stream) {
     if (chunk.text) yield chunk.text;
