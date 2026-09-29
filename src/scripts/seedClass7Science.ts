@@ -1,6 +1,6 @@
 /**
  * Seeds the Class 7 Science question bank (15 questions for each of the 12
- * chapters) and a few sample homework assignments, so every Class 7 Science
+ * chapters) and one homework assignment per chapter, so every Class 7 Science
  * chapter has a working Quiz, Question Bank and Homework behind it.
  *
  * The questions live in ./data/class7Science.json, keyed by the chapter slug
@@ -41,29 +41,36 @@ const BANK: Record<string, Seed[]> = JSON.parse(
   fs.readFileSync(path.join(__dirname, "data", "class7Science.json"), "utf8")
 );
 
+// One assignment per chapter, so the Homework button on every Class 7 Science
+// chapter opens real work. The first three titles are the original samples and
+// are kept as they were, so an environment that already has them gets the
+// other nine added rather than three duplicates.
 const HOMEWORK = [
-  {
-    title: "Electric circuits, practice set",
-    chapterSlug: "electricity-circuits",
-    instructions: "Draw the circuit in your notebook before you answer each question.",
-    dueInDays: 7,
-    take: 8,
-  },
-  {
-    title: "Acids, bases and indicators, chapter check",
-    chapterSlug: "acidic-basic-neutral",
-    instructions: "Revise how each indicator changes colour before you start.",
-    dueInDays: 10,
-    take: 8,
-  },
-  {
-    title: "Heat transfer, revision",
-    chapterSlug: "heat-transfer",
-    instructions: "Think of one example from your kitchen for every question.",
-    dueInDays: 14,
-    take: 8,
-  },
-];
+  { chapterSlug: "electricity-circuits", title: "Electric circuits, practice set",
+    instructions: "Draw the circuit in your notebook before you answer each question." },
+  { chapterSlug: "metals-nonmetals", title: "Metals and non-metals, practice set",
+    instructions: "Revise the properties of metals and non-metals before you start." },
+  { chapterSlug: "physical-chemical-changes", title: "Physical and chemical changes, practice set",
+    instructions: "For every change, ask yourself whether a new substance is formed." },
+  { chapterSlug: "adolescence", title: "Adolescence, chapter check",
+    instructions: "Read the chapter once more before you answer." },
+  { chapterSlug: "heat-transfer", title: "Heat transfer, revision",
+    instructions: "Think of one example from your kitchen for every question." },
+  { chapterSlug: "time-and-motion", title: "Time and motion, practice set",
+    instructions: "Keep a pen and paper ready for the speed calculations." },
+  { chapterSlug: "evolving-science", title: "The world of science, chapter check",
+    instructions: "Think about how a scientist would test each idea." },
+  { chapterSlug: "acidic-basic-neutral", title: "Acids, bases and indicators, chapter check",
+    instructions: "Revise how each indicator changes colour before you start." },
+  { chapterSlug: "life-processes-animals", title: "Life processes in animals, practice set",
+    instructions: "Revise the path food takes through the body before you start." },
+  { chapterSlug: "life-processes-plants", title: "Life processes in plants, practice set",
+    instructions: "Revise what a plant needs for photosynthesis before you start." },
+  { chapterSlug: "light-shadows", title: "Light, shadows and reflections, practice set",
+    instructions: "Think about how light travels before you answer." },
+  { chapterSlug: "earth-moon-sun", title: "Earth, Moon and the Sun, chapter check",
+    instructions: "Picture the Earth spinning and moving around the Sun as you answer." },
+].map((h) => ({ ...h, dueInDays: 30, take: 8 }));
 
 async function removeStale(): Promise<void> {
   const keep = new Set(

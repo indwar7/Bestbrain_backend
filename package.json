@@ -17,7 +17,8 @@
     "seed:class6science": "tsx src/scripts/seedClass6Science.ts",
     "seed:class7science": "tsx src/scripts/seedClass7Science.ts",
     "rag:ingest": "tsx src/scripts/ragIngest.ts",
-    "gen:book-questions": "tsx src/scripts/genBookQuestions.ts"
+    "gen:book-questions": "tsx src/scripts/genBookQuestions.ts",
+    "coins:grant": "tsx src/scripts/grantCoins.ts"
   },
   "keywords": [],
   "author": "Abhaydeep Indwar",
