@@ -304,6 +304,32 @@ describe("Homework, doing the work", () => {
     expect(res.body.homework[0].status).toBe("submitted");
     expect(res.body.homework[0].score).toBe(1);
   });
+
+  it("after handing in, opening the homework returns the review", async () => {
+    const teacher = await tokenFor("teacher");
+    const student = await tokenFor("student");
+    const q1 = await makeQuestion(teacher); // correctIndex 1
+    const q2 = await makeQuestion(teacher);
+    const created = await makeHomework(teacher, [q1, q2]);
+    const id = created.body.homework.id;
+
+    const before = await request(app).get(`/api/homework/${id}`).set(auth(student));
+    expect(before.body.review).toBeUndefined();
+
+    await request(app)
+      .post(`/api/homework/${id}/submit`)
+      .set(auth(student))
+      .send({ answers: [{ questionId: q1, selectedIndex: 1 }] });
+
+    const res = await request(app).get(`/api/homework/${id}`).set(auth(student));
+    expect(res.status).toBe(200);
+    expect(res.body.homework.status).toBe("submitted");
+    expect(res.body.homework.score).toBe(1);
+    expect(res.body.homework.total).toBe(2);
+    expect(res.body.review.length).toBe(2);
+    expect(res.body.review[0]).toMatchObject({ selectedIndex: 1, correctIndex: 1, isCorrect: true });
+    expect(res.body.review[1]).toMatchObject({ selectedIndex: -1, isCorrect: false });
+  });
 });
 
 describe("Homework, the teacher's roster", () => {

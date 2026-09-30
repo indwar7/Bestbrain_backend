@@ -347,6 +347,27 @@ export async function getHomeworkForStudent(req: AuthRequest, res: Response): Pr
 
   const existing = await HomeworkSubmission.findOne({ homeworkId: hw._id, studentId: user._id });
 
+  // Once handed in, the student can look back at what they answered, with the
+  // right answers and why, the same review the submit response carries. Before
+  // that, answers stay hidden.
+  let review;
+  if (existing) {
+    const picked = new Map(existing.answers.map((a) => [String(a.questionId), a.selectedIndex]));
+    review = ordered.map((q) => {
+      const raw = picked.get(String(q._id));
+      const selectedIndex = typeof raw === "number" ? raw : -1;
+      return {
+        questionId: String(q._id),
+        text: q.text,
+        options: q.options,
+        selectedIndex,
+        correctIndex: q.correctIndex,
+        isCorrect: selectedIndex === q.correctIndex,
+        explanation: q.explanation || "",
+      };
+    });
+  }
+
   res.json({
     homework: {
       id: String(hw._id),
@@ -358,9 +379,12 @@ export async function getHomeworkForStudent(req: AuthRequest, res: Response): Pr
       overdue: !existing && hw.dueAt.getTime() < Date.now(),
       status: existing ? existing.status : "assigned",
       score: existing ? existing.score : null,
+      total: existing ? existing.total : null,
+      submittedAt: existing ? existing.submittedAt : null,
     },
     total: ordered.length,
     questions: ordered.map(publicQuestion),
+    ...(review ? { review } : {}),
   });
 }
 
