@@ -20,3 +20,5 @@ reference/
 gcp-*.json
 dev-abhay-*.json
 vertex-*.json
+uploads/homework/*
+!uploads/homework/.gitkeep

@@ -27,6 +27,7 @@ export interface IHomework extends Document {
   title: string;
   instructions: string;
   questionIds: mongoose.Types.ObjectId[];
+  writtenQuestions: string[]; // answered on paper and uploaded as a PDF
   dueAt: Date;
   assignedById: mongoose.Types.ObjectId;
   assignedByRole: "teacher" | "admin";
@@ -43,6 +44,7 @@ const homeworkSchema = new Schema<IHomework>(
     title: { type: String, required: true, trim: true },
     instructions: { type: String, default: "" },
     questionIds: { type: [Schema.Types.ObjectId], ref: "Question", default: [] },
+    writtenQuestions: { type: [String], default: [] },
     dueAt: { type: Date, required: true },
     assignedById: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
     assignedByRole: { type: String, enum: ["teacher", "admin"], default: "teacher" },

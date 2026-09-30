@@ -5,6 +5,23 @@ import { User } from "../models/User";
 import { Question, IQuestion } from "../models/Question";
 import { Homework } from "../models/Homework";
 import { HomeworkSubmission } from "../models/HomeworkSubmission";
+import { HomeworkUpload, IHomeworkUpload } from "../models/HomeworkUpload";
+import fs from "fs";
+import path from "path";
+
+export const HOMEWORK_UPLOAD_DIR = path.join(process.cwd(), "uploads", "homework");
+
+// Written questions: plain strings, trimmed, blanks dropped, at most 10.
+function cleanWritten(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  return v.map((x) => String(x ?? "").trim()).filter(Boolean).slice(0, 10);
+}
+
+type UploadLike = Pick<IHomeworkUpload, "originalName" | "mimeType" | "size" | "uploadedAt">;
+function uploadView(u: UploadLike | null | undefined) {
+  if (!u) return null;
+  return { originalName: u.originalName, mimeType: u.mimeType, size: u.size, uploadedAt: u.uploadedAt };
+}
 
 /**
  * Homework: a teacher hands out a set of questions with a date on it, and a
@@ -48,6 +65,7 @@ function teacherView(h: InstanceType<typeof Homework>) {
     instructions: h.instructions,
     questionIds: h.questionIds.map((id) => String(id)),
     questionCount: h.questionIds.length,
+    writtenQuestions: h.writtenQuestions || [],
     dueAt: h.dueAt,
     isPublished: h.isPublished,
     createdAt: h.createdAt,
@@ -69,7 +87,8 @@ export async function createHomework(req: AuthRequest, res: Response): Promise<v
     res.status(400).json({ error: "className, subject, title and dueAt are required" });
     return;
   }
-  if (questionIds.length === 0) {
+  const writtenQuestions = cleanWritten(b.writtenQuestions);
+  if (questionIds.length === 0 && writtenQuestions.length === 0) {
     res.status(400).json({ error: "A homework needs at least one question" });
     return;
   }
@@ -105,6 +124,7 @@ export async function createHomework(req: AuthRequest, res: Response): Promise<v
     title: String(b.title),
     instructions: typeof b.instructions === "string" ? b.instructions : "",
     questionIds,
+    writtenQuestions,
     dueAt,
     assignedById: req.user!.id,
     // requireRole("teacher") is the only way to reach this handler, and the
@@ -166,6 +186,7 @@ export async function updateHomework(req: AuthRequest, res: Response): Promise<v
   if (typeof b.instructions === "string") hw.instructions = b.instructions;
   if (typeof b.chapterSlug === "string") hw.chapterSlug = b.chapterSlug;
   if (b.isPublished !== undefined) hw.isPublished = Boolean(b.isPublished);
+  if (b.writtenQuestions !== undefined) hw.writtenQuestions = cleanWritten(b.writtenQuestions);
   if (b.dueAt !== undefined) {
     const d = new Date(String(b.dueAt));
     if (Number.isNaN(d.getTime())) {
@@ -221,6 +242,9 @@ export async function deleteHomework(req: AuthRequest, res: Response): Promise<v
   // The submissions go too. Leaving them behind would keep marks referring to
   // an assignment nobody can open.
   await HomeworkSubmission.deleteMany({ homeworkId: hw._id });
+  const files = await HomeworkUpload.find({ homeworkId: hw._id });
+  for (const f of files) fs.rm(path.join(HOMEWORK_UPLOAD_DIR, f.filename), { force: true }, () => {});
+  await HomeworkUpload.deleteMany({ homeworkId: hw._id });
   await hw.deleteOne();
   res.json({ deleted: true });
 }
@@ -249,19 +273,46 @@ export async function homeworkSubmissions(req: AuthRequest, res: Response): Prom
     )
     .sort({ submittedAt: -1 });
 
-  res.json({
-    homework: teacherView(hw),
-    total: subs.length,
-    submissions: subs.map((s) => ({
+  const ups = await HomeworkUpload.find({ homeworkId: hw._id }).populate<{
+    studentId: { _id: mongoose.Types.ObjectId; name: string; rollNumber?: string };
+  }>("studentId", "name rollNumber");
+  const upByStudent = new Map(ups.map((u) => [String(u.studentId?._id ?? u.studentId), u]));
+
+  const rows = subs.map((s) => {
+    const sid = String(s.studentId?._id ?? s.studentId);
+    const up = upByStudent.get(sid);
+    upByStudent.delete(sid);
+    return {
       id: String(s._id),
-      studentId: String(s.studentId?._id ?? s.studentId),
+      studentId: sid,
       studentName: s.studentId?.name ?? "",
       rollNumber: s.studentId?.rollNumber ?? "",
       score: s.score,
       total: s.total,
       status: s.status,
       submittedAt: s.submittedAt,
-    })),
+      upload: uploadView(up),
+    };
+  });
+  // Written answers handed in before (or without) the multiple-choice part.
+  for (const [sid, up] of upByStudent) {
+    rows.push({
+      id: String(up._id),
+      studentId: sid,
+      studentName: up.studentId?.name ?? "",
+      rollNumber: up.studentId?.rollNumber ?? "",
+      score: null as unknown as number,
+      total: hw.questionIds.length,
+      status: "uploaded" as never,
+      submittedAt: up.uploadedAt,
+      upload: uploadView(up),
+    });
+  }
+
+  res.json({
+    homework: teacherView(hw),
+    total: rows.length,
+    submissions: rows,
   });
 }
 
@@ -290,6 +341,11 @@ export async function assignedHomework(req: AuthRequest, res: Response): Promise
     studentId: user._id,
   });
   const subByHw = new Map(mine.map((s) => [String(s.homeworkId), s]));
+  const myUploads = await HomeworkUpload.find({
+    homeworkId: { $in: rows.map((r) => r._id) },
+    studentId: user._id,
+  });
+  const upByHw = new Map(myUploads.map((u) => [String(u.homeworkId), u]));
 
   const now = Date.now();
   res.json({
@@ -304,6 +360,8 @@ export async function assignedHomework(req: AuthRequest, res: Response): Promise
         subject: h.subject,
         chapterSlug: h.chapterSlug,
         questionCount: h.questionIds.length,
+        writtenCount: (h.writtenQuestions || []).length,
+        upload: uploadView(upByHw.get(String(h._id))),
         dueAt: h.dueAt,
         // "overdue" is a display state for work not yet done; once submitted
         // the status is what happened, which is submitted or late.
@@ -346,6 +404,7 @@ export async function getHomeworkForStudent(req: AuthRequest, res: Response): Pr
     .filter((q) => Boolean(q)) as typeof questions;
 
   const existing = await HomeworkSubmission.findOne({ homeworkId: hw._id, studentId: user._id });
+  const myUpload = await HomeworkUpload.findOne({ homeworkId: hw._id, studentId: user._id });
 
   // Once handed in, the student can look back at what they answered, with the
   // right answers and why, the same review the submit response carries. Before
@@ -381,6 +440,8 @@ export async function getHomeworkForStudent(req: AuthRequest, res: Response): Pr
       score: existing ? existing.score : null,
       total: existing ? existing.total : null,
       submittedAt: existing ? existing.submittedAt : null,
+      writtenQuestions: hw.writtenQuestions || [],
+      upload: uploadView(myUpload),
     },
     total: ordered.length,
     questions: ordered.map(publicQuestion),
@@ -483,4 +544,89 @@ export async function submitHomework(req: AuthRequest, res: Response): Promise<v
     },
     review,
   });
+}
+
+// ===========================================================================
+// WRITTEN ANSWERS (PDF / photo upload)
+// ===========================================================================
+
+// POST /api/homework/:id/upload   multipart field "file" (student)
+// One file per student per homework; uploading again replaces it.
+export async function uploadHomeworkAnswers(req: AuthRequest, res: Response): Promise<void> {
+  const file = req.file;
+  const discard = () => { if (file) fs.rm(file.path, { force: true }, () => {}); };
+  const user = await User.findById(req.user!.id);
+  if (!user || user.role !== "student") {
+    discard();
+    res.status(403).json({ error: "Only students can upload homework answers" });
+    return;
+  }
+  const { id } = req.params;
+  const hw = mongoose.isValidObjectId(id) ? await Homework.findById(id) : null;
+  if (!hw || !hw.isPublished || hw.className !== user.className) {
+    discard();
+    res.status(404).json({ error: "Homework not found" });
+    return;
+  }
+  if (!file) {
+    res.status(400).json({ error: "Choose a PDF or a photo of your answers" });
+    return;
+  }
+
+  const previous = await HomeworkUpload.findOne({ homeworkId: hw._id, studentId: user._id });
+  const saved = await HomeworkUpload.findOneAndUpdate(
+    { homeworkId: hw._id, studentId: user._id },
+    {
+      filename: file.filename,
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      size: file.size,
+      uploadedAt: new Date(),
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+  if (previous && previous.filename !== file.filename) {
+    fs.rm(path.join(HOMEWORK_UPLOAD_DIR, previous.filename), { force: true }, () => {});
+  }
+  res.status(201).json({ upload: uploadView(saved) });
+}
+
+// GET /api/homework/:id/upload/file?token=...[&student=<id>]
+// The student opens their own file; the teacher who set the homework opens any
+// student's by passing ?student=.
+export async function downloadHomeworkAnswers(req: AuthRequest, res: Response): Promise<void> {
+  const { id } = req.params;
+  const hw = mongoose.isValidObjectId(id) ? await Homework.findById(id) : null;
+  if (!hw) {
+    res.status(404).json({ error: "Homework not found" });
+    return;
+  }
+  let studentId = req.user!.id;
+  if (req.user!.role === "teacher") {
+    if (String(hw.assignedById) !== req.user!.id) {
+      res.status(403).json({ error: "That homework was assigned by someone else" });
+      return;
+    }
+    const q = String(req.query.student ?? "");
+    if (!mongoose.isValidObjectId(q)) {
+      res.status(400).json({ error: "Which student?" });
+      return;
+    }
+    studentId = q;
+  } else if (req.user!.role !== "student") {
+    res.status(403).json({ error: "Not allowed" });
+    return;
+  }
+
+  const up = await HomeworkUpload.findOne({ homeworkId: hw._id, studentId });
+  const filePath = up ? path.join(HOMEWORK_UPLOAD_DIR, up.filename) : "";
+  if (!up || !fs.existsSync(filePath)) {
+    res.status(404).json({ error: "No answers uploaded" });
+    return;
+  }
+  const safe = (up.originalName || "answers").replace(/[^a-zA-Z0-9.\-_ ]/g, "_");
+  res.setHeader("Content-Type", up.mimeType);
+  res.setHeader("Content-Disposition", `inline; filename="${safe}"`);
+  res.setHeader("Content-Length", String(fs.statSync(filePath).size));
+  fs.createReadStream(filePath).pipe(res);
 }

@@ -144,12 +144,12 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   if (err instanceof MulterError) {
     const message =
       err.code === "LIMIT_FILE_SIZE"
-        ? "Video is too large (max 500 MB)."
+        ? (/\/homework\//.test(req.originalUrl) ? "That file is too large (max 20 MB)." : "Video is too large (max 500 MB).")
         : err.message;
     res.status(400).json({ error: message });
     return;
   }
-  if (err instanceof Error && /only video files are allowed/i.test(err.message)) {
+  if (err instanceof Error && /only video files are allowed|only a pdf or a photo|only pdf or image/i.test(err.message)) {
     res.status(400).json({ error: err.message });
     return;
   }

@@ -379,3 +379,69 @@ describe("Homework, the teacher's roster", () => {
     expect(listed.body.total).toBe(0);
   });
 });
+
+describe("Homework, written answers uploaded as a PDF", () => {
+  const PDF = Buffer.from("%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n");
+
+  async function withWritten() {
+    const teacher = await tokenFor("teacher");
+    const student = await tokenFor("student");
+    const q1 = await makeQuestion(teacher);
+    const res = await request(app)
+      .post("/api/homework")
+      .set(auth(teacher))
+      .send({
+        className: "Class 7", subject: "Science", title: "Written set",
+        questionIds: [q1], dueAt: inDays(7),
+        writtenQuestions: ["Draw a circuit.", "  ", "Explain rusting."],
+      });
+    expect(res.status).toBe(201);
+    return { teacher, student, id: res.body.homework.id as string };
+  }
+
+  it("a teacher can set written questions, and the student sees them", async () => {
+    const { student, id } = await withWritten();
+    const res = await request(app).get(`/api/homework/${id}`).set(auth(student));
+    expect(res.body.homework.writtenQuestions).toEqual(["Draw a circuit.", "Explain rusting."]);
+    expect(res.body.homework.upload).toBeNull();
+    const list = await request(app).get("/api/homework/assigned").set(auth(student));
+    expect(list.body.homework[0].writtenCount).toBe(2);
+  });
+
+  it("a student uploads a PDF, can replace it and open it; the teacher can open it", async () => {
+    const { teacher, student, id } = await withWritten();
+    const up = await request(app).post(`/api/homework/${id}/upload`).set(auth(student))
+      .attach("file", PDF, { filename: "answers.pdf", contentType: "application/pdf" });
+    expect(up.status).toBe(201);
+    expect(up.body.upload.originalName).toBe("answers.pdf");
+
+    const again = await request(app).post(`/api/homework/${id}/upload`).set(auth(student))
+      .attach("file", PDF, { filename: "answers-v2.pdf", contentType: "application/pdf" });
+    expect(again.status).toBe(201);
+    const open = await request(app).get(`/api/homework/${id}`).set(auth(student));
+    expect(open.body.homework.upload.originalName).toBe("answers-v2.pdf");
+
+    const file = await request(app).get(`/api/homework/${id}/upload/file?token=${student}`);
+    expect(file.status).toBe(200);
+    expect(file.headers["content-type"]).toContain("application/pdf");
+
+    const roster = await request(app).get(`/api/homework/${id}/submissions`).set(auth(teacher));
+    expect(roster.body.submissions.length).toBe(1);
+    const sid = roster.body.submissions[0].studentId;
+    expect(roster.body.submissions[0].upload.originalName).toBe("answers-v2.pdf");
+    const tfile = await request(app).get(`/api/homework/${id}/upload/file?token=${teacher}&student=${sid}`);
+    expect(tfile.status).toBe(200);
+  });
+
+  it("refuses files that are not a PDF or a photo, and other teachers", async () => {
+    const { student, id } = await withWritten();
+    const bad = await request(app).post(`/api/homework/${id}/upload`).set(auth(student))
+      .attach("file", Buffer.from("hello"), { filename: "a.txt", contentType: "text/plain" });
+    expect(bad.status).toBe(400);
+    await request(app).post(`/api/homework/${id}/upload`).set(auth(student))
+      .attach("file", PDF, { filename: "answers.pdf", contentType: "application/pdf" });
+    const other = await tokenFor("teacher");
+    const res = await request(app).get(`/api/homework/${id}/upload/file?token=${other}&student=000000000000000000000000`);
+    expect(res.status).toBe(403);
+  });
+});

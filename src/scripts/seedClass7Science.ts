@@ -45,6 +45,70 @@ const BANK: Record<string, Seed[]> = JSON.parse(
 // chapter opens real work. The first three titles are the original samples and
 // are kept as they were, so an environment that already has them gets the
 // other nine added rather than three duplicates.
+// Questions answered on paper and uploaded as a PDF or photo, three per chapter.
+const WRITTEN: Record<string, string[]> = {
+  "electricity-circuits": [
+    "Draw a circuit with a cell, a switch and a bulb. Label each part and show the direction of the current.",
+    "Explain why a bulb does not glow when the switch is open.",
+    "List three conductors and three insulators you can find at home."
+  ],
+  "metals-nonmetals": [
+    "Compare metals and non-metals on any four properties in a table.",
+    "Why are cooking pans made of metal but their handles made of plastic or wood?",
+    "What is rusting? Write two ways to prevent it."
+  ],
+  "physical-chemical-changes": [
+    "Write two examples each of physical and chemical changes from your kitchen.",
+    "Explain why burning a candle shows both a physical and a chemical change.",
+    "Describe the lime water test and what it tells us."
+  ],
+  "adolescence": [
+    "List four physical changes that happen during adolescence.",
+    "Why is a balanced diet important for adolescents? Suggest a healthy one-day meal plan.",
+    "Write three ways to stay safe from harmful substances and online bullying."
+  ],
+  "heat-transfer": [
+    "Explain conduction, convection and radiation with one everyday example each.",
+    "Why do we feel a cool breeze near the sea during the day?",
+    "Why are dark clothes preferred in winter and light clothes in summer?"
+  ],
+  "time-and-motion": [
+    "Draw a simple pendulum and mark one oscillation. How would you measure its time period?",
+    "A bus covers 120 km in 3 hours. Find its speed and show your working.",
+    "What is the difference between uniform and non-uniform motion? Give one example of each."
+  ],
+  "evolving-science": [
+    "Describe the steps of the scientific method in your own words.",
+    "Give one example of a scientific idea that changed over time.",
+    "Plan a small experiment to test whether plants need sunlight to grow."
+  ],
+  "acidic-basic-neutral": [
+    "Name three natural indicators and the colour each shows with an acid and a base.",
+    "What is neutralisation? Give two examples from daily life.",
+    "Classify lemon juice, soap solution, vinegar, water and baking soda solution as acidic, basic or neutral."
+  ],
+  "life-processes-animals": [
+    "Draw and label the human digestive system.",
+    "Explain what happens to food in the mouth, stomach and small intestine.",
+    "How do fish and insects breathe? Compare them with humans."
+  ],
+  "life-processes-plants": [
+    "Write the word equation for photosynthesis and explain each part.",
+    "Describe an activity to show that a leaf makes starch.",
+    "How do water and minerals travel from the roots to the leaves?"
+  ],
+  "light-shadows": [
+    "Classify ten objects around you as transparent, translucent or opaque.",
+    "Draw a diagram to show how a shadow is formed.",
+    "Describe how a pinhole camera works and why its image is upside down."
+  ],
+  "earth-moon-sun": [
+    "Explain how the rotation of the Earth causes day and night.",
+    "Why do we see different phases of the Moon? Draw any four phases.",
+    "Explain how a solar eclipse happens with a labelled diagram."
+  ]
+};
+
 const HOMEWORK = [
   { chapterSlug: "electricity-circuits", title: "Electric circuits, practice set",
     instructions: "Draw the circuit in your notebook before you answer each question." },
@@ -70,7 +134,7 @@ const HOMEWORK = [
     instructions: "Think about how light travels before you answer." },
   { chapterSlug: "earth-moon-sun", title: "Earth, Moon and the Sun, chapter check",
     instructions: "Picture the Earth spinning and moving around the Sun as you answer." },
-].map((h) => ({ ...h, dueInDays: 30, take: 8 }));
+].map((h) => ({ ...h, dueInDays: 30, take: 8, written: WRITTEN[h.chapterSlug] || [] }));
 
 async function removeStale(): Promise<void> {
   const keep = new Set(
@@ -150,7 +214,15 @@ async function main() {
   let hwAdded = 0;
   for (const h of HOMEWORK) {
     const exists = await Homework.findOne({ className: CLASS, subject: SUBJECT, title: h.title });
-    if (exists) continue;
+    if (exists) {
+      // Homework created before written questions existed gets them now.
+      if (!exists.writtenQuestions || exists.writtenQuestions.length === 0) {
+        exists.writtenQuestions = h.written;
+        await exists.save();
+        console.log(`~ homework: ${h.title} (+${h.written.length} written questions)`);
+      }
+      continue;
+    }
 
     const qs = await Question.find({ className: CLASS, subject: SUBJECT, chapterSlug: h.chapterSlug })
       .limit(h.take)
@@ -164,6 +236,7 @@ async function main() {
       title: h.title,
       instructions: h.instructions,
       questionIds: qs.map((q) => q._id),
+      writtenQuestions: h.written,
       dueAt: new Date(Date.now() + h.dueInDays * 24 * 60 * 60 * 1000),
       assignedById: teacher._id,
       assignedByRole: "teacher",
