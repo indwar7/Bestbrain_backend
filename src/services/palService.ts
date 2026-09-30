@@ -1,5 +1,6 @@
 import path from "path";
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
+import { GoogleAuth } from "google-auth-library";
 import { env } from "../config/env";
 import { IChatMessage } from "../models/ChatSession";
 
@@ -59,7 +60,7 @@ const SAFETY_SETTINGS = [
 // we wait on Vertex, and how many times we retry transient failures.
 const MAX_HISTORY_TURNS = 20; // last N messages sent as context (keeps it fast)
 const REQUEST_TIMEOUT_MS = 30_000;
-const MAX_RETRIES = 2; // total attempts = 1 + MAX_RETRIES
+const MAX_RETRIES = 3; // total attempts = 1 + MAX_RETRIES
 
 // Reject prompts longer than this so a single request can't blow up token cost.
 export const MAX_MESSAGE_LENGTH = 4000;
@@ -121,8 +122,8 @@ const RAG_TOP_K = 5;
 // back on general knowledge. Only the retrieved passages (and the student's
 // own progress data above) are allowed sources.
 const RAG_STYLE =
-  "\n\nSTRICT TEXTBOOK MODE. You can retrieve passages from this student's uploaded " +
-  "NCERT textbook, and those passages are your ONLY source for any academic answer.\n" +
+  "\n\nSTRICT TEXTBOOK MODE. The TEXTBOOK PASSAGES below come from this student's uploaded " +
+  "NCERT textbook, and they are your ONLY source for any academic answer.\n" +
   "- Answer only with facts, definitions, examples and activities found in the retrieved " +
   "passages. Use the book's own terms, and name the chapter the answer comes from.\n" +
   "- Do NOT add facts, numbers, examples or explanations from general knowledge, even if " +
@@ -139,29 +140,88 @@ const RAG_STYLE =
 // not improvise around it.
 const RAG_TEMPERATURE = 0.2;
 
-// Retrieval setup for a student's class, or null when that class has no corpus
-// (see PAL_RAG_CORPORA in env.ts). The location is read off the corpus name,
-// projects/<p>/locations/<loc>/ragCorpora/<id>.
-function ragFor(className: string) {
+// Book passages for a question, fetched from the class's RAG Engine corpus
+// (PAL_RAG_CORPORA in env.ts), or null when the class has no corpus.
+//
+// Retrieval is a separate call rather than Gemini's built-in retrieval tool:
+// the combined grounded call kept failing with 429 Resource exhausted under
+// light load, while plain retrieval and plain generation each held up fine.
+// Doing it in two steps also lets each step retry on its own.
+let ragAuth: GoogleAuth | null = null;
+async function retrieveContexts(ragCorpus: string, query: string) {
+  if (!ragAuth) {
+    ragAuth = new GoogleAuth({
+      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
+      ...(env.googleCredentialsJson
+        ? { credentials: JSON.parse(env.googleCredentialsJson) }
+        : { keyFile: path.resolve(env.googleCredentialsFile) }),
+    });
+  }
+  // projects/<p>/locations/<loc>/ragCorpora/<id>
+  const [, project, , location] = ragCorpus.split("/");
+  const client = await ragAuth.getClient();
+  const res = await client.request<{
+    contexts?: { contexts?: { sourceDisplayName?: string; text?: string }[] };
+  }>({
+    url: `https://${location}-aiplatform.googleapis.com/v1/projects/${project}/locations/${location}:retrieveContexts`,
+    method: "POST",
+    timeout: 15_000,
+    data: {
+      vertexRagStore: { ragResources: [{ ragCorpus }] },
+      query: { text: query, ragRetrievalConfig: { topK: RAG_TOP_K } },
+    },
+  });
+  return res.data.contexts?.contexts ?? [];
+}
+
+async function bookPassages(className: string, query: string): Promise<string | null> {
   const ragCorpus = className ? env.palRagCorpora[className] : undefined;
   if (!ragCorpus) return null;
-  const location = /\/locations\/([^/]+)\//.exec(ragCorpus)?.[1] ?? env.vertexLocation;
-  return {
-    location,
-    tools: [
-      {
-        retrieval: {
-          vertexRagStore: {
-            ragResources: [{ ragCorpus }],
-            ragRetrievalConfig: { topK: RAG_TOP_K },
-          },
-        },
-      },
-    ],
-  };
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const contexts = await retrieveContexts(ragCorpus, query);
+      if (contexts.length === 0) return "(nothing in the textbook matches this question)";
+      return contexts
+        .map((c) => {
+          // "Ch07 - Heat Transfer in Nature.pdf" -> "Chapter 7: Heat Transfer in Nature"
+          const chapter = (c.sourceDisplayName ?? "")
+            .replace(/\.pdf$/i, "")
+            .replace(/^Ch0?(\d+) - /, "Chapter $1: ");
+          return `[${chapter}]\n${(c.text ?? "").trim()}`;
+        })
+        .join("\n\n");
+    } catch (err) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      const retryable = isRetryable(err) || (status !== undefined && (status === 429 || status >= 500));
+      if (attempt >= MAX_RETRIES || !retryable) throw err;
+      await sleep(backoffMs(status === 429 ? new Error("429") : err, attempt));
+    }
+  }
+}
+
+// The retrieval query: the new message, plus the student's previous question
+// so a follow-up like "and convection?" still finds the right chapter.
+function retrievalQuery(history: IChatMessage[], message: string): string {
+  const prev = [...history].reverse().find((m) => m.role === "user")?.content ?? "";
+  return prev ? `${prev}\n${message}` : message;
+}
+
+function withBook(base: string, book: string | null): string {
+  return book === null
+    ? base
+    : `${base}${RAG_STYLE}\n\nTEXTBOOK PASSAGES (for you only; the student can't see them, so ` +
+        `never say "passages", "provided" or "text"; say "your textbook" or name the chapter):\n${book}`;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Vertex's shared capacity answers 429 "Resource exhausted" in short bursts,
+// and a retry 400ms later usually lands in the same burst. Back off
+// exponentially with jitter for 429 (~1s, 2s, 4s), briefly for anything else.
+function backoffMs(err: unknown, attempt: number): number {
+  const is429 = /\b429\b|resource.?exhausted/i.test(String((err as Error)?.message ?? err));
+  return is429 ? 1000 * 2 ** attempt + Math.random() * 500 : 400 * (attempt + 1);
+}
 
 // Transient errors worth retrying: rate limits, overload, gateway/timeouts.
 function isRetryable(err: unknown): boolean {
@@ -203,9 +263,7 @@ export async function generatePalReply(
   // raise this.
   maxOutputTokens = 2048
 ): Promise<string> {
-  const rag = ragFor(className);
-  const systemInstruction = (rag: unknown) =>
-    buildSystemInstruction(palRole, context, voice) + (rag ? RAG_STYLE : "");
+  const base = buildSystemInstruction(palRole, context, voice);
 
   if (!env.vertexConfigured) {
     // Stub reply so the endpoint works end-to-end without credentials in dev.
@@ -224,17 +282,21 @@ export async function generatePalReply(
     { role: "user", parts: [{ text: message }] },
   ];
 
+  // Book-only classes: no fallback if this throws, PAL is unavailable rather
+  // than answering from general knowledge.
+  const book = await bookPassages(className, retrievalQuery(history, message));
+  const systemInstruction = withBook(base, book);
+
   let lastErr: unknown;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await withTimeout(
-        getClient(rag?.location).models.generateContent({
+        getClient().models.generateContent({
           model: env.vertexModel,
           contents,
           config: {
-            systemInstruction: systemInstruction(rag),
-            tools: rag?.tools,
-            temperature: rag ? RAG_TEMPERATURE : 0.7,
+            systemInstruction,
+            temperature: book !== null ? RAG_TEMPERATURE : 0.7,
             topP: 0.95,
             maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : maxOutputTokens,
             safetySettings: SAFETY_SETTINGS,
@@ -252,7 +314,7 @@ export async function generatePalReply(
     } catch (err) {
       lastErr = err;
       if (attempt < MAX_RETRIES && isRetryable(err)) {
-        await sleep(400 * (attempt + 1)); // 400ms, 800ms backoff
+        await sleep(backoffMs(err, attempt));
         continue;
       }
       break;
@@ -289,24 +351,32 @@ export async function* streamPalReply(
     { role: "user", parts: [{ text: message }] },
   ];
 
-  const open = (rag: ReturnType<typeof ragFor>) =>
-    getClient(rag?.location).models.generateContentStream({
+  const book = await bookPassages(className, retrievalQuery(history, message));
+  const open = () =>
+    getClient().models.generateContentStream({
       model: env.vertexModel,
       contents,
       config: {
-        systemInstruction: base + (rag ? RAG_STYLE : ""),
-        tools: rag?.tools,
-        temperature: rag ? RAG_TEMPERATURE : 0.7,
+        systemInstruction: withBook(base, book),
+        temperature: book !== null ? RAG_TEMPERATURE : 0.7,
         topP: 0.95,
         maxOutputTokens: voice ? VOICE_MAX_OUTPUT_TOKENS : 2048,
         safetySettings: SAFETY_SETTINGS,
       },
     });
 
-  // No fallback to a retrieval-free call: for a book-only class that would
-  // be exactly the general-knowledge answer book-only mode forbids, so a
-  // broken corpus surfaces as "PAL is unavailable" instead.
-  const stream = await open(ragFor(className));
+  // Retry opening the stream on transient errors (mostly 429s); safe because
+  // nothing has reached the client yet. Mid-stream failures are not retried.
+  let stream;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      stream = await open();
+      break;
+    } catch (err) {
+      if (attempt >= MAX_RETRIES || !isRetryable(err)) throw err;
+      await sleep(backoffMs(err, attempt));
+    }
+  }
 
   for await (const chunk of stream) {
     if (chunk.text) yield chunk.text;
