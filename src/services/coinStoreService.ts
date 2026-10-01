@@ -18,7 +18,7 @@ export function findPack(id: unknown): CoinPack | undefined {
 
 /** Buying needs the Razorpay API keys; without them the store says so. */
 export function storeConfigured(): boolean {
-  return !!(env.razorpayKeyId && env.razorpayKeySecret);
+  return env.coinStoreEnabled && !!(env.razorpayKeyId && env.razorpayKeySecret);
 }
 
 /** Opens a Razorpay order for one pack (Orders API, server to server). */

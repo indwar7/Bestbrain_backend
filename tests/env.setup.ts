@@ -24,3 +24,4 @@ process.env.WELCOME_COINS = "0";
 // Orders API is stubbed there.
 process.env.RAZORPAY_KEY_ID = "rzp_test_key";
 process.env.RAZORPAY_KEY_SECRET = "rzp_test_secret";
+process.env.COIN_STORE_ENABLED = "true";

@@ -22,9 +22,14 @@ export function getSubscriptionConfig(_req: Request, res: Response): void {
   res.json({
     subscriptionButtonId: env.razorpaySubscriptionButtonId,
     pricePaise: env.subscriptionPricePaise,
+    price: Math.round(env.subscriptionPricePaise / 100),
     currency: env.subscriptionCurrency,
+    // Plus pays its price back in coins every month (1 coin per rupee).
+    monthlyCoins: Math.round(env.subscriptionPricePaise / 100),
     // So the UI can warn instead of silently taking money it can never honour.
     webhookConfigured: env.razorpayWebhookConfigured,
+    // False until online payment is switched on: the plan is shown as coming soon.
+    checkoutEnabled: env.subscriptionCheckoutEnabled && env.razorpayWebhookConfigured,
   });
 }
 

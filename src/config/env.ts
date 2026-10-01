@@ -155,7 +155,16 @@ export const env = {
   // configured on the pl_TSKoRXpZy9rgRy Razorpay plan (verified against
   // Razorpay's own API, not assumed). Razorpay's plan is still the source of
   // truth for what is actually charged; this only drives the pricing copy.
-  subscriptionPricePaise: Number(process.env.SUBSCRIPTION_PRICE_PAISE ?? 90000),
+  // BestBrain Plus price. Set SUBSCRIPTION_PRICE_INR (e.g. 200) to change it;
+  // SUBSCRIPTION_PRICE_PAISE still works and wins if both are set.
+  subscriptionPricePaise: Number(
+    process.env.SUBSCRIPTION_PRICE_PAISE ??
+      Math.round(Number(process.env.SUBSCRIPTION_PRICE_INR ?? 200) * 100)
+  ),
+  // Online payment is off until the business switches it on: no plan checkout
+  // and no coin packs. COIN_STORE_ENABLED / SUBSCRIPTION_CHECKOUT_ENABLED = true.
+  coinStoreEnabled: process.env.COIN_STORE_ENABLED === "true",
+  subscriptionCheckoutEnabled: process.env.SUBSCRIPTION_CHECKOUT_ENABLED === "true",
   subscriptionCurrency: process.env.SUBSCRIPTION_CURRENCY ?? "INR",
   get razorpayWebhookConfigured(): boolean {
     return !!this.razorpayWebhookSecret;
