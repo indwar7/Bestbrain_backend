@@ -37,14 +37,20 @@ export const otpLimiter = rateLimit({
 });
 
 // Login/signup are unauthenticated and the prime target for credential
-// stuffing / brute-force. Cap per IP. Deliberately stricter than general
-// traffic but loose enough not to lock out a legitimate user who mistypes.
+// stuffing / brute-force. Only FAILED attempts count, and per IP + email: a
+// whole classroom on one school wifi (or a mobile network sharing one IP)
+// signing in at the start of a lesson must not lock itself out, while
+// guessing one account's password is still capped at 10 tries / 15 min.
 export const authLimiter = rateLimit({
   windowMs: 15 * 60_000, // 15 minutes
-  limit: 20, // 20 attempts / 15 min / IP
+  limit: 10, // 10 failed attempts / 15 min / IP + email
   standardHeaders: "draft-7",
   legacyHeaders: false,
   skip: () => isTest,
-  keyGenerator: ipKey,
+  skipSuccessfulRequests: true,
+  keyGenerator: (req) => {
+    const email = String((req.body as { email?: unknown } | undefined)?.email ?? "").trim().toLowerCase();
+    return ipKey(req) + "|" + email;
+  },
   message: { error: "Too many attempts, please try again later." },
 });
