@@ -4,6 +4,7 @@ import { env } from "../config/env";
 import { logger } from "../config/logger";
 import { User } from "../models/User";
 import { awardCoins } from "./coinService";
+import { fulfilOrder } from "./coinStoreService";
 import {
   Subscription,
   ISubscription,
@@ -110,6 +111,17 @@ export async function applyWebhookEvent(
   eventId: string
 ): Promise<ApplyResult> {
   const name = asString(event.event);
+  // Coin packs: the checkout callback normally credits them; the webhook is
+  // the backstop for a student who closed the tab before it returned.
+  if (name === "payment.captured" || name === "order.paid") {
+    const pay = (event.payload as { payment?: { entity?: Record<string, unknown> } } | undefined)?.payment?.entity;
+    const orderId = asString(pay?.order_id);
+    if (orderId) {
+      const r = await fulfilOrder(orderId, asString(pay?.id));
+      if (r.ok) return { handled: true, reason: `coins for ${orderId}` } as ApplyResult;
+    }
+    return { handled: false, reason: `ignored event ${name}` };
+  }
   if (!name.startsWith("subscription.")) {
     return { handled: false, reason: `ignored event ${name || "(unnamed)"}` };
   }

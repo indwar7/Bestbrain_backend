@@ -28,6 +28,42 @@ function hourKey(d: Date): string {
   return d.toISOString().slice(0, 13);
 }
 
+// ---- Arena coins -----------------------------------------------------------
+// A daily gift for showing up, coins for a right answer, and a bonus for the
+// top three of each hour. Every award is a ledger line with its own refId, so
+// none of them can be paid twice.
+export const ARENA_DAILY_COINS = 5;
+export const ARENA_CORRECT_COINS = 5;
+export const ARENA_TOP3_COINS = 20;
+
+// The day in India, so the daily gift resets at midnight IST, not UTC.
+function istDayKey(d: Date): string {
+  return new Date(d.getTime() + 330 * 60000).toISOString().slice(0, 10);
+}
+
+/**
+ * Pays the top three of every finished hour in the last two days that has not
+ * been paid yet. Runs whenever someone opens the Arena or its leaderboard, so
+ * there is no scheduler to keep alive; the ledger refId makes reruns no-ops.
+ */
+async function settleArenaHours(now: Date): Promise<void> {
+  const current = hourKey(now);
+  const keys = (await ChallengeAttempt.distinct("hourKey", {
+    createdAt: { $gte: new Date(now.getTime() - 48 * 3600 * 1000) },
+  })) as string[];
+  for (const key of keys) {
+    if (key >= current) continue;
+    const top = await ChallengeAttempt.find({ hourKey: key, correct: true })
+      .sort({ points: -1, msTaken: 1 })
+      .limit(3)
+      .select("userId")
+      .lean();
+    for (const t of top) {
+      await awardCoins(String(t.userId), ARENA_TOP3_COINS, "arena_top3", `arena-top:${key}:${t.userId}`);
+    }
+  }
+}
+
 // ===========================================================================
 // AUTHORING (teacher/admin)
 // ===========================================================================
@@ -325,6 +361,7 @@ export async function getChallenge(req: AuthRequest, res: Response): Promise<voi
     return;
   }
   const key = hourKey(new Date());
+  await settleArenaHours(new Date());
 
   // Already played this hour?
   const existing = await ChallengeAttempt.findOne({ userId: user._id, hourKey: key });
@@ -408,11 +445,22 @@ export async function answerChallenge(req: AuthRequest, res: Response): Promise<
       msTaken: ms,
       points,
     });
+    const now = new Date();
+    const daily = await awardCoins(String(user._id), ARENA_DAILY_COINS, "arena_daily", `arena-daily:${user._id}:${istDayKey(now)}`);
+    const right = correct
+      ? await awardCoins(String(user._id), ARENA_CORRECT_COINS, "arena_correct", `arena-correct:${attempt._id}`)
+      : null;
     res.json({
       correct,
       points: attempt.points,
       correctIndex: q.correctIndex,
       explanation: q.explanation || "",
+      coins: {
+        daily: daily.awarded ? ARENA_DAILY_COINS : 0,
+        correct: right && right.awarded ? ARENA_CORRECT_COINS : 0,
+        balance: (right || daily).balance,
+        top3Bonus: ARENA_TOP3_COINS,
+      },
     });
   } catch (err: unknown) {
     // Duplicate key = already played this hour.
@@ -427,6 +475,7 @@ export async function answerChallenge(req: AuthRequest, res: Response): Promise<
 // GET /api/assessments/challenge/leaderboard, top scorers for the current hour.
 export async function challengeLeaderboard(req: AuthRequest, res: Response): Promise<void> {
   const key = hourKey(new Date());
+  await settleArenaHours(new Date());
   const top = await ChallengeAttempt.find({ hourKey: key })
     .select("userName points msTaken correct")
     .sort({ points: -1, msTaken: 1 })

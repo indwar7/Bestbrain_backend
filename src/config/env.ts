@@ -33,8 +33,8 @@ export const env = {
   accessTtl: process.env.ACCESS_TTL ?? "12h",
   refreshTtl: process.env.REFRESH_TTL ?? "7d",
   // Coins every student starts with, so PAL chat, the live doubt session and
-  // lecture videos work from day one (PAL 3/question, a video 25). 0 turns it off.
-  welcomeCoins: Math.max(0, Math.floor(Number(process.env.WELCOME_COINS ?? 100)) || 0),
+  // lecture videos can be tried from day one; more come from the Arena or a coin pack. 0 turns it off.
+  welcomeCoins: Math.max(0, Math.floor(Number(process.env.WELCOME_COINS ?? 30)) || 0),
   refreshCookieName: "edulearn_refresh",
 
   // Optional LLM key for PAL chat (falls back to a stub reply if unset).

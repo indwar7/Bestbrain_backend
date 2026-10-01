@@ -19,3 +19,8 @@ process.env.RAZORPAY_WEBHOOK_SECRET = "test_webhook_secret";
 // Most coin suites assert exact balances from zero; the welcome bonus has its
 // own test that switches it on.
 process.env.WELCOME_COINS = "0";
+// Test Razorpay API keys, so the coin store is "switched on" and checkout
+// signatures can be computed in coinStore.test.ts. No real call is made: the
+// Orders API is stubbed there.
+process.env.RAZORPAY_KEY_ID = "rzp_test_key";
+process.env.RAZORPAY_KEY_SECRET = "rzp_test_secret";
