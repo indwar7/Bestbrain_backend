@@ -13,15 +13,11 @@ import {
   isEntitling,
 } from "../models/Subscription";
 
-// Coins are credited 1-for-1 with what was actually paid, in rupees - ₹900
-// becomes 900 coins. That number is a DISPLAY choice (see coinService.ts's
-// spendCoins usage in pal/videoController for the real internal cost basis:
-// 3 coins ≈ ₹1 of actual compute budget, so 900 coins is calibrated to cover
-// roughly ₹300 of real usage, not ₹900, see the coin-economy design notes).
-// Reading it off doc.amount rather than hard-coding 900 means a future price
-// change is a Razorpay-side config change, not a code change here.
-function coinsForPayment(amountPaise: number): number {
-  return Math.round(amountPaise / 100);
+// Each paid month of Plus credits a fixed allowance of AI usage as coins
+// (env.plusMonthlyCoins: ₹50 of usage = 150 coins by default), not the price
+// paid. Above the allowance a student buys or wins coins.
+function coinsForPayment(_amountPaise: number): number {
+  return env.plusMonthlyCoins;
 }
 
 /**

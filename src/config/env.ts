@@ -163,6 +163,14 @@ export const env = {
   ),
   // Online payment is off until the business switches it on: no plan checkout
   // and no coin packs. COIN_STORE_ENABLED / SUBSCRIPTION_CHECKOUT_ENABLED = true.
+  // Plus includes this much AI usage every month, paid out as coins at
+  // COINS_PER_RUPEE (3 coins ≈ ₹1 of real AI cost, the rate PAL is priced at).
+  // ₹50 → 150 coins. Above it a student buys or wins coins.
+  plusFreeUsageInr: Number(process.env.PLUS_FREE_USAGE_INR ?? 50),
+  coinsPerRupee: Number(process.env.COINS_PER_RUPEE ?? 3),
+  get plusMonthlyCoins(): number {
+    return Math.max(0, Math.round(this.plusFreeUsageInr * this.coinsPerRupee));
+  },
   coinStoreEnabled: process.env.COIN_STORE_ENABLED === "true",
   subscriptionCheckoutEnabled: process.env.SUBSCRIPTION_CHECKOUT_ENABLED === "true",
   subscriptionCurrency: process.env.SUBSCRIPTION_CURRENCY ?? "INR",

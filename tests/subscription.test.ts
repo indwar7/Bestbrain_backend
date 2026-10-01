@@ -99,7 +99,7 @@ describe("Subscription webhook, coin crediting", () => {
       "evt_credit_1"
     );
     expect(res.status).toBe(200);
-    expect(await balanceOf(token)).toBe(900);
+    expect(await balanceOf(token)).toBe(150); // ₹50 of AI usage a month
   });
 
   it("a retried webhook (same event id) does not double-credit", async () => {
@@ -108,7 +108,7 @@ describe("Subscription webhook, coin crediting", () => {
     const payload = activatedPayload({ subId: "sub_4", email, amountPaise: 90000, currentStart: start, currentEnd: start + 2592000 });
     await postWebhook(payload, "evt_retry");
     await postWebhook(payload, "evt_retry"); // Razorpay retries carry the SAME event id
-    expect(await balanceOf(token)).toBe(900);
+    expect(await balanceOf(token)).toBe(150); // ₹50 of AI usage a month
   });
 
   it("a new billing cycle (current_start advances) credits coins again", async () => {
@@ -118,7 +118,7 @@ describe("Subscription webhook, coin crediting", () => {
       activatedPayload({ subId: "sub_5", email, amountPaise: 90000, currentStart: cycle1Start, currentEnd: cycle1Start + 2592000 }),
       "evt_cycle1"
     );
-    expect(await balanceOf(token)).toBe(900);
+    expect(await balanceOf(token)).toBe(150); // ₹50 of AI usage a month
 
     // next month's renewal, current_start has moved on
     const cycle2Start = cycle1Start + 2592000;
@@ -132,7 +132,7 @@ describe("Subscription webhook, coin crediting", () => {
       }),
       "evt_cycle2"
     );
-    expect(await balanceOf(token)).toBe(1800);
+    expect(await balanceOf(token)).toBe(300); // two months of the allowance
   });
 
   it("does not credit coins for a subscription that is only 'created', not paid", async () => {
@@ -177,6 +177,6 @@ describe("Subscription webhook, coin crediting", () => {
     const subRes = await request(app).get("/api/subscription/me").set(auth(token));
     expect(subRes.status).toBe(200);
     expect(subRes.body.active).toBe(true);
-    expect(await balanceOf(token)).toBe(900);
+    expect(await balanceOf(token)).toBe(150); // ₹50 of AI usage a month
   });
 });

@@ -24,8 +24,9 @@ export function getSubscriptionConfig(_req: Request, res: Response): void {
     pricePaise: env.subscriptionPricePaise,
     price: Math.round(env.subscriptionPricePaise / 100),
     currency: env.subscriptionCurrency,
-    // Plus pays its price back in coins every month (1 coin per rupee).
-    monthlyCoins: Math.round(env.subscriptionPricePaise / 100),
+    // The AI usage Plus includes every month, and the same in coins.
+    freeUsageInr: env.plusFreeUsageInr,
+    monthlyCoins: env.plusMonthlyCoins,
     // So the UI can warn instead of silently taking money it can never honour.
     webhookConfigured: env.razorpayWebhookConfigured,
     // False until online payment is switched on: the plan is shown as coming soon.
