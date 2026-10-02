@@ -479,6 +479,246 @@
       "correctIndex": 0,
       "explanation": "A candle burning down happens only once, while the other events repeat regularly.",
       "difficulty": "hard"
+    },
+    {
+      "text": "In science, what is an observation?",
+      "options": [
+        "A guess about what might happen next",
+        "A rule that can never be changed",
+        "Information we collect using our senses or instruments",
+        "A story passed down by elders"
+      ],
+      "correctIndex": 2,
+      "explanation": "An observation is what we notice by seeing, hearing, touching, smelling or measuring, often with the help of instruments.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is a change that can be reversed?",
+      "options": [
+        "Melting of wax",
+        "Cooking of rice",
+        "Burning of wood",
+        "Ripening of a mango"
+      ],
+      "correctIndex": 0,
+      "explanation": "Melted wax becomes solid again when it cools, so this change can be reversed.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Long ago, many people believed that the Sun moved around the Earth. Why did this idea change?",
+      "options": [
+        "A king ordered people to believe something new",
+        "People got tired of the old idea",
+        "The Sun changed its path in the sky",
+        "New observations and evidence, gathered with better instruments like telescopes, supported a different idea"
+      ],
+      "correctIndex": 3,
+      "explanation": "Scientific ideas change when new evidence shows a better explanation, and telescopes helped gather such evidence.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When can we trust the result of an experiment more?",
+      "options": [
+        "When only one person has done it once",
+        "When other people in different places repeat it and get the same result",
+        "When the result matches what we wanted",
+        "When the experiment was done very quickly"
+      ],
+      "correctIndex": 1,
+      "explanation": "If many people can repeat an experiment and get the same result, the result is more reliable.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which instrument is used to measure how hot or cold something is?",
+      "options": [
+        "Measuring tape",
+        "Weighing balance",
+        "Thermometer",
+        "Stopwatch"
+      ],
+      "correctIndex": 2,
+      "explanation": "A thermometer measures temperature, which tells us how hot or cold something is.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why is it helpful to write the results of an experiment in a table?",
+      "options": [
+        "It makes it easier to compare results and spot patterns",
+        "It makes the experiment finish faster",
+        "It changes the results to the correct ones",
+        "It means we do not need to observe carefully"
+      ],
+      "correctIndex": 0,
+      "explanation": "A table arranges results neatly so we can compare them and notice patterns easily.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In science, finding the answer to one question usually leads to what?",
+      "options": [
+        "The end of all learning on that topic",
+        "New questions to explore",
+        "A rule that no one can test again",
+        "Forgetting the earlier question"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each answer opens up new questions, which is why science keeps growing.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Plants kept near a window are seen bending towards it. Which of these is a question that can be tested by an experiment?",
+      "options": [
+        "Are plants happier near windows?",
+        "Do plants like the view outside?",
+        "Is the window the most beautiful part of the room?",
+        "Do plants grow towards the side from which light comes?"
+      ],
+      "correctIndex": 3,
+      "explanation": "This question can be tested by changing the direction of light and observing how the plants grow.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which statement best shows how science and technology are linked?",
+      "options": [
+        "Technology has nothing to do with science",
+        "Science only uses old tools and never new ones",
+        "Scientific knowledge helps build new tools, and new tools help scientists discover more",
+        "Technology always comes before any science is known"
+      ],
+      "correctIndex": 2,
+      "explanation": "Science and technology help each other: knowledge leads to tools, and tools lead to new knowledge.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is a conclusion and NOT just an observation?",
+      "options": [
+        "Seeds need water to sprout, because only the seeds in wet cotton sprouted",
+        "The seeds in wet cotton sprouted in three days",
+        "The seeds in dry cotton did not sprout",
+        "The sprouts were white and thin"
+      ],
+      "correctIndex": 0,
+      "explanation": "A conclusion explains the observations; the other options only describe what was seen.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Tara's mother adds a spoon of curd to warm milk at night. By morning, the milk has turned into curd. What kind of change is this?",
+      "options": [
+        "A change that can be reversed by heating",
+        "A change that cannot be reversed, as a new substance is formed",
+        "Not a change at all",
+        "A change that can be reversed by cooling"
+      ],
+      "correctIndex": 1,
+      "explanation": "Curd is a new substance and cannot be turned back into milk, so this change cannot be reversed.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "After a morning shower in Jaipur, Vikram sees puddles on the road. By afternoon, the puddles have disappeared. Where did the water go?",
+      "options": [
+        "It turned into soil",
+        "It was destroyed completely",
+        "It was absorbed by the Sun",
+        "It changed into water vapour and went into the air"
+      ],
+      "correctIndex": 3,
+      "explanation": "The heat of the Sun made the water evaporate into the air as water vapour.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Neha plants bean seeds in three similar pots. She gives each pot a different amount of water every day but keeps the soil, sunlight and seeds the same. After two weeks she measures the plants. What is she trying to find out?",
+      "options": [
+        "How sunlight affects plant growth",
+        "How the type of soil affects plant growth",
+        "How the amount of water affects plant growth",
+        "How the size of the pot affects plant growth"
+      ],
+      "correctIndex": 2,
+      "explanation": "Water is the only thing she changes, so she is studying its effect on plant growth.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Farhan's grandfather in Lucknow says that a crow cawing on the roof means guests will come that day. How can Farhan check this belief like a scientist?",
+      "options": [
+        "Keep a record for many days of when the crow caws and when guests come, and see if the two really go together",
+        "Believe it because an elder said it",
+        "Ask the crow to caw and wait for guests",
+        "Ignore it without checking"
+      ],
+      "correctIndex": 0,
+      "explanation": "Collecting evidence over many days lets Farhan test whether the belief is actually true.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "On a sunny day in Kochi, Anjali measures the length of her shadow at 9 am, 12 noon and 3 pm. What pattern will she most likely find?",
+      "options": [
+        "The shadow is longest at 12 noon",
+        "The shadow is shortest around 12 noon and longer in the morning and afternoon",
+        "The shadow is the same length at all three times",
+        "There is no shadow at 9 am"
+      ],
+      "correctIndex": 1,
+      "explanation": "Around noon the Sun is high in the sky, so shadows are short; in the morning and afternoon the Sun is lower, so shadows are longer.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Scientific knowledge can change over time. Reason (R): Scientists accept new ideas when there is strong evidence to support them.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Knowledge changes because scientists update their ideas when new evidence appears, so R explains A.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): Seeds kept on dry cotton do not sprout. Reason (R): Seeds need air to sprout.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both statements are true, but seeds on dry cotton fail to sprout because they lack water, not air.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Curiosity is important for learning science. Reason (R): Scientists never make mistakes.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "Curiosity drives us to ask questions, but scientists do make mistakes and learn from them, so R is false.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a good way to collect information in science?",
+      "options": [
+        "Observing carefully",
+        "Measuring with proper instruments",
+        "Doing an experiment",
+        "Guessing an answer without checking it"
+      ],
+      "correctIndex": 3,
+      "explanation": "Guessing without checking gives no evidence, so it is not a scientific way to collect information.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a step a scientist usually follows when testing an idea?",
+      "options": [
+        "Making careful observations",
+        "Doing an experiment",
+        "Accepting the idea without any test",
+        "Recording the results"
+      ],
+      "correctIndex": 2,
+      "explanation": "Scientists test an idea with observations and experiments before accepting it; accepting it without a test is not part of the scientific method.",
+      "difficulty": "easy"
     }
   ],
   "acidic-basic-neutral": [
@@ -960,6 +1200,246 @@
       ],
       "correctIndex": 0,
       "explanation": "Dissolving sugar in tea involves no acid reacting with a base, while the others are neutralisation.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What colour does china rose indicator turn in an acidic solution?",
+      "options": [
+        "Green",
+        "Dark pink",
+        "Yellow",
+        "Blue"
+      ],
+      "correctIndex": 1,
+      "explanation": "China rose indicator turns acidic solutions dark pink (magenta).",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The word 'acid' comes from a Latin word 'acere'. What does it mean?",
+      "options": [
+        "Sour",
+        "Sweet",
+        "Bitter",
+        "Salty"
+      ],
+      "correctIndex": 0,
+      "explanation": "Acids taste sour, and 'acere' means sour.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What happens when blue litmus paper is dipped in soap solution?",
+      "options": [
+        "It turns red",
+        "It turns yellow",
+        "It stays blue",
+        "It turns green"
+      ],
+      "correctIndex": 2,
+      "explanation": "Soap solution is basic, and bases do not change the colour of blue litmus.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Tamarind (imli) tastes sour because it contains which acid?",
+      "options": [
+        "Lactic acid",
+        "Formic acid",
+        "Acetic acid",
+        "Tartaric acid"
+      ],
+      "correctIndex": 3,
+      "explanation": "Tamarind contains tartaric acid, which gives it its sour taste.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Amla is rich in an acid that is also known as vitamin C. What is it called?",
+      "options": [
+        "Citric acid",
+        "Ascorbic acid",
+        "Oxalic acid",
+        "Hydrochloric acid"
+      ],
+      "correctIndex": 1,
+      "explanation": "Ascorbic acid is vitamin C, found in amla and citrus fruits.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Milk of magnesia, taken for acidity, contains which base?",
+      "options": [
+        "Magnesium hydroxide",
+        "Calcium hydroxide",
+        "Sodium hydroxide",
+        "Ammonium hydroxide"
+      ],
+      "correctIndex": 0,
+      "explanation": "Milk of magnesia contains magnesium hydroxide, a mild base that neutralises extra stomach acid.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Our stomach produces an acid that helps digest food. Which acid is it?",
+      "options": [
+        "Citric acid",
+        "Acetic acid",
+        "Hydrochloric acid",
+        "Lactic acid"
+      ],
+      "correctIndex": 2,
+      "explanation": "The stomach produces hydrochloric acid, which helps in digestion.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "An acid is mixed with a base in just the right amounts so that the solution is completely neutralised. What will happen when this solution is tested with red and blue litmus papers?",
+      "options": [
+        "Red litmus turns blue",
+        "Blue litmus turns red",
+        "Both papers change colour",
+        "Neither paper changes colour"
+      ],
+      "correctIndex": 3,
+      "explanation": "A fully neutralised solution is neutral, so it does not change the colour of either litmus paper.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these is a property of most bases?",
+      "options": [
+        "They taste sour",
+        "They taste bitter",
+        "They turn blue litmus red",
+        "They turn china rose indicator dark pink"
+      ],
+      "correctIndex": 1,
+      "explanation": "Bases generally taste bitter, while acids taste sour.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Solution X turns blue litmus red, and solution Y turns red litmus blue. X and Y are mixed in exactly the right amounts. What will the mixture do to turmeric paper?",
+      "options": [
+        "Leave it yellow",
+        "Turn it red",
+        "Turn it blue",
+        "Turn it green"
+      ],
+      "correctIndex": 0,
+      "explanation": "X is an acid and Y is a base, so the mixture becomes neutral, and neutral solutions leave turmeric yellow.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Kavya dips a strip of blue litmus paper in fresh orange juice, and the strip turns red. What is the nature of orange juice?",
+      "options": [
+        "Basic",
+        "Neutral",
+        "Acidic",
+        "Both basic and neutral"
+      ],
+      "correctIndex": 2,
+      "explanation": "Acids turn blue litmus red, so orange juice is acidic.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Ishita's dentist tells her that after she eats sweets, bacteria in her mouth make acids that harm her teeth. He advises her to brush with toothpaste. How does toothpaste help?",
+      "options": [
+        "It adds more acid to the mouth",
+        "It is basic and neutralises the acid in the mouth",
+        "It is neutral and has no effect on the acid",
+        "It makes the sweets taste better"
+      ],
+      "correctIndex": 1,
+      "explanation": "Toothpaste is basic, so it neutralises the acids that can cause tooth decay.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Zoya makes an indicator by soaking china rose petals in warm water. She adds a few drops of it to lime water. What colour will she see?",
+      "options": [
+        "Dark pink",
+        "Yellow",
+        "Red",
+        "Green"
+      ],
+      "correctIndex": 3,
+      "explanation": "Lime water is basic, and china rose indicator turns green in a basic solution.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Rahul has three unlabelled bottles. One has an acid, one has a base and one has water. He has only turmeric paper. Which plan will help him identify all three?",
+      "options": [
+        "Find the base first because it turns turmeric red, then drop the other two liquids on the red spot; the one that turns it yellow again is the acid",
+        "Smell each liquid and decide",
+        "Taste a drop of each liquid",
+        "Put all three on turmeric paper; the acid turns it blue"
+      ],
+      "correctIndex": 0,
+      "explanation": "Turmeric turns red only with a base; an acid then neutralises the base and brings back the yellow colour, while water does not.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "In a lab in Pune, Deepa adds china rose indicator to sodium hydroxide solution, and it turns green. She then keeps adding dilute hydrochloric acid drop by drop, a little more each time. What will she finally see once she has added more than enough acid?",
+      "options": [
+        "The solution stays green",
+        "The solution turns yellow",
+        "The solution turns dark pink",
+        "The solution turns blue"
+      ],
+      "correctIndex": 2,
+      "explanation": "Once all the base is neutralised and extra acid is present, the solution becomes acidic, so china rose turns dark pink.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Baking soda solution turns red litmus paper blue. Reason (R): Baking soda is basic in nature.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Bases turn red litmus blue, and baking soda is a base, so R explains A.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): The test tube becomes warm when an acid is neutralised by a base. Reason (R): Heat is given out in a neutralisation reaction.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Neutralisation gives out heat, and that heat is what makes the test tube warm, so R explains A.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Turmeric paper can be used to tell an acid apart from a neutral solution. Reason (R): Turmeric stays yellow in acidic solutions.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Turmeric stays yellow in both acidic and neutral solutions, so it cannot tell them apart; A is false and R is true.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a base?",
+      "options": [
+        "Soap solution",
+        "Vinegar",
+        "Lime water",
+        "Baking soda solution"
+      ],
+      "correctIndex": 1,
+      "explanation": "Vinegar contains acetic acid, so it is acidic, not basic.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a correct pair of a substance and the acid it contains?",
+      "options": [
+        "Lemon and citric acid",
+        "Curd and lactic acid",
+        "Tomato and acetic acid",
+        "Ant sting and formic acid"
+      ],
+      "correctIndex": 2,
+      "explanation": "Tomato contains oxalic acid; acetic acid is found in vinegar.",
       "difficulty": "medium"
     }
   ],
@@ -1443,6 +1923,246 @@
       "correctIndex": 3,
       "explanation": "The switch being ON closes the circuit, so it cannot be a reason for the torch not glowing.",
       "difficulty": "hard"
+    },
+    {
+      "text": "What usually supplies electricity to a wristwatch?",
+      "options": [
+        "A small button cell",
+        "A wall socket",
+        "A solar panel on the roof",
+        "A large car battery"
+      ],
+      "correctIndex": 0,
+      "explanation": "Wristwatches run on tiny button cells that fit inside them.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why do we use symbols to draw electric circuits?",
+      "options": [
+        "Because real parts cannot be drawn at all",
+        "To make the circuit work better",
+        "Because symbols are easy and quick to draw and are understood everywhere",
+        "To hide what the parts are"
+      ],
+      "correctIndex": 2,
+      "explanation": "Symbols are simple to draw and are the same everywhere, so anyone can read the circuit diagram.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The filament of an incandescent lamp is usually made of which metal?",
+      "options": [
+        "Copper",
+        "Tungsten",
+        "Aluminium",
+        "Iron"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tungsten is used because it can get very hot and glow without melting.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A cell is marked '1.5 V'. What does this marking tell us?",
+      "options": [
+        "The cell is 1.5 cm long",
+        "The cell will last 1.5 years",
+        "The cell weighs 1.5 grams",
+        "The voltage of the cell, which tells how strongly it can push electric current"
+      ],
+      "correctIndex": 3,
+      "explanation": "V stands for volt, the unit of voltage, which shows the electrical push a cell provides.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which source of electricity is safe to use for circuit activities in a school lab?",
+      "options": [
+        "Electric cells of 1.5 V",
+        "The wall socket in the classroom",
+        "The main switchboard of the school",
+        "An overhead power line"
+      ],
+      "correctIndex": 0,
+      "explanation": "Low-voltage cells are safe, while wall sockets and power lines carry dangerous electricity.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A lamp is glowing in a circuit with one cell. Another cell is added correctly to make a battery. What will most likely happen to the lamp?",
+      "options": [
+        "It will stop glowing",
+        "It will glow less brightly",
+        "It will glow more brightly",
+        "Its colour will change to blue"
+      ],
+      "correctIndex": 2,
+      "explanation": "Two cells together give a bigger electrical push, so the lamp glows more brightly.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In a working circuit, one copper connecting wire is replaced by a cotton thread. What happens to the lamp?",
+      "options": [
+        "It glows more brightly",
+        "It stops glowing",
+        "It glows the same",
+        "It starts blinking"
+      ],
+      "correctIndex": 1,
+      "explanation": "Cotton thread is an insulator, so it breaks the path of the current and the lamp goes off.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why should we never join the two terminals of a cell directly with just a wire, without a lamp or any other part?",
+      "options": [
+        "The cell will start charging itself",
+        "The wire will turn into an insulator",
+        "The cell will give more light",
+        "The cell gets used up very quickly and the wire can become hot"
+      ],
+      "correctIndex": 3,
+      "explanation": "Without any component, a large current flows, which drains the cell fast and heats the wire.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A circuit has a cell, a closed switch and a lamp. Which statement correctly describes the path of the electric current?",
+      "options": [
+        "It flows from the positive terminal through the switch and the lamp and back to the negative terminal",
+        "It flows from the lamp into the cell and stays there",
+        "It flows only between the switch and the lamp",
+        "It flows from both terminals and meets at the lamp"
+      ],
+      "correctIndex": 0,
+      "explanation": "Current flows in a complete loop from the positive terminal, through the parts, back to the negative terminal.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Three cells of 1.5 V each are joined correctly to make a battery. What is the voltage of this battery?",
+      "options": [
+        "1.5 V",
+        "3 V",
+        "4.5 V",
+        "6 V"
+      ],
+      "correctIndex": 2,
+      "explanation": "When cells are joined positive to negative, their voltages add up: 1.5 + 1.5 + 1.5 = 4.5 V.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Pooja's doorbell rings only while a visitor keeps pressing the button. What is the job of the button in the bell circuit?",
+      "options": [
+        "It stores electricity",
+        "It works as a switch that closes the circuit",
+        "It is the source of electricity",
+        "It makes the sound"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pressing the button completes the circuit, just like turning a switch ON.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Aman in Kanpur finds that his torch flickers. When he opens it, he sees that the metal spring touching the cells is covered with rust. What is the most likely reason for the flickering?",
+      "options": [
+        "The cells are too new",
+        "The torch has too many cells",
+        "The bulb is too bright",
+        "The rust does not let current pass easily, so the contact is poor"
+      ],
+      "correctIndex": 3,
+      "explanation": "Rust is a poor conductor, so it weakens the contact and the current keeps breaking.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Nisha draws a circuit diagram with a cell, a lamp and a switch in the OFF (open) position. Her friend says the lamp in this circuit would be glowing. Is he right?",
+      "options": [
+        "No, because an open switch breaks the path and no current flows",
+        "Yes, because the cell is present",
+        "Yes, because the lamp is connected to wires",
+        "No, because circuit diagrams never show lamps"
+      ],
+      "correctIndex": 0,
+      "explanation": "An open switch breaks the circuit, so current cannot flow and the lamp does not glow.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Karan makes a circuit with a cell, a lamp and a switch. To his surprise, the lamp keeps glowing even when he turns the switch OFF. What is the most likely mistake?",
+      "options": [
+        "The cell is fully used up",
+        "The lamp is fused",
+        "The switch is not part of the loop, so the lamp is connected to the cell without passing through the switch",
+        "The wires are covered with plastic"
+      ],
+      "correctIndex": 2,
+      "explanation": "If the switch is not in the path of the current, opening it does not break the circuit.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Farah in Chennai touches the ends of her conduction tester to the painted outside of a soft-drink can, and the lamp does not glow. When she scratches off a little paint and touches the shiny metal, the lamp glows. Why?",
+      "options": [
+        "Scratching the can produces electricity",
+        "The paint is an insulator, while the aluminium under it is a conductor",
+        "The can is made of plastic inside",
+        "The lamp needed time to warm up"
+      ],
+      "correctIndex": 1,
+      "explanation": "The paint layer blocks the current, but the metal underneath lets it pass.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): A lamp glows only when the circuit is closed. Reason (R): In a closed circuit, the current gets a complete path to flow.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Current flows only through a complete path, which is why the lamp glows only in a closed circuit.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): Tungsten is used to make the filament of incandescent bulbs. Reason (R): Tungsten has a very high melting point, so it does not melt when the filament glows white hot.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "A glowing filament gets extremely hot, and tungsten is chosen because it does not melt at that temperature, so R explains A.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Dry wood is a good conductor of electricity. Reason (R): Dry wood does not allow electric current to pass through it easily.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Dry wood is an insulator, so A is false, while R correctly describes it.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a conductor of electricity?",
+      "options": [
+        "Aluminium foil",
+        "Iron nail",
+        "Glass bangle",
+        "Copper wire"
+      ],
+      "correctIndex": 2,
+      "explanation": "Glass does not let current pass, so it is an insulator; the others are metals that conduct.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a safe practice with electricity?",
+      "options": [
+        "Pulling a plug out of the socket by tugging its wire",
+        "Switching off the main supply before a repair",
+        "Keeping electrical appliances away from water",
+        "Using cells for school experiments"
+      ],
+      "correctIndex": 0,
+      "explanation": "Tugging the wire can damage its covering and expose live wires, causing shocks; the plug should be held instead.",
+      "difficulty": "medium"
     }
   ],
   "metals-nonmetals": [
@@ -1925,6 +2645,246 @@
       "correctIndex": 0,
       "explanation": "Sulfur is a poor conductor of electricity, so it is not used to make electric wires.",
       "difficulty": "medium"
+    },
+    {
+      "text": "Which of these non-metals is a gas at room temperature?",
+      "options": [
+        "Carbon",
+        "Nitrogen",
+        "Sulfur",
+        "Iodine"
+      ],
+      "correctIndex": 1,
+      "explanation": "Nitrogen is a gas at room temperature, while carbon, sulfur and iodine are solids.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Coal and charcoal are mostly made of which non-metal?",
+      "options": [
+        "Sulfur",
+        "Carbon",
+        "Phosphorus",
+        "Oxygen"
+      ],
+      "correctIndex": 1,
+      "explanation": "Coal and charcoal are made mostly of carbon, which is why they burn to give carbon dioxide.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A solution of magnesium oxide in water is tested with red litmus paper. What will happen?",
+      "options": [
+        "The red litmus turns green",
+        "The red litmus stays red",
+        "The red litmus turns blue",
+        "The red litmus turns colourless"
+      ],
+      "correctIndex": 2,
+      "explanation": "Magnesium oxide is a basic oxide, and bases turn red litmus blue.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these elements is a metal?",
+      "options": [
+        "Iodine",
+        "Sulfur",
+        "Carbon",
+        "Zinc"
+      ],
+      "correctIndex": 3,
+      "explanation": "Zinc is a metal. Sulfur, carbon and iodine are non-metals.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Galvanisation is a method used to protect iron from rusting. In galvanisation, iron is coated with a layer of which metal?",
+      "options": [
+        "Zinc",
+        "Copper",
+        "Gold",
+        "Sodium"
+      ],
+      "correctIndex": 0,
+      "explanation": "In galvanisation, a thin layer of zinc is put on iron so that air and water cannot reach the iron.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When the gas formed by burning sulfur is dissolved in water, which substance is formed?",
+      "options": [
+        "Magnesium hydroxide",
+        "Sulfurous acid",
+        "Lime water",
+        "Common salt"
+      ],
+      "correctIndex": 1,
+      "explanation": "Sulfur dioxide dissolves in water to form sulfurous acid, which is acidic in nature.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "The rough brown strip on the side of a matchbox contains a form of which non-metal that helps the matchstick catch fire?",
+      "options": [
+        "Iodine",
+        "Nitrogen",
+        "Phosphorus",
+        "Chlorine"
+      ],
+      "correctIndex": 2,
+      "explanation": "The striking surface of a matchbox contains red phosphorus, which helps start the flame when the stick is rubbed on it.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Silver anklets and silver coins slowly turn black when left in the open for a long time. Why does this happen?",
+      "options": [
+        "Silver changes into a non-metal over time",
+        "Silver absorbs dust and turns black from inside",
+        "Silver melts slightly in sunlight",
+        "Silver reacts with some gases present in the air and forms a black layer"
+      ],
+      "correctIndex": 3,
+      "explanation": "Silver reacts slowly with substances in air (such as sulfur-containing gases) to form a black coating. This is a type of corrosion.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these statements about oxides is correct?",
+      "options": [
+        "Metal oxides are basic and turn red litmus blue, while non-metal oxides are acidic and turn blue litmus red",
+        "Metal oxides are acidic and turn blue litmus red, while non-metal oxides are basic",
+        "Both metal oxides and non-metal oxides are always neutral",
+        "Metal oxides turn blue litmus red, while non-metal oxides do not change litmus at all"
+      ],
+      "correctIndex": 0,
+      "explanation": "Metals form basic oxides that turn red litmus blue, and non-metals form acidic oxides that turn blue litmus red.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "An iron nail is weighed, then left in moist air until it rusts completely on its surface. If it is weighed again (without scraping off the rust), what will be seen?",
+      "options": [
+        "Its mass has decreased, because rust is lighter than iron",
+        "Its mass has increased, because iron has combined with oxygen and water from the air",
+        "Its mass stays exactly the same, because nothing is added",
+        "Its mass becomes zero, because rust turns into gas"
+      ],
+      "correctIndex": 1,
+      "explanation": "During rusting, iron joins with oxygen and water from the air, so the rusted nail has more mass than before.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Priya noticed that the chain of her bicycle had started to rust. Her father cleaned it and applied a few drops of oil on it. How does the oil help?",
+      "options": [
+        "It makes the chain heavier so it cannot rust",
+        "It turns the iron into gold",
+        "It forms a layer that keeps air and moisture away from the iron",
+        "It adds oxygen to the iron to make it strong"
+      ],
+      "correctIndex": 2,
+      "explanation": "Rusting needs both air and moisture. Oil forms a thin layer that stops them from reaching the iron.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Aman burnt a magnesium ribbon and collected the white ash. He mixed the ash in a little water and dipped a strip of turmeric paper in it. The turmeric paper turned red. What does this tell him?",
+      "options": [
+        "The turmeric paper was already spoilt",
+        "The solution of magnesium ash is acidic",
+        "The solution of magnesium ash is neutral",
+        "The solution of magnesium ash is basic"
+      ],
+      "correctIndex": 3,
+      "explanation": "Turmeric turns red in a basic solution, which shows that magnesium oxide forms a basic solution in water.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "On a cold winter morning in Shimla, Diya touched an iron railing and a wooden bench kept side by side. Both were at the same temperature, but the iron railing felt much colder. Why?",
+      "options": [
+        "Iron is a good conductor of heat, so it quickly takes heat away from her hand",
+        "Iron is a poor conductor of heat, so it keeps cold inside",
+        "Wood is a good conductor of heat, so it warms her hand",
+        "Iron is always colder than everything around it"
+      ],
+      "correctIndex": 0,
+      "explanation": "Metals like iron conduct heat well, so they draw heat from the hand quickly and feel colder than wood at the same temperature.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "In a science class in Pune, Kiran's teacher burnt a little sulfur powder in a spoon inside a covered jar with some water at the bottom. After shaking the jar, Kiran tested the water with blue litmus paper. What will she observe?",
+      "options": [
+        "The blue litmus stays blue, because the solution is basic",
+        "The blue litmus turns red, because the oxide of sulfur is acidic",
+        "The blue litmus turns yellow, because sulfur is yellow",
+        "The blue litmus turns red, because the oxide of sulfur is basic"
+      ],
+      "correctIndex": 1,
+      "explanation": "The oxide formed by burning sulfur dissolves in water to make an acidic solution, which turns blue litmus red.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Gopal has three unlabelled solutions, each made by dissolving an oxide in water. Solution A turns red litmus blue, solution B turns blue litmus red, and solution C does not change either litmus. Which solution is most likely made from the oxide of a non-metal such as sulfur?",
+      "options": [
+        "Solution C",
+        "Solution A",
+        "Solution B",
+        "Both A and C"
+      ],
+      "correctIndex": 2,
+      "explanation": "Non-metal oxides are acidic, and only an acidic solution turns blue litmus red, so it must be solution B.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Iron objects rust faster during the rainy season. Reason (R): Moisture in the air is one of the conditions needed for rusting.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Rusting needs air and moisture, and the rainy season has a lot of moisture in the air, so R correctly explains A.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): Graphite can conduct electricity. Reason (R): Graphite is a metal.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "Graphite does conduct electricity, but it is a form of carbon, which is a non-metal. So A is true and R is false.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): A solution of magnesium oxide in water turns blue litmus red. Reason (R): Metal oxides are basic in nature.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Metal oxides like magnesium oxide are basic, so they turn red litmus blue, not blue litmus red. A is false and R is true.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a way to prevent iron from rusting?",
+      "options": [
+        "Coating it with a layer of zinc",
+        "Painting the iron object",
+        "Applying oil or grease on it",
+        "Keeping the iron object in a damp place"
+      ],
+      "correctIndex": 3,
+      "explanation": "A damp place gives the moisture needed for rusting, so it makes rusting faster instead of preventing it.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these statements is NOT true about non-metals in general?",
+      "options": [
+        "They produce a ringing sound when struck",
+        "Some of them are gases at room temperature",
+        "Most of them are poor conductors of heat and electricity",
+        "Most of them are dull in appearance"
+      ],
+      "correctIndex": 0,
+      "explanation": "Non-metals are generally not sonorous. A ringing sound when struck is a property of metals.",
+      "difficulty": "hard"
     }
   ],
   "physical-chemical-changes": [
@@ -2406,6 +3366,246 @@
       ],
       "correctIndex": 2,
       "explanation": "A burning candle uses up oxygen from the air; it gives out carbon dioxide, water vapour, heat and light.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Salt is obtained from sea water in large shallow pits along the coast. Which process separates the salt from the water?",
+      "options": [
+        "Evaporation",
+        "Burning",
+        "Rusting",
+        "Melting"
+      ],
+      "correctIndex": 0,
+      "explanation": "The sun's heat evaporates the water, leaving the salt behind. No new substance is formed.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Tiny drops of dew form on grass on a cool morning. What kind of change is this?",
+      "options": [
+        "A chemical change",
+        "A physical change",
+        "A change that forms a new substance",
+        "A burning process"
+      ],
+      "correctIndex": 1,
+      "explanation": "Dew forms when water vapour in the air condenses into liquid water. Only the state changes, so it is a physical change.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the process of getting large, pure crystals of a substance from its solution called?",
+      "options": [
+        "Rusting",
+        "Combustion",
+        "Crystallisation",
+        "Galvanisation"
+      ],
+      "correctIndex": 2,
+      "explanation": "Crystallisation is the process of obtaining pure crystals of a substance from its solution.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the colour of copper sulfate crystals?",
+      "options": [
+        "Black",
+        "Red",
+        "Yellow",
+        "Blue"
+      ],
+      "correctIndex": 3,
+      "explanation": "Copper sulfate crystals are bright blue in colour.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Lime water is used to test for carbon dioxide. Lime water is a solution of which substance in water?",
+      "options": [
+        "Calcium hydroxide",
+        "Sodium chloride",
+        "Calcium carbonate",
+        "Copper sulfate"
+      ],
+      "correctIndex": 0,
+      "explanation": "Lime water is a clear solution of calcium hydroxide in water.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "While making crystals, a hot, concentrated solution is left undisturbed to cool slowly. Why is it cooled slowly?",
+      "options": [
+        "Slow cooling makes the substance burn",
+        "Slow cooling gives larger and better-shaped crystals",
+        "Slow cooling turns the solution into a new substance",
+        "Slow cooling makes the solution boil again"
+      ],
+      "correctIndex": 1,
+      "explanation": "When the solution cools slowly and is not disturbed, the crystals get time to grow big and well-shaped.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "When sugar is heated strongly in a pan, it turns black and gives off a burnt smell. What kind of change is this?",
+      "options": [
+        "A physical change, because sugar only melts",
+        "A physical change, because only the colour changes",
+        "A chemical change, because new substances are formed",
+        "No change, because it is still sugar"
+      ],
+      "correctIndex": 2,
+      "explanation": "The black material and the burnt smell show that new substances have formed, so it is a chemical change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these changes involves heating but is still a physical change?",
+      "options": [
+        "Baking of a cake",
+        "Cooking of rice",
+        "Burning of a wooden stick",
+        "Boiling of water to form steam"
+      ],
+      "correctIndex": 3,
+      "explanation": "Steam is just water in the gas state and can be cooled back into water, so boiling is a physical change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A block of ice weighing 10 g is kept in a closed container and allowed to melt completely. What will be the mass of the water formed?",
+      "options": [
+        "10 g",
+        "More than 10 g",
+        "Less than 10 g",
+        "It depends on the colour of the container"
+      ],
+      "correctIndex": 0,
+      "explanation": "Melting is a physical change. Only the state changes, so the mass of water stays 10 g.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which simple test shows that dissolving sugar in water is a physical change?",
+      "options": [
+        "The solution tastes sweet",
+        "Evaporating the water gets the sugar back",
+        "The sugar can no longer be seen",
+        "The solution becomes slightly warm"
+      ],
+      "correctIndex": 1,
+      "explanation": "Since the same sugar can be recovered by evaporating the water, no new substance was formed. So it is a physical change.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Meera washed clothes in her home in Kochi and hung them out in the sun. By evening the clothes were dry. What happened to the water in the clothes?",
+      "options": [
+        "It turned into a new substance",
+        "It burnt, which is a chemical change",
+        "It evaporated, which is a physical change",
+        "It was absorbed into the cloth forever"
+      ],
+      "correctIndex": 2,
+      "explanation": "The water changed into water vapour by evaporation. No new substance was formed, so this is a physical change.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Ishaan dissolved some alum in hot water and left the solution overnight. In the morning, he found clear alum crystals at the bottom of the glass. What kind of change took place?",
+      "options": [
+        "A change that can never be reversed",
+        "A chemical change, because a new substance was formed",
+        "A chemical change, because the water disappeared",
+        "A physical change, because the crystals are the same substance as the alum he used"
+      ],
+      "correctIndex": 3,
+      "explanation": "The crystals are pure alum, the same substance he started with, so crystallisation is a physical change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "While making breakfast in Lucknow, Neeraj saw two things happen: butter melted in the hot pan, and a slice of bread got burnt and turned black. Which of these is a chemical change?",
+      "options": [
+        "The bread turning black",
+        "The butter melting",
+        "Both are physical changes",
+        "Neither is a change"
+      ],
+      "correctIndex": 0,
+      "explanation": "The burnt bread has formed new substances like charcoal-like black material, so it is a chemical change. Melting butter only changes its state.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Kunal did two activities. In the first, he melted some wax in a spoon and let it cool. In the second, he burnt a piece of paper. Which statement is correct?",
+      "options": [
+        "Both activities formed new substances",
+        "Only the burnt paper formed a new substance, and only the wax change could be reversed",
+        "Only the wax formed a new substance, and the paper change could be reversed",
+        "Both changes could be fully reversed"
+      ],
+      "correctIndex": 1,
+      "explanation": "Melted wax becomes solid wax again on cooling, so no new substance forms. Burnt paper turns into ash and gases, which cannot be changed back into paper.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Tanvi dissolved as much common salt as she could in hot water. When the solution cooled, some salt crystals formed at the bottom. Her friend says the crystals are a new substance. What is correct?",
+      "options": [
+        "The crystals are a new substance because heat was used",
+        "The crystals are a new substance because they look different",
+        "The crystals are the same salt, so no new substance has formed",
+        "The crystals are sugar formed from salt and water"
+      ],
+      "correctIndex": 2,
+      "explanation": "Crystallisation only separates the salt from the water in a purer form. The crystals are still common salt, so no new substance is formed.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Freezing of water into ice is a physical change. Reason (R): The ice formed is a new substance.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "Freezing is a physical change because ice is just water in solid form. Ice is not a new substance, so R is false.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): Cooking food is a chemical change. Reason (R): Cooking food usually involves heating.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Cooking forms new substances, so it is a chemical change. Heating is true but it is not the reason; boiling water also uses heat but is a physical change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): Lime water turning milky when carbon dioxide is passed through it is a physical change. Reason (R): A new substance, calcium carbonate, is formed in this reaction.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Since a new substance (calcium carbonate) is formed, this is a chemical change, not a physical one. So A is false and R is true.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a physical change?",
+      "options": [
+        "Freezing water into ice cubes",
+        "Melting of ghee",
+        "Chopping of vegetables",
+        "Burning of an incense stick"
+      ],
+      "correctIndex": 3,
+      "explanation": "Burning an incense stick produces ash, smoke and new gases, so it is a chemical change.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these statements is NOT true about crystallisation?",
+      "options": [
+        "It forms a new substance",
+        "It gives a pure form of a substance",
+        "The crystals formed have a definite shape",
+        "It is a physical change"
+      ],
+      "correctIndex": 0,
+      "explanation": "Crystallisation does not form a new substance. It only separates a pure substance from its solution.",
       "difficulty": "hard"
     }
   ],
@@ -2889,6 +4089,246 @@
       "correctIndex": 2,
       "explanation": "Exercise keeps the body healthy, but it does not stop the natural changes of puberty.",
       "difficulty": "hard"
+    },
+    {
+      "text": "In India, which free phone number can a child call for help if they are in danger or being harmed?",
+      "options": [
+        "100",
+        "1098",
+        "1111",
+        "999"
+      ],
+      "correctIndex": 1,
+      "explanation": "1098 is CHILDLINE, a free 24-hour helpline in India for children who need care and protection.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "About how many hours of sleep do adolescents need each night to stay healthy?",
+      "options": [
+        "3 to 4 hours",
+        "8 to 10 hours",
+        "5 to 6 hours",
+        "14 to 16 hours"
+      ],
+      "correctIndex": 1,
+      "explanation": "Adolescents need about 8 to 10 hours of sleep every night for proper growth, rest and concentration.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is a safe practice while using the internet?",
+      "options": [
+        "Accepting every friend request you receive",
+        "Sharing your school name and photos with people you have never met",
+        "Not sharing passwords or your home address with strangers online",
+        "Clicking on any link that offers free gifts"
+      ],
+      "correctIndex": 2,
+      "explanation": "Keeping personal details like passwords and addresses private protects you from people who may misuse them.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "During adolescence, a person may feel very happy one moment and upset the next. What are these quick changes in feelings commonly called?",
+      "options": [
+        "Acne",
+        "Growth spurts",
+        "Menarche",
+        "Mood swings"
+      ],
+      "correctIndex": 3,
+      "explanation": "Quick changes in emotions are called mood swings. They are common during adolescence and are linked to changes in hormones.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why is it NOT a good idea for adolescents to skip breakfast regularly?",
+      "options": [
+        "The body needs energy after the long night without food, and skipping breakfast can make it hard to focus in class",
+        "Breakfast makes a person grow too tall",
+        "Eating in the morning causes pimples",
+        "The body does not need any food in the morning"
+      ],
+      "correctIndex": 0,
+      "explanation": "After a night without food, breakfast gives energy and nutrients needed for growth, activity and concentration.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A person who does not get enough iron in their diet may develop anaemia. Which of these is a common sign of anaemia?",
+      "options": [
+        "Growing taller very fast",
+        "Feeling tired and weak most of the time",
+        "Having a deeper voice",
+        "Feeling extra energetic all day"
+      ],
+      "correctIndex": 1,
+      "explanation": "Iron is needed to make blood. Too little iron leads to anaemia, which makes a person feel tired, weak and breathless.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why should a used sanitary pad be wrapped in paper before throwing it in a dustbin?",
+      "options": [
+        "To use it again later",
+        "To make the pad heavier",
+        "To keep things clean and stop the spread of germs",
+        "Because it should be flushed down the toilet after wrapping"
+      ],
+      "correctIndex": 2,
+      "explanation": "Wrapping the used pad keeps the surroundings clean and hygienic. Pads should never be flushed, as they block drains.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Riddhi uses her phone in bed till late every night. What is the most likely effect of this habit?",
+      "options": [
+        "She will need less food",
+        "She will grow taller faster",
+        "Her eyesight will become sharper",
+        "She may not get enough sleep and may feel tired the next day"
+      ],
+      "correctIndex": 3,
+      "explanation": "Using screens late at night delays sleep, so she may get less rest and feel tired and unable to focus the next day.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which pair of nutrient and food is correctly matched?",
+      "options": [
+        "Calcium: ragi and milk",
+        "Iron: white sugar",
+        "Protein: cooking oil",
+        "Calcium: potato chips"
+      ],
+      "correctIndex": 0,
+      "explanation": "Ragi and milk are good sources of calcium, which is needed for strong bones during growth.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Many children compare their bodies with pictures of film stars and influencers seen online. Which is the healthiest way to think about this?",
+      "options": [
+        "You should stop eating until you look like them",
+        "Every body grows in its own way, and many online pictures are edited, so comparing yourself with them is not fair to yourself",
+        "Your body is wrong if it does not match these pictures",
+        "Only people who look like them can be healthy"
+      ],
+      "correctIndex": 1,
+      "explanation": "Bodies grow at different rates and in different shapes, and many online images are edited. Being healthy matters more than matching a picture.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Ishita has her final exams next week. She feels nervous and is unable to sleep well. What is the best thing for her to do?",
+      "options": [
+        "Stop eating meals to save time",
+        "Stay awake all night studying without rest",
+        "Talk to her parents or teacher, make a study plan and take short breaks",
+        "Keep her worries to herself and not tell anyone"
+      ],
+      "correctIndex": 2,
+      "explanation": "Sharing worries with a trusted adult, planning study time and resting properly help reduce stress.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Aarav, aged 13, has been chatting with a person in an online game. He has never met this person. One day, the person asks for Aarav's photos and home address and tells him to keep it a secret from his parents. What should Aarav do?",
+      "options": [
+        "Meet the person alone to find out who they are",
+        "Send the photos but not the address",
+        "Keep the chat secret as asked",
+        "Refuse, stop chatting, block the person and tell his parents"
+      ],
+      "correctIndex": 3,
+      "explanation": "A stranger asking for personal details and secrecy is a warning sign. Aarav should refuse, block the person and tell a trusted adult.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Simran has her periods. A neighbour tells her that she must not go to school or play during these days. What is correct?",
+      "options": [
+        "She can go to school and continue her normal activities, including light exercise, if she feels comfortable",
+        "She must stay in bed for all the days of her period",
+        "She must not eat any food during her period",
+        "Menstruation is an illness, so she should stay away from everyone"
+      ],
+      "correctIndex": 0,
+      "explanation": "Menstruation is a natural process. Girls can carry on with school, play and daily activities while keeping themselves clean.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "An adult whom Rohit, aged 12, knows touches him in a way that makes him feel uncomfortable and then tells him to keep it a secret. What is the right thing for Rohit to do?",
+      "options": [
+        "Keep it a secret because the person is older",
+        "Say no, move away and tell a trusted adult like a parent or teacher, because it is not his fault",
+        "Feel guilty and think it was his fault",
+        "Wait and see if it happens again before telling anyone"
+      ],
+      "correctIndex": 1,
+      "explanation": "No one has the right to touch a child in an unsafe way. Rohit should say no, get away and tell a trusted adult; it is never the child's fault.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Zoya, aged 13 and living in Delhi, has started skipping lunch to look slim like some people she follows online. In class, she often feels dizzy and cannot concentrate. What is the best explanation and advice?",
+      "options": [
+        "She should skip breakfast as well to slim down faster",
+        "Feeling dizzy is normal and shows she is becoming healthy",
+        "Her growing body needs regular, balanced meals, so skipping lunch is harmful; she should eat properly and talk to a parent or doctor",
+        "Only adults need lunch, so she is doing the right thing"
+      ],
+      "correctIndex": 2,
+      "explanation": "During adolescence the body grows fast and needs nutrients. Skipping meals can cause weakness and dizziness, so she should eat balanced meals and seek advice from an adult.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Adolescents should take a bath every day. Reason (R): Sweat glands become more active during adolescence.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "More sweating can lead to body odour and germs, so bathing daily keeps the body clean. R correctly explains A.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): All children of the same age go through the changes of adolescence at exactly the same time. Reason (R): The changes during adolescence are controlled by hormones.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Changes are controlled by hormones, but they begin at different ages in different children. So A is false and R is true.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): It is helpful for adolescents to talk to a trusted adult about their worries and body changes. Reason (R): Adolescence lasts for only one year.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "Talking to a trusted adult helps adolescents understand and handle changes. But adolescence lasts several years (about 11 to 19 years of age), so R is false.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a healthy way to handle stress?",
+      "options": [
+        "Spending time on a hobby like drawing or music",
+        "Sharing your feelings with a friend or parent",
+        "Playing a sport or going for a walk",
+        "Staying awake all night scrolling on the phone"
+      ],
+      "correctIndex": 3,
+      "explanation": "Staying up late on the phone disturbs sleep and can make stress worse, while the other options help the mind relax.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these statements about adolescence is NOT correct?",
+      "options": [
+        "Adolescence brings only physical changes and no emotional changes",
+        "Adolescence can begin at different ages in different people",
+        "The changes in adolescence are controlled by hormones",
+        "Girls often begin to show changes a little earlier than boys"
+      ],
+      "correctIndex": 0,
+      "explanation": "Adolescence brings physical, emotional and mental changes, not just physical ones.",
+      "difficulty": "hard"
     }
   ],
   "heat-transfer": [
@@ -3371,6 +4811,246 @@
       "correctIndex": 0,
       "explanation": "Radiation does not need any medium, which is why the Sun's heat can reach us through space.",
       "difficulty": "hard"
+    },
+    {
+      "text": "A few ice cubes are put into a glass of warm lemon water. In which direction does heat flow?",
+      "options": [
+        "From the ice cubes to the lemon water",
+        "From the lemon water to the ice cubes",
+        "Heat does not flow at all",
+        "Heat flows equally in both directions"
+      ],
+      "correctIndex": 1,
+      "explanation": "Heat always flows from a hotter object to a colder one, so it flows from the warm lemon water into the ice cubes, which then melt.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Smoke from a burning incense stick (agarbatti) rises upward. Why does this happen?",
+      "options": [
+        "Hot air around the stick becomes lighter and rises, carrying the smoke up",
+        "Smoke is always heavier than air",
+        "The incense stick pushes the smoke up like a fan",
+        "Cold air near the floor sucks the smoke upward"
+      ],
+      "correctIndex": 0,
+      "explanation": "The air heated by the burning stick becomes lighter and rises by convection, carrying the smoke particles with it.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A hand pump in a village draws up water from which source?",
+      "options": [
+        "Rainwater collected on the roof",
+        "Water stored in the clouds",
+        "Groundwater stored below the surface",
+        "Water from the sea"
+      ],
+      "correctIndex": 2,
+      "explanation": "Hand pumps and borewells pull up groundwater that has collected in the soil and rock layers below the ground.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Air conditioners are usually fixed high up on the wall of a room. Why?",
+      "options": [
+        "Cool air is lighter and must start from the top",
+        "Air near the ceiling conducts heat better",
+        "Heat cannot travel near the floor",
+        "Cool air is heavier, so it sinks down and spreads through the room"
+      ],
+      "correctIndex": 3,
+      "explanation": "Cool air is heavier than warm air, so cool air released from a height sinks while the warm air rises, setting up convection that cools the whole room.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A paper spiral hung by a thread above a burning candle (at a safe height) starts to turn slowly. What makes it turn?",
+      "options": [
+        "Light from the candle pushes the paper",
+        "Warm air rising from the candle pushes against the spiral",
+        "Heat conducted up through the thread",
+        "The paper becomes lighter as it gets warm"
+      ],
+      "correctIndex": 1,
+      "explanation": "The candle heats the air above it, and this warm air rises by convection, pushing the spiral and making it turn.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A few crystals of potassium permanganate are placed at one corner of the bottom of a beaker of water, and only that corner is heated gently. What will be seen?",
+      "options": [
+        "The colour stays at the bottom and does not move",
+        "The colour spreads only sideways along the bottom",
+        "Coloured streams rise above the heated part, move across the top and come down on the other side",
+        "The colour disappears as the water heats up"
+      ],
+      "correctIndex": 2,
+      "explanation": "The heated water rises and the cooler water sinks, forming convection currents that the coloured streams make easy to see.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why does water vapour form clouds high up in the sky?",
+      "options": [
+        "The rising water vapour cools down at a height and condenses into tiny water droplets",
+        "Water vapour gets hotter at a height and turns into droplets",
+        "Wind carries dust that turns into clouds",
+        "Water vapour freezes on the ground and then floats up"
+      ],
+      "correctIndex": 0,
+      "explanation": "As warm, moist air rises it cools, and the water vapour condenses into tiny droplets that together form clouds.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A steel cup of hot tea is left on a table and slowly cools down. Which statement correctly describes how it loses heat?",
+      "options": [
+        "Only by conduction through the cup",
+        "Only by radiation from the tea",
+        "By conduction to the table, convection of the air above it, and radiation from its surface",
+        "Only by convection inside the tea"
+      ],
+      "correctIndex": 2,
+      "explanation": "A hot object loses heat in all three ways: conduction through the cup to the table, convection as the warm air above it rises, and radiation from its surface.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Eagles and kites (the birds) are often seen circling high in the sky on sunny days without flapping their wings much. What helps them stay up?",
+      "options": [
+        "Rising currents of warm air heated by the ground",
+        "Cold air sinking from the clouds",
+        "Heat reaching them by conduction from the ground",
+        "Sunlight making their bodies lighter"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Sun heats the ground, which heats the air above it; this warm air rises as convection currents that lift the gliding birds.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "In a water heater (geyser), cold water enters from near the bottom and hot water is taken out from near the top. Why is this arrangement used?",
+      "options": [
+        "Cold water is lighter and floats up to the heater",
+        "Hot water is lighter, so it rises to the top while cold water stays below to be heated",
+        "Hot water conducts heat only to the top of the tank",
+        "Water at the top of the tank is closer to the Sun"
+      ],
+      "correctIndex": 1,
+      "explanation": "Hot water is lighter than cold water, so it rises to the top by convection, where it can be drawn out, while colder water sinks to be heated.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Ananya is going on a school picnic in Lucknow. Her mother packs ice cubes and cold drinks in a thermocol box. Why is thermocol used?",
+      "options": [
+        "Thermocol is a good conductor of heat",
+        "Thermocol produces cold air",
+        "Thermocol absorbs the heat of the ice",
+        "Thermocol is a poor conductor of heat, so heat from outside cannot easily reach the ice"
+      ],
+      "correctIndex": 3,
+      "explanation": "Thermocol is an insulator, so it slows down the flow of heat from the warm surroundings into the box and the ice melts slowly.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "On a hot afternoon in a park in Jaipur, Farhan touches an iron slide and a wooden bench that have both been in the sun for hours. The iron slide feels much hotter. Why?",
+      "options": [
+        "The slide received more sunlight than the bench",
+        "Iron is a good conductor and passes heat to his hand quickly, while wood is a poor conductor",
+        "Wood reflects all the sunlight that falls on it",
+        "Iron makes its own heat"
+      ],
+      "correctIndex": 1,
+      "explanation": "Iron conducts heat into his hand much faster than wood does, so the iron slide feels hotter even when both have been in the same sunlight.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In summer, Lakshmi's family in Hyderabad keeps drinking water in an earthen pot (matka). The water stays cool. What is the main reason?",
+      "options": [
+        "Clay is a good conductor of heat",
+        "Cold air enters the pot through its mouth",
+        "Water seeps through tiny pores and evaporates from the outer surface, taking heat away from the pot",
+        "Clay produces cool air on its own"
+      ],
+      "correctIndex": 2,
+      "explanation": "Evaporation needs heat, so as water evaporates from the outside of the pot it takes heat from the pot and the water inside, keeping it cool.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Villagers in a dry village in Maharashtra built small check dams and dug pits to hold rainwater. After a few years, the wells in the village had more water. What best explains this?",
+      "options": [
+        "More rainwater seeped into the ground and recharged the groundwater, raising the water table",
+        "The check dams made more rain fall",
+        "The pits brought sea water into the wells",
+        "Water evaporated faster from the pits"
+      ],
+      "correctIndex": 0,
+      "explanation": "Holding rainwater gives it more time to seep into the ground by infiltration, which refills the groundwater and raises the water table.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Fishermen in a coastal village in Odisha often sail out to sea very early in the morning and come back to the shore in the afternoon. How do the winds help them?",
+      "options": [
+        "Sea breeze in the morning takes them out, and land breeze in the afternoon brings them back",
+        "The wind blows from land to sea all day long",
+        "There is no wind near the coast in the morning or afternoon",
+        "Land breeze in the early morning carries them out to sea, and sea breeze in the afternoon brings them back"
+      ],
+      "correctIndex": 3,
+      "explanation": "At night and early morning the land is cooler, so the breeze blows from land to sea; by afternoon the land is hotter, so the sea breeze blows towards the land.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): A steel tumbler filled with hot milk soon feels hot from the outside. Reason (R): Steel is a good conductor of heat.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Steel conducts heat well, so heat from the milk quickly reaches the outer surface of the tumbler; R correctly explains A.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): A sea breeze blows from the sea towards the land during the day. Reason (R): Water gets heated faster than land.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "The sea breeze does blow during the day, but this is because land heats up faster than water, so R is false.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): Groundwater is recharged mainly during the hot, dry summer months. Reason (R): Rainwater seeps into the ground through the process of infiltration.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Groundwater is recharged mainly during the rainy season when rainwater seeps in, so A is false while R is a true statement.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these is NOT an example of convection?",
+      "options": [
+        "Warm air rising above a room heater",
+        "The handle of a metal ladle getting hot while stirring",
+        "Water moving up and down when heated in a pot",
+        "Sea breeze blowing towards the land"
+      ],
+      "correctIndex": 1,
+      "explanation": "A ladle handle gets hot by conduction through the metal; the others involve movement of air or water, which is convection.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a reason for the water table going down in an area?",
+      "options": [
+        "Pumping out too much groundwater through borewells",
+        "Cutting down forests",
+        "Covering open ground with cement and tar",
+        "Digging pits and ponds to collect rainwater"
+      ],
+      "correctIndex": 3,
+      "explanation": "Pits and ponds that collect rainwater help it seep into the ground and raise the water table, while the other activities lower it.",
+      "difficulty": "medium"
     }
   ],
   "time-and-motion": [
@@ -3567,15 +5247,15 @@
       "difficulty": "easy"
     },
     {
-      "text": "How many seconds are there in one hour?",
+      "text": "Which of these is the largest unit of time?",
       "options": [
-        "60",
-        "360",
-        "600",
-        "3600"
+        "Minute",
+        "Hour",
+        "Second",
+        "Day"
       ],
       "correctIndex": 3,
-      "explanation": "One hour has 60 minutes and each minute has 60 seconds, so 60 × 60 = 3600 seconds.",
+      "explanation": "A day has 24 hours, an hour has 60 minutes and a minute has 60 seconds, so a day is the largest of these.",
       "difficulty": "easy"
     },
     {
@@ -3853,6 +5533,246 @@
       "correctIndex": 0,
       "explanation": "The time period of a pendulum does not depend on the mass of the bob, so a heavier bob does not make it shorter.",
       "difficulty": "hard"
+    },
+    {
+      "text": "How many seconds are there in one hour?",
+      "options": [
+        "60",
+        "360",
+        "6000",
+        "3600"
+      ],
+      "correctIndex": 3,
+      "explanation": "One hour has 60 minutes and each minute has 60 seconds, so 60 x 60 = 3600 seconds.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is an example of non-uniform linear motion?",
+      "options": [
+        "A car moving on a straight road at a steady 40 km/h",
+        "A train starting from a station and picking up speed on a straight track",
+        "A toy train on a straight track covering 2 m every second",
+        "A person walking on a straight path covering 1 m every second"
+      ],
+      "correctIndex": 1,
+      "explanation": "A train that is picking up speed covers more distance in each second, so its speed changes and its motion is non-uniform.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "How many seconds are there in 2.5 minutes?",
+      "options": [
+        "120 s",
+        "250 s",
+        "150 s",
+        "25 s"
+      ],
+      "correctIndex": 2,
+      "explanation": "One minute has 60 seconds, so 2.5 minutes = 2.5 x 60 = 150 seconds.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A speed of 10 m/s is the same as:",
+      "options": [
+        "36 km/h",
+        "10 km/h",
+        "100 km/h",
+        "3.6 km/h"
+      ],
+      "correctIndex": 0,
+      "explanation": "In one hour (3600 s) the object covers 10 x 3600 = 36000 m = 36 km, so 10 m/s = 36 km/h.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A pendulum has a time period of 1.5 s. How many oscillations will it complete in 1 minute?",
+      "options": [
+        "30",
+        "90",
+        "40",
+        "60"
+      ],
+      "correctIndex": 2,
+      "explanation": "Number of oscillations = 60 s divided by 1.5 s = 40.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "To find the time period of a pendulum, students time 20 oscillations and then divide by 20, instead of timing just one oscillation. Why?",
+      "options": [
+        "One oscillation is too long to time",
+        "This gives a more accurate value, because small mistakes in starting and stopping the watch get shared over many oscillations",
+        "The pendulum swings faster after 20 oscillations",
+        "The time period changes after every oscillation"
+      ],
+      "correctIndex": 1,
+      "explanation": "A single oscillation is very short, so a small timing mistake is a big error; timing many oscillations and dividing makes the error much smaller.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "A runner runs 200 m at a steady speed of 4 m/s. How long does she take?",
+      "options": [
+        "20 s",
+        "40 s",
+        "800 s",
+        "50 s"
+      ],
+      "correctIndex": 3,
+      "explanation": "Time = distance / speed = 200 m / 4 m/s = 50 s.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is moving the fastest?",
+      "options": [
+        "A bus moving at 60 km/h",
+        "A bird flying at 20 m/s",
+        "A scooter covering 1 km in 1 minute",
+        "A car covering 1 km in 40 seconds"
+      ],
+      "correctIndex": 3,
+      "explanation": "The car covers 1000 m / 40 s = 25 m/s, which is more than 20 m/s, while 60 km/h and 1 km per minute are both about 16.7 m/s.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A car travels the first 30 km of a trip at 60 km/h and the next 30 km at 30 km/h. What is its average speed for the whole trip (total distance divided by total time)?",
+      "options": [
+        "45 km/h",
+        "40 km/h",
+        "50 km/h",
+        "36 km/h"
+      ],
+      "correctIndex": 1,
+      "explanation": "Time taken is 0.5 h + 1 h = 1.5 h for a total of 60 km, so average speed = 60 / 1.5 = 40 km/h.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A scooter moves with a uniform speed of 12 m/s. How far will it travel in 1 minute?",
+      "options": [
+        "720 m",
+        "72 m",
+        "120 m",
+        "7200 m"
+      ],
+      "correctIndex": 0,
+      "explanation": "Distance = speed x time = 12 m/s x 60 s = 720 m.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Diya visits Jantar Mantar in Jaipur and sees the Samrat Yantra, a huge structure built nearly 300 years ago. Her guide says it can tell the local time very accurately. How does it work?",
+      "options": [
+        "By the shadow cast by the Sun, which moves during the day",
+        "By the flow of water",
+        "By the swinging of a large pendulum",
+        "By a slowly burning candle"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Samrat Yantra is a giant sundial; the position of its shadow changes as the Sun moves across the sky, showing the time.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Harish's old pendulum wall clock in Shimla has started running slow; it loses a few minutes every day. What should he do to correct it?",
+      "options": [
+        "Make the pendulum slightly shorter",
+        "Make the pendulum slightly longer",
+        "Use a heavier bob",
+        "Use a lighter bob"
+      ],
+      "correctIndex": 0,
+      "explanation": "A shorter pendulum has a smaller time period, so it swings faster and makes the clock run faster; the mass of the bob does not change the time period.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Kavya walks 1.2 km from her home to her school in Bhopal in 20 minutes. What is her speed in m/s?",
+      "options": [
+        "6 m/s",
+        "0.6 m/s",
+        "2 m/s",
+        "1 m/s"
+      ],
+      "correctIndex": 3,
+      "explanation": "1.2 km = 1200 m and 20 minutes = 1200 s, so speed = 1200 / 1200 = 1 m/s.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Ishaan's family is driving on the Mumbai-Pune Expressway. Their car moves at a steady 80 km/h for 45 minutes. How much distance does it cover?",
+      "options": [
+        "45 km",
+        "36 km",
+        "60 km",
+        "80 km"
+      ],
+      "correctIndex": 2,
+      "explanation": "45 minutes is 0.75 hour, so distance = 80 km/h x 0.75 h = 60 km.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Neel records the distance covered by his toy car moving along a straight line: 0 m at 0 s, 6 m at 2 s, 12 m at 4 s and 20 m at 6 s. How can its motion be described?",
+      "options": [
+        "Uniform, because it moves in a straight line",
+        "Non-uniform, because it does not cover equal distances in equal intervals of time",
+        "Uniform, because the distance keeps increasing",
+        "Non-uniform, because it stops in between"
+      ],
+      "correctIndex": 1,
+      "explanation": "In each 2 s interval it covers 6 m, 6 m and then 8 m, so the distances in equal time intervals are not equal and the motion is non-uniform.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): A sundial cannot be used to tell the time at night. Reason (R): A sundial needs the shadow formed by sunlight to show the time.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "A sundial works only when the Sun casts a shadow, and there is no sunlight at night, so R correctly explains A.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): A car moving on a straight road with its speedometer showing a steady 50 km/h is in uniform linear motion. Reason (R): The speed of vehicles is commonly measured in km/h.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both are true, but A is true because the car moves in a straight line at a constant speed, not because of the unit used to measure speed.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): The time period of a simple pendulum becomes longer if a heavier bob is used. Reason (R): The time period of a simple pendulum depends on the length of its thread.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "At a given place the time period does not depend on the mass of the bob, so A is false, but it does depend on the length, so R is true.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these is NOT a unit of speed?",
+      "options": [
+        "km/h",
+        "m/s",
+        "km",
+        "cm/s"
+      ],
+      "correctIndex": 2,
+      "explanation": "Kilometre (km) is a unit of distance; a unit of speed must be a distance unit divided by a time unit.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a regularly repeating event that could be used to measure time?",
+      "options": [
+        "Sunrise every morning",
+        "The swing of a pendulum",
+        "The Moon going from one full moon to the next",
+        "Rainfall during a storm"
+      ],
+      "correctIndex": 3,
+      "explanation": "Rainfall does not repeat after a fixed interval of time, while the other events repeat regularly and have been used to measure time.",
+      "difficulty": "medium"
     }
   ],
   "life-processes-animals": [
@@ -4334,6 +6254,246 @@
       ],
       "correctIndex": 0,
       "explanation": "Most absorption of digested food happens in the small intestine, not in the stomach.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these mainly grinds and crushes food in our mouth?",
+      "options": [
+        "Incisors",
+        "Canines",
+        "Molars",
+        "Tongue"
+      ],
+      "correctIndex": 2,
+      "explanation": "Molars are the broad back teeth with flat surfaces that grind and crush food.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which is the largest gland in the human body?",
+      "options": [
+        "Liver",
+        "Pancreas",
+        "Salivary gland",
+        "Gall bladder"
+      ],
+      "correctIndex": 0,
+      "explanation": "The liver is the largest gland in the body; it makes bile, which helps in digesting fats.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the role of the fine hair and mucus inside our nose?",
+      "options": [
+        "They add extra oxygen to the air",
+        "They trap dust and germs from the air we breathe in",
+        "They help us taste food",
+        "They remove carbon dioxide from the air"
+      ],
+      "correctIndex": 1,
+      "explanation": "Hair and sticky mucus in the nose trap dust and germs so that cleaner air reaches the lungs.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "In Amoeba, where does the digestion of food take place?",
+      "options": [
+        "In the food vacuole",
+        "In the stomach",
+        "In the pseudopodia",
+        "In the nucleus"
+      ],
+      "correctIndex": 0,
+      "explanation": "Amoeba traps food inside a food vacuole, where digestive juices break it down.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Bile made by the liver is stored in which organ until it is needed?",
+      "options": [
+        "Pancreas",
+        "Gall bladder",
+        "Large intestine",
+        "Stomach"
+      ],
+      "correctIndex": 1,
+      "explanation": "Bile is stored in the gall bladder and released into the small intestine when food arrives there.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "During digestion, the proteins in foods like dal and paneer are finally broken down into:",
+      "options": [
+        "Glucose",
+        "Fatty acids and glycerol",
+        "Amino acids",
+        "Starch"
+      ],
+      "correctIndex": 2,
+      "explanation": "Proteins are broken down into amino acids, while carbohydrates give glucose and fats give fatty acids and glycerol.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Food reaches the stomach even if a person eats while lying down. How does this happen?",
+      "options": [
+        "Food simply falls down due to its weight",
+        "Air from the lungs pushes the food down",
+        "Saliva carries the food down like a stream",
+        "The walls of the food pipe contract and relax in waves, pushing the food along"
+      ],
+      "correctIndex": 3,
+      "explanation": "The muscular walls of the food pipe squeeze in waves that push food towards the stomach, whatever the position of the body.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which is the correct path of air when we breathe in?",
+      "options": [
+        "Nostrils → windpipe → nasal cavity → lungs",
+        "Nostrils → nasal cavity → windpipe → lungs",
+        "Nasal cavity → nostrils → windpipe → lungs",
+        "Nostrils → nasal cavity → lungs → windpipe"
+      ],
+      "correctIndex": 1,
+      "explanation": "Air enters through the nostrils, passes through the nasal cavity, goes down the windpipe and then reaches the lungs.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "In a ruminant like a buffalo, where is the swallowed grass first stored and partly digested?",
+      "options": [
+        "In the small intestine",
+        "In the large intestine",
+        "In the food pipe",
+        "In the rumen, a part of its stomach"
+      ],
+      "correctIndex": 3,
+      "explanation": "Ruminants swallow grass quickly and store it in the rumen, a part of the stomach, where it is partly digested before being brought back as cud.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "About how many times does a healthy adult breathe in one minute while resting?",
+      "options": [
+        "60 to 70 times",
+        "2 to 4 times",
+        "100 to 120 times",
+        "15 to 18 times"
+      ],
+      "correctIndex": 3,
+      "explanation": "A resting adult usually breathes about 15 to 18 times a minute; the rate goes up during exercise.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In her school lab in Chandigarh, Simran watches an Amoeba under a microscope. It pushes out finger-like parts of its body around a tiny food particle and traps it. What are these parts called?",
+      "options": [
+        "Villi",
+        "Pseudopodia",
+        "Gills",
+        "Spiracles"
+      ],
+      "correctIndex": 1,
+      "explanation": "Amoeba uses finger-like projections called pseudopodia to move and to surround and capture its food.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Pooja sees a cow at her grandparents' farm in Haryana chewing slowly while resting, even though it is not eating any fresh grass. Where does the food it is chewing come from?",
+      "options": [
+        "Grass stuck between its teeth",
+        "Food stored in pouches in its cheeks",
+        "Partly digested food brought back from the rumen to its mouth",
+        "Food coming up from its small intestine"
+      ],
+      "correctIndex": 2,
+      "explanation": "The cow brings partly digested food, called cud, back from its rumen to the mouth and chews it again.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Tashi, a mountaineer from Sikkim, carries oxygen cylinders when climbing very high Himalayan peaks. Why?",
+      "options": [
+        "Oxygen keeps their bodies warm",
+        "There is no air at all on high mountains",
+        "The cylinders help them digest food",
+        "The air at great heights is thin and has less oxygen, so breathing enough is difficult"
+      ],
+      "correctIndex": 3,
+      "explanation": "At great heights the air is thin and each breath gives less oxygen, so climbers carry extra oxygen for their cells to release energy.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "While eating lunch, Rohan laughs and talks at the same time and suddenly starts coughing. His mother says some food \"went the wrong way\". What happened?",
+      "options": [
+        "Food entered the windpipe instead of the food pipe",
+        "Food entered the large intestine",
+        "Food got stuck in the stomach",
+        "Food went into his lungs through the food pipe"
+      ],
+      "correctIndex": 0,
+      "explanation": "Normally a small flap closes the windpipe when we swallow; talking while eating can let food slip into the windpipe, and coughing pushes it out.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Meera eats dal-rice for lunch in Chennai. In which part of her alimentary canal will the digestion of this food be completed?",
+      "options": [
+        "Small intestine",
+        "Mouth",
+        "Stomach",
+        "Large intestine"
+      ],
+      "correctIndex": 0,
+      "explanation": "Digestion of carbohydrates, proteins and fats is completed in the small intestine with the help of juices from the liver, pancreas and the intestine itself.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): Amoeba is a single-celled organism. Reason (R): Amoeba moves and captures food with the help of pseudopodia.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both statements are true, but using pseudopodia does not explain why Amoeba has only one cell.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Assertion (A): Grass-eating animals like cows can digest grass, but humans cannot. Reason (R): Cows have bacteria in a part of their stomach that help break down the cellulose in grass.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Grass is rich in cellulose, which humans cannot digest; the bacteria in a cow's stomach break it down, so R explains A.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): The air we breathe out has more oxygen than the air we breathe in. Reason (R): The cells of our body use oxygen to release energy from food.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Because cells use up oxygen, exhaled air has less oxygen and more carbon dioxide than inhaled air, so A is false while R is true.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Which of these is NOT a juice or secretion that helps digest food in humans?",
+      "options": [
+        "Saliva",
+        "Bile",
+        "Sweat",
+        "Pancreatic juice"
+      ],
+      "correctIndex": 2,
+      "explanation": "Sweat is released through the skin and has no role in digestion, while saliva, bile and pancreatic juice all help break down food.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these does NOT help any animal take in oxygen?",
+      "options": [
+        "Lungs of a dog",
+        "Gills of a fish",
+        "Villi of the small intestine",
+        "Moist skin of an earthworm"
+      ],
+      "correctIndex": 2,
+      "explanation": "Villi absorb digested food in the small intestine; lungs, gills and the moist skin of an earthworm are used for taking in oxygen.",
       "difficulty": "hard"
     }
   ],
@@ -4817,6 +6977,246 @@
       "correctIndex": 2,
       "explanation": "A carrot root grows underground and has no chlorophyll, so it only stores food and does not make it.",
       "difficulty": "medium"
+    },
+    {
+      "text": "From where does a green plant get the energy it needs to make its food?",
+      "options": [
+        "From the soil",
+        "From the water it absorbs",
+        "From sunlight",
+        "From the air around it"
+      ],
+      "correctIndex": 2,
+      "explanation": "Plants capture the energy of sunlight with chlorophyll and use it to make food during photosynthesis.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the loss of water in the form of water vapour from the leaves of a plant called?",
+      "options": [
+        "Photosynthesis",
+        "Respiration",
+        "Germination",
+        "Transpiration"
+      ],
+      "correctIndex": 3,
+      "explanation": "Transpiration is the process in which plants lose water as vapour, mostly through the stomata of leaves.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Each stoma on a leaf is surrounded by a pair of special cells that open and close it. What are these cells called?",
+      "options": [
+        "Guard cells",
+        "Root hairs",
+        "Phloem cells",
+        "Seed cells"
+      ],
+      "correctIndex": 0,
+      "explanation": "Two guard cells surround each stoma and control its opening and closing.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The thin lines seen on a leaf, which contain the xylem and phloem, are called:",
+      "options": [
+        "Stomata",
+        "Veins",
+        "Root hairs",
+        "Chloroplasts"
+      ],
+      "correctIndex": 1,
+      "explanation": "Veins are the thin lines in a leaf that carry xylem and phloem, bringing water in and taking food out.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a way in which a plant uses the glucose it makes?",
+      "options": [
+        "To get energy for its life activities",
+        "To build new parts like leaves and stems",
+        "To store food in the form of starch",
+        "To turn it back into minerals for the soil"
+      ],
+      "correctIndex": 3,
+      "explanation": "Plants use glucose for energy, for growth and for storing as starch, but they do not change it back into soil minerals.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Ishaan tied a clear plastic bag around a leafy branch of a potted plant and kept it in the sun. After a few hours, he saw tiny drops of water inside the bag. Where did this water come from?",
+      "options": [
+        "Rain that fell on the bag",
+        "Water vapour given out by the leaves",
+        "Air leaking in from outside the bag",
+        "Water made by the plastic in the heat"
+      ],
+      "correctIndex": 1,
+      "explanation": "Leaves give out water vapour by transpiration, and this vapour cools and collects as drops on the inside of the bag.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Plants take in minerals from the soil. In what form are these minerals absorbed by the roots?",
+      "options": [
+        "As dry solid grains",
+        "As gases through the leaves",
+        "Dissolved in water",
+        "Along with sunlight"
+      ],
+      "correctIndex": 2,
+      "explanation": "Roots absorb minerals only after they dissolve in soil water, and the solution is then carried up through the xylem.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In most plants, on which surface of the leaf are stomata found in larger numbers?",
+      "options": [
+        "The upper surface",
+        "The lower surface",
+        "Only on the edges",
+        "Only on the leaf stalk"
+      ],
+      "correctIndex": 1,
+      "explanation": "Most leaves have more stomata on the lower surface, which is shaded from direct sun and so loses less water.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "How does transpiration help a plant on a hot day?",
+      "options": [
+        "It keeps the plant cool",
+        "It makes more chlorophyll",
+        "It stops respiration",
+        "It adds minerals to the soil"
+      ],
+      "correctIndex": 0,
+      "explanation": "When water evaporates from the leaves, it takes away heat, which helps keep the plant cool, just like sweating cools us.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In which direction can phloem carry food in a plant?",
+      "options": [
+        "Only upwards, from roots to leaves",
+        "Only downwards, from leaves to roots",
+        "Upwards and downwards, to wherever food is needed",
+        "Only sideways, out into the soil"
+      ],
+      "correctIndex": 2,
+      "explanation": "Phloem carries food from the leaves to all parts of the plant, so it can move food both up to buds and fruits and down to roots.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In the science lab, Tanvi put a few drops of iodine solution on a slice of raw potato, and it turned blue-black. What does this tell her?",
+      "options": [
+        "The potato contains chlorophyll",
+        "The potato is doing photosynthesis",
+        "The potato is full of oxygen",
+        "The potato has stored starch in it"
+      ],
+      "correctIndex": 3,
+      "explanation": "Iodine turns blue-black with starch, showing that food made in the leaves is stored as starch in the potato.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Simran kept a white tuberose (rajnigandha) stem in a glass of water mixed with blue ink. The next day, she saw thin blue lines on the white petals. What does this activity show?",
+      "options": [
+        "Water moves up the stem to the flower through narrow tubes",
+        "Flowers make their own coloured ink",
+        "Petals soak up ink from the air",
+        "Food moves down from the flower into the stem"
+      ],
+      "correctIndex": 0,
+      "explanation": "The coloured water travels up through the xylem tubes in the stem and reaches the petals, showing the path of water.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Arjun's mother noticed that the plants on her sunny balcony droop on hot, windy afternoons but stand straight again after watering in the evening. Why do the leaves droop?",
+      "options": [
+        "The plant makes too much starch in the afternoon",
+        "The plant loses water by transpiration faster than its roots can take it in",
+        "The phloem stops carrying food in the afternoon",
+        "The leaves take in too much carbon dioxide"
+      ],
+      "correctIndex": 1,
+      "explanation": "Heat and wind increase transpiration, and when water is lost faster than it is absorbed, the leaves lose firmness and droop.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): The leaves of most plants are green in colour. Reason (R): Plants give out oxygen during photosynthesis.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both statements are true, but leaves are green because of chlorophyll, not because oxygen is given out.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT a product of photosynthesis?",
+      "options": [
+        "Glucose",
+        "Oxygen",
+        "Carbon dioxide",
+        "Starch formed from the glucose"
+      ],
+      "correctIndex": 2,
+      "explanation": "Carbon dioxide is a raw material taken in for photosynthesis, while glucose and oxygen are made, and glucose is later stored as starch.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What mainly helps to pull water up through the xylem to the top of a tall tree?",
+      "options": [
+        "Loss of water from the leaves by transpiration",
+        "Pushing of water by the phloem",
+        "The pull of gravity",
+        "Sunlight heating the roots"
+      ],
+      "correctIndex": 0,
+      "explanation": "As water evaporates from the leaves, more water is pulled up through the xylem to replace it, like sucking water through a straw.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Why do many plants close their stomata during very hot and dry afternoons?",
+      "options": [
+        "To take in more carbon dioxide",
+        "To catch more sunlight",
+        "To send starch out of the leaf",
+        "To reduce the loss of water"
+      ],
+      "correctIndex": 3,
+      "explanation": "Closing the stomata cuts down transpiration, so the plant saves water when it is hot and dry.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Phloem carries water and minerals from the roots to the leaves. Reason (R): Phloem is present in the veins of leaves.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "Water and minerals are carried by the xylem, not the phloem, so A is false; R is true because veins contain both xylem and phloem.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): Most of the water absorbed by a plant is lost to the air by transpiration. Reason (R): Plants need water only for photosynthesis.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "A plant loses most of its absorbed water through transpiration, but R is false because water is also needed to carry minerals, keep cells firm and cool the plant.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Deepa took two similar potted plants. She removed all the leaves from Plant Y but left Plant X as it was. She watered both equally, covered the soil with plastic to stop evaporation and kept them in the sun. After a day, which pot will have wetter soil?",
+      "options": [
+        "Plant X, because leaves send water back into the soil",
+        "Plant Y, because with no leaves there is very little transpiration to draw water up",
+        "Both the same, because roots always absorb water at the same rate",
+        "Plant Y, because roots of a leafless plant make extra water"
+      ],
+      "correctIndex": 1,
+      "explanation": "Leaves lose water by transpiration, which pulls water up from the soil, so the leafless plant uses much less water and its soil stays wetter.",
+      "difficulty": "hard"
     }
   ],
   "light-shadows": [
@@ -5299,6 +7699,246 @@
       "correctIndex": 1,
       "explanation": "Butter paper is translucent, while glass, clean water and air are transparent.",
       "difficulty": "medium"
+    },
+    {
+      "text": "Clean water in a glass is an example of which kind of material?",
+      "options": [
+        "Opaque",
+        "Translucent",
+        "Transparent",
+        "Luminous"
+      ],
+      "correctIndex": 2,
+      "explanation": "Clean water lets almost all light pass through it, so we can see clearly through it, which makes it transparent.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "What is the colour of the shadow of a red ball in sunlight?",
+      "options": [
+        "Red",
+        "Dark, without any colour",
+        "Pink",
+        "Bright white"
+      ],
+      "correctIndex": 1,
+      "explanation": "A shadow is just a region where light is blocked, so it is always dark and does not show the colour of the object.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these surfaces is best for forming a clear image by reflection?",
+      "options": [
+        "A rough wooden plank",
+        "A cotton cloth",
+        "A brick wall",
+        "A smooth, shiny metal sheet"
+      ],
+      "correctIndex": 3,
+      "explanation": "Smooth and shiny surfaces reflect light evenly, so they form clear images, while rough surfaces do not.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A firefly glowing in a garden at night is an example of:",
+      "options": [
+        "A luminous object",
+        "A non-luminous object",
+        "A translucent object",
+        "A mirror"
+      ],
+      "correctIndex": 0,
+      "explanation": "A firefly produces its own light, so it is a luminous object.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT an opaque object?",
+      "options": [
+        "A wooden door",
+        "A steel plate",
+        "A clear glass window",
+        "A brick"
+      ],
+      "correctIndex": 2,
+      "explanation": "Clear glass lets light pass through it, so it is transparent, while the others block light completely.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "At a village fair in Odisha, Lakshmi watched a Ravana Chhaya puppet show. The puppeteers held leather puppets between an oil lamp and a white cloth screen. What did the audience on the other side of the screen see?",
+      "options": [
+        "Shadows of the puppets",
+        "Mirror images of the puppets",
+        "Nothing at all",
+        "Coloured pictures of the lamp"
+      ],
+      "correctIndex": 0,
+      "explanation": "The opaque puppets block the lamp's light, so their shadows fall on the screen for the audience to see.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "A wooden block is held in front of a torch in different ways. Why is its shadow a square at one time and a rectangle at another time?",
+      "options": [
+        "The torch gives out different kinds of light",
+        "The shape of the shadow depends on which side of the object faces the light",
+        "Light bends around the block in different ways",
+        "The screen changes its shape"
+      ],
+      "correctIndex": 1,
+      "explanation": "The shadow takes the outline of the side facing the light, so turning the block changes the shape of its shadow.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What happens to the image in a pinhole camera if the pinhole is made much bigger?",
+      "options": [
+        "It becomes upright",
+        "It becomes blurred",
+        "It becomes sharper",
+        "It turns into a shadow"
+      ],
+      "correctIndex": 1,
+      "explanation": "A big hole lets light from each point of the object fall on many places on the screen, so the image becomes blurred.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "What do we call a narrow, straight path of light, usually drawn as a line with an arrow?",
+      "options": [
+        "A shadow",
+        "An image",
+        "A reflection",
+        "A ray of light"
+      ],
+      "correctIndex": 3,
+      "explanation": "A ray is the straight-line path along which light travels, and it is shown by a line with an arrow for its direction.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why does a clear glass sheet hardly form any shadow?",
+      "options": [
+        "It gives out its own light",
+        "It absorbs all the light",
+        "Most of the light passes through it",
+        "It bends all the light back to the source"
+      ],
+      "correctIndex": 2,
+      "explanation": "A shadow forms only when light is blocked, and clear glass lets most light through, so almost no shadow forms.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Swati stands 2 m in front of a plane mirror. She then walks 1 m towards the mirror. What is the distance between Swati and her image now?",
+      "options": [
+        "1 m",
+        "3 m",
+        "2 m",
+        "4 m"
+      ],
+      "correctIndex": 2,
+      "explanation": "She is now 1 m from the mirror and her image is 1 m behind it, so they are 1 m + 1 m = 2 m apart.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Pooja placed a ball between a torch and a screen. Keeping the torch and ball fixed, she moved the screen farther away from the ball. What happened to the shadow on the screen?",
+      "options": [
+        "It became larger",
+        "It became smaller",
+        "It disappeared",
+        "It took the colour of the ball"
+      ],
+      "correctIndex": 0,
+      "explanation": "Light from the torch spreads out in straight lines, so a screen placed farther behind the ball catches a bigger shadow.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Dev stood behind his grandmother and a little to one side while she sat facing her dressing table mirror. She could see Dev in the mirror without turning around. How was this possible?",
+      "options": [
+        "The mirror gives out its own light",
+        "Light from her eyes travelled to Dev",
+        "Light from Dev reflected off the mirror into her eyes",
+        "The mirror formed a shadow of Dev"
+      ],
+      "correctIndex": 2,
+      "explanation": "Light coming from Dev hits the mirror and is reflected into the grandmother's eyes, so she sees his image.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): A white wall does not form a clear image like a mirror does. Reason (R): A white wall is opaque.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both are true, but the wall gives no clear image because its surface is rough and scatters light, not because it is opaque; a mirror is also opaque.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT true about the image formed by a plane mirror?",
+      "options": [
+        "It is the same size as the object",
+        "It is upright",
+        "It appears as far behind the mirror as the object is in front",
+        "It can be caught on a screen placed behind the mirror"
+      ],
+      "correctIndex": 3,
+      "explanation": "The image in a plane mirror only appears to be behind the mirror, so it cannot be caught on a screen.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Under a leafy tree on a sunny day, you see many round bright spots on the ground, even though the gaps between the leaves have different shapes. What are these spots?",
+      "options": [
+        "Shadows of the leaves",
+        "Images of the Sun formed by tiny gaps acting like pinholes",
+        "Light reflected from the shiny leaves",
+        "Light given out by the soil"
+      ],
+      "correctIndex": 1,
+      "explanation": "Tiny gaps between leaves act like pinholes and form images of the round Sun, so the spots are round whatever the shape of the gap.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "A wall clock with only marks and no numbers on its face shows 3 o'clock. When you look at it in a plane mirror, what time does it seem to show?",
+      "options": [
+        "3 o'clock",
+        "6 o'clock",
+        "12 o'clock",
+        "9 o'clock"
+      ],
+      "correctIndex": 3,
+      "explanation": "Lateral inversion swaps left and right, so the hour hand pointing to the right (3) appears to point to the left (9).",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Mohan wrote his name MOHAN in capital letters on a card and held it facing a plane mirror. How does the name look in the mirror?",
+      "options": [
+        "It reads MOHAN, exactly the same",
+        "The letters appear in reverse order, like NAHOM, and the N looks flipped",
+        "It appears upside down",
+        "It reads MOHAN, but smaller in size"
+      ],
+      "correctIndex": 1,
+      "explanation": "Lateral inversion reverses left and right, so the order of letters is reversed and an unsymmetrical letter like N appears flipped.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): The shadow of an object is always exactly the same size as the object. Reason (R): Light travels in straight lines.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 3,
+      "explanation": "A shadow can be bigger or smaller than the object depending on distances from the light and the screen, so A is false, while R is true.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): The image formed in a pinhole camera is upside down. Reason (R): Light from the top of the object travels in a straight line through the hole and reaches the bottom of the screen.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Because light travels straight through the hole, rays from the top land at the bottom and rays from the bottom land at the top, making the image upside down.",
+      "difficulty": "hard"
     }
   ],
   "earth-moon-sun": [
@@ -5781,6 +8421,246 @@
       "correctIndex": 1,
       "explanation": "The Moon does not make its own light, while the Sun, the Pole Star and Sirius are all stars that give out light.",
       "difficulty": "easy"
+    },
+    {
+      "text": "On which day is the Moon not seen in the night sky at all?",
+      "options": [
+        "Full moon day (Purnima)",
+        "New moon day (Amavasya)",
+        "Half moon day",
+        "Every Sunday"
+      ],
+      "correctIndex": 1,
+      "explanation": "On new moon day, the side of the Moon facing the Earth gets no sunlight, so we cannot see it.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The different shapes of the bright part of the Moon that we see during a month are called:",
+      "options": [
+        "Eclipses",
+        "Seasons",
+        "Phases of the Moon",
+        "Orbits"
+      ],
+      "correctIndex": 2,
+      "explanation": "The changing shapes of the lit part of the Moon over a month are called the phases of the Moon.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "At any moment, about how much of the Earth is facing the Sun and having day?",
+      "options": [
+        "About one quarter",
+        "About half",
+        "All of it",
+        "About three quarters"
+      ],
+      "correctIndex": 1,
+      "explanation": "The Earth is a sphere lit from one side, so about half of it faces the Sun and has day while the other half has night.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "The path along which the Earth moves around the Sun is called its:",
+      "options": [
+        "Axis",
+        "Shadow",
+        "Phase",
+        "Orbit"
+      ],
+      "correctIndex": 3,
+      "explanation": "An orbit is the path an object follows as it revolves around another object.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Which of these is NOT a phase of the Moon?",
+      "options": [
+        "Crescent",
+        "Full moon",
+        "Gibbous",
+        "Eclipse"
+      ],
+      "correctIndex": 3,
+      "explanation": "An eclipse happens when a shadow falls on the Moon or the Earth; it is not one of the regular monthly phases.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Riya's family celebrates Diwali on Amavasya. That night, Riya looked up and could not find the Moon anywhere in the sky. Which phase of the Moon was it?",
+      "options": [
+        "Full moon",
+        "Half moon",
+        "Crescent",
+        "New moon"
+      ],
+      "correctIndex": 3,
+      "explanation": "Amavasya is the new moon day, when the Moon's lit side faces away from the Earth and it cannot be seen.",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Why do we see phases of the Moon?",
+      "options": [
+        "The Earth's shadow covers a different part of the Moon each night",
+        "As the Moon revolves, we see different amounts of its sunlit half",
+        "The Moon changes its size during the month",
+        "Clouds hide different parts of the Moon"
+      ],
+      "correctIndex": 1,
+      "explanation": "One half of the Moon is always lit by the Sun, and as it moves around the Earth we see more or less of that lit half.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "About how many days pass from one full moon to the next full moon?",
+      "options": [
+        "About 7 days",
+        "About 15 days",
+        "About 29.5 days",
+        "About 365 days"
+      ],
+      "correctIndex": 2,
+      "explanation": "The cycle of phases repeats about every 29.5 days, which is a little longer than one revolution because the Earth also moves around the Sun.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "After a new moon, the bright part of the Moon grows bigger night after night. What is this called?",
+      "options": [
+        "The waxing Moon",
+        "The waning Moon",
+        "A lunar eclipse",
+        "A solar eclipse"
+      ],
+      "correctIndex": 0,
+      "explanation": "When the lit part grows from new moon to full moon, the Moon is said to be waxing.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "About seven days after a new moon, how much of the Moon's face seen from the Earth is bright?",
+      "options": [
+        "None of it",
+        "All of it",
+        "About half",
+        "Only a thin line"
+      ],
+      "correctIndex": 2,
+      "explanation": "About a week after new moon, we see half of the Moon's face lit, which is called a half moon.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "On Raksha Bandhan, which falls on Purnima, Aditi saw the Moon rising in the east just as the Sun was setting in the west. How were the Sun, Earth and Moon placed at that time?",
+      "options": [
+        "The Earth was roughly between the Sun and the Moon",
+        "The Moon was between the Sun and the Earth",
+        "The Sun was between the Earth and the Moon",
+        "The Moon was right next to the Sun"
+      ],
+      "correctIndex": 0,
+      "explanation": "On full moon day the Moon is on the side of the Earth opposite the Sun, so it rises as the Sun sets and its whole lit face is seen.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "In a dark room, Harsh shines a torch on a globe and slowly turns the globe from west to east. A sticker on India moves from the dark side into the lit side. What does this show for India?",
+      "options": [
+        "Sunset",
+        "Sunrise",
+        "A lunar eclipse",
+        "A new moon"
+      ],
+      "correctIndex": 1,
+      "explanation": "As the rotating Earth carries India from the dark half into the sunlit half, the Sun appears to rise there.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Anaya in Kolkata sees a full moon one night and phones her cousin in Pune. What will her cousin see if he looks at the Moon that night?",
+      "options": [
+        "A half moon",
+        "A thin crescent",
+        "No Moon at all",
+        "A full moon as well"
+      ],
+      "correctIndex": 3,
+      "explanation": "The phase depends on the positions of the Sun, Earth and Moon, not on where you are, so everyone sees the same phase on the same night.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Assertion (A): The Moon appears in different shapes on different nights of a month. Reason (R): The Moon gives out its own light.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Moon does show different shapes, but it has no light of its own; it shines by reflecting sunlight.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Which of these is NOT true about a solar eclipse?",
+      "options": [
+        "The Moon comes between the Sun and the Earth",
+        "It can happen only on a new moon day",
+        "It can be seen from every part of the Earth at the same time",
+        "It is unsafe to look at it with bare eyes"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Moon's shadow on the Earth is small, so a solar eclipse is seen only from some places, not from the whole Earth.",
+      "difficulty": "medium"
+    },
+    {
+      "text": "Why do we always see the same side of the Moon from the Earth?",
+      "options": [
+        "The Moon does not spin at all",
+        "The Moon takes the same time to spin once on its axis as to go once around the Earth",
+        "The Earth blocks our view of the other side",
+        "The other side of the Moon is always dark"
+      ],
+      "correctIndex": 1,
+      "explanation": "Since the Moon spins once in the same time it takes to revolve once around the Earth, the same face always stays turned towards us.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Imagine the Earth stopped rotating but kept revolving around the Sun. About how long would daylight last at one place?",
+      "options": [
+        "About 12 hours",
+        "About one week",
+        "About six months",
+        "The same as it is now"
+      ],
+      "correctIndex": 2,
+      "explanation": "Without rotation, a place would face the Sun only as the Earth moved around it in a year, giving about six months of day and six months of night.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Just after sunset, Mahi saw a thin crescent Moon low in the western sky, the kind people look for before Eid. What will she most likely see over the next few evenings?",
+      "options": [
+        "The bright part growing bigger each night",
+        "The bright part getting thinner each night",
+        "Exactly the same crescent every night",
+        "No Moon at all from the next night"
+      ],
+      "correctIndex": 0,
+      "explanation": "A thin crescent seen in the west after sunset comes just after new moon, so the Moon is waxing and its lit part grows each night.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): A lunar eclipse can be seen from all places on the Earth where it is night at that time. Reason (R): During a lunar eclipse, the Moon itself moves into the Earth's shadow, so it looks darkened to everyone who can see the Moon.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 0,
+      "explanation": "Since the Moon itself is darkened by the Earth's shadow, anyone on the night side who can see the Moon sees the eclipse.",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Assertion (A): A total solar eclipse is seen only from a small part of the Earth at a time. Reason (R): The Sun is much bigger than the Earth.",
+      "options": [
+        "Both A and R are true, and R explains A",
+        "Both A and R are true, but R does not explain A",
+        "A is true, but R is false",
+        "A is false, but R is true"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both are true, but a total solar eclipse is seen from a small area because the Moon's shadow on the Earth is small, not because the Sun is big.",
+      "difficulty": "hard"
     }
   ]
 }

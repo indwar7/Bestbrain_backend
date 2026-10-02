@@ -1,5 +1,5 @@
 /**
- * Seeds the Class 7 Science question bank (40 questions for each of the 12
+ * Seeds the Class 7 Science question bank (60 questions for each of the 12
  * chapters) and one homework assignment per chapter, so every Class 7 Science
  * chapter has a working Quiz, Question Bank and Homework behind it.
  *
