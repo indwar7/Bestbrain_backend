@@ -18,7 +18,8 @@
     "seed:class7science": "tsx src/scripts/seedClass7Science.ts",
     "rag:ingest": "tsx src/scripts/ragIngest.ts",
     "gen:book-questions": "tsx src/scripts/genBookQuestions.ts",
-    "coins:grant": "tsx src/scripts/grantCoins.ts"
+    "coins:grant": "tsx src/scripts/grantCoins.ts",
+    "import:questions": "tsx src/scripts/importQuestions.ts"
   },
   "keywords": [],
   "author": "Abhaydeep Indwar",
