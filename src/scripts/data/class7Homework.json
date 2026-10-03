@@ -1,0 +1,177 @@
+{
+  "Maths": {
+    "integers": {
+      "title": "Integers, practice set",
+      "instructions": "Do these three questions neatly in your notebook, show all your working, and check each answer once before you finish.",
+      "written": [
+        "Find the value of (-8) × (-5) + (-36) ÷ 9 - (-7). Show every step and say which sign rule you used in each step.",
+        "Take a = -4, b = 6 and c = -3. Check that a × (b + c) = a × b + a × c by working out both sides. Then explain with one example why integers are not closed under division.",
+        "At 6 pm the temperature in Srinagar was 5°C. It fell by 3°C every hour until 11 pm. Find the temperature at 11 pm. After that it rose by 4°C every hour until 3 am. Find the temperature at 3 am. Show your working with integers."
+      ]
+    },
+    "fractions-decimals": {
+      "title": "Fractions and Decimals, practice set",
+      "instructions": "Do these three questions neatly in your notebook and show all your working, as it is the steps that earn marks.",
+      "written": [
+        "Find 3 1/2 × 2 2/7 and 5/6 ÷ 2 1/2. Show every step, including changing mixed fractions to improper fractions and simplifying your answers.",
+        "A 6.3 m ribbon is cut into pieces of 0.9 m each. Find how many pieces you get. Then find the cost of 2.5 m of the same ribbon if 1 m costs ₹48.40. Show your working.",
+        "Explain in your own words why 6 ÷ 1/3 is bigger than 6, while 6 ÷ 3 is smaller than 6. Use a drawing or an example to support your answer."
+      ]
+    },
+    "data-handling": {
+      "title": "Data Handling, practice set",
+      "instructions": "Work through these three questions in your notebook and show every step of your working.",
+      "written": [
+        "The marks of 7 students in a test are 15, 18, 12, 20, 18, 16 and 13. Find the mean, the median, the mode and the range. Show your working for each.",
+        "The mean weight of 6 boys is 42 kg. When a seventh boy joins, the mean becomes 43 kg. Find the weight of the seventh boy, and show every step of your working.",
+        "A bag has 5 red, 3 yellow and 2 green balls, and one ball is drawn without looking. Write the probability of getting a red ball, a yellow ball and a ball that is not green. Then explain in two sentences why a probability can never be more than 1."
+      ]
+    },
+    "simple-equations": {
+      "title": "Simple Equations, practice set",
+      "instructions": "Do these on paper, write each step neatly and check every answer by putting it back in the equation.",
+      "written": [
+        "Solve each equation and check your answer by substitution: (a) 4x - 9 = 23, (b) 5(y - 2) = 35, (c) z/3 + 6 = 11.",
+        "Ritu's mother is 4 times as old as Ritu. After 5 years, the sum of their ages will be 60 years. Form an equation and find their present ages. Show every step.",
+        "The length of a rectangle is 3 cm more than twice its breadth. Its perimeter is 36 cm. Write an equation, solve it to find the length and breadth, and explain in one or two sentences why the balancing method lets you do the same thing to both sides."
+      ]
+    },
+    "lines-angles": {
+      "title": "Lines and Angles, practice set",
+      "instructions": "Solve these three questions neatly in your notebook, showing every step and the reason for it.",
+      "written": [
+        "Two angles are supplementary. One of them is 30° more than the other. Form an equation, find both angles and write their complements, if they exist.",
+        "Draw two parallel lines and a transversal. Mark and name one pair of corresponding angles, one pair of alternate interior angles and one pair of co-interior angles. If one of the eight angles is 65°, write down all the other seven angles with a reason for each.",
+        "Lines AB and CD cross at O. Angle AOC = (3x + 10)° and angle BOD = (5x - 30)°. Find x and then find all four angles at O. Show your working and the rule you used."
+      ]
+    },
+    "triangle-properties": {
+      "title": "The Triangle and its Properties, practice set",
+      "instructions": "Do these three questions in your notebook, show every step of your working, and draw a neat figure wherever it helps.",
+      "written": [
+        "Two angles of a triangle are in the ratio 3 : 4. The exterior angle at the third vertex is 140°. Find all three angles of the triangle, and show your working.",
+        "Can a triangle have sides 7 cm, 10 cm and 18 cm? Show your check. Then find the range of lengths the third side can have if two sides of a triangle are 7 cm and 10 cm.",
+        "A 25 m long ladder reaches a window 20 m above the ground. Draw a neat sketch, find how far the foot of the ladder is from the wall, and check whether the three lengths form a Pythagorean triplet."
+      ]
+    },
+    "congruence": {
+      "title": "Congruence of triangles, practice set",
+      "instructions": "Do these three questions neatly in your notebook, drawing a figure where it helps and writing a reason for every step.",
+      "written": [
+        "Draw △ABC with AB = 5 cm, ∠B = 60° and BC = 6 cm. Draw △PQR with PQ = 5 cm, ∠Q = 60° and QR = 6 cm. Measure AC and PR, name the criterion that shows the triangles are congruent, and write the congruence statement.",
+        "In △ABC, AB = AC and D is the mid-point of BC. Show that △ABD ≅ △ACD, writing each pair of equal parts with a reason. Hence show that ∠B = ∠C and that ∠ADB = 90°.",
+        "△ABC ≅ △PQR with A, B, C matching P, Q, R. If ∠A = (3x + 10)° and ∠P = (5x - 20)°, find x and ∠A. If AB = (2y + 3) cm and PQ = (4y - 5) cm, find y and AB. Show your working."
+      ]
+    },
+    "comparing-quantities": {
+      "title": "Comparing Quantities, practice set",
+      "instructions": "Work out each question on paper, show every step, and check your answer by working backwards.",
+      "written": [
+        "Divide ₹ 2,400 among Asha, Bina and Chitra in the ratio 3:4:5. Show how much each gets and check that the shares add up to ₹ 2,400.",
+        "A shopkeeper buys a fan for ₹ 1,600 and sells it at a loss of 15%. Find the selling price. Then find the selling price he would have needed for a profit of 15%. Show your working.",
+        "Rahul deposits ₹ 5,000 for 3 years at 8% simple interest per year. Find the interest and the amount he gets back. Then find the rate at which the same sum would earn ₹ 1,500 interest in 3 years."
+      ]
+    },
+    "rational-numbers": {
+      "title": "Rational Numbers, practice set",
+      "instructions": "Do these three questions in your notebook, show every step of your working, and check each answer by putting it back into the question.",
+      "written": [
+        "Write 45/(-60) and (-36)/48 in standard form and say whether they are equal. Then write the additive inverse and the reciprocal of the standard form of 45/(-60).",
+        "Draw a number line and mark -5/4, -3/4, 1/4 and 3/2 on it. Write the four numbers in ascending order, and then find three rational numbers lying between -3/4 and 1/4, showing your working.",
+        "Anil spent 2/5 of his savings on a helmet and 1/4 of his savings on a bag, and he was left with Rs 350. Find his total savings. Also find how many pieces of 3/4 m can be cut from a rope 15/2 m long."
+      ]
+    },
+    "perimeter-area": {
+      "title": "Perimeter and Area, practice set",
+      "instructions": "Do these three questions in your notebook, show every step and write the units in your answers.",
+      "written": [
+        "A rectangular field is 45 m long and 30 m wide. A path 2 m wide is built all around it, outside the field. Find the area of the path, and the cost of paving it at Rs 15 per m². Show every step of your working.",
+        "A rectangular lawn is 40 m long and 30 m wide. A circular flower bed of radius 7 m is made in it. Taking π = 22/7, find the area of the lawn that has grass, and the length of fencing needed to go around the flower bed.",
+        "A parallelogram has base 18 cm and height 10 cm. It is cut along a diagonal into two triangles. Draw a neat figure, find the area of each triangle, and explain in a few sentences why the two triangles have equal area."
+      ]
+    }
+  },
+  "Social Science": {
+    "thousand-years": {
+      "title": "Tracing Changes Through a Thousand Years, chapter check",
+      "instructions": "Answer these three questions in your notebook, using full sentences, and check your notes if you get stuck.",
+      "written": [
+        "Explain in a few sentences how the meaning of the word Hindustan changed between the time of Minhaj-i-Siraj and the time of Babur.",
+        "Name four kinds of sources that historians use for this period. For each one, say in one sentence what it can tell us.",
+        "Why do many historians feel that dividing Indian history into Hindu, Muslim and British periods is not a good idea? Give two reasons."
+      ]
+    },
+    "new-kings": {
+      "title": "New Kings and Kingdoms, chapter check",
+      "instructions": "Answer these three questions in your notebook in your own words, using the names and terms from the chapter.",
+      "written": [
+        "Explain who the samantas were. Give two duties of a samanta, and say how a samanta could grow into a maha-samanta or even an independent ruler.",
+        "Describe in a few sentences how the Cholas rose from Vijayalaya to Rajendra I. Name the towns and the temple linked with them.",
+        "Write a short note on Mahmud of Ghazni and Al-Biruni. Why did Mahmud raid the subcontinent, and what is the Kitab-ul-Hind?"
+      ]
+    },
+    "delhi-sultans": {
+      "title": "The Delhi Sultans, chapter check",
+      "instructions": "Read your notes once more, then answer all three questions in your notebook in your own words.",
+      "written": [
+        "Explain how Delhi became a capital and a centre of trade before the Sultanate began. Name the two Rajput dynasties involved and say what dehliwal coins were.",
+        "Describe how the iqta system worked. Say who a muqti was, what he had to do, and why muqtis were moved from one iqta to another.",
+        "Write a short note on Alauddin Khalji or Muhammad Tughluq. Explain one important step he took (market control, or token currency and Daulatabad) and what happened afterwards."
+      ]
+    },
+    "mughal-empire": {
+      "title": "The Mughal Empire, chapter check",
+      "instructions": "Answer these three questions neatly in your notebook in your own words, and check your notes if you get stuck.",
+      "written": [
+        "Explain the Mughal tradition of dividing a ruler's inheritance among all his sons. Why did it often lead to wars of succession? Give one example in a few sentences.",
+        "Describe the mansabdari system. Say what zat and sawar meant and how mansabdars were paid.",
+        "Write a short note on Akbar's ideas about religion, using the terms Ibadat Khana and sulh-i-kul, and explain why Abu'l Fazl's books are useful to historians."
+      ]
+    },
+    "rulers-buildings": {
+      "title": "Rulers and Buildings, chapter check",
+      "instructions": "Answer all three questions neatly on paper, using your own words and a sketch wherever it helps.",
+      "written": [
+        "Explain the difference between post-and-lintel (trabeate) and arcuate construction. Draw a simple sketch of each, and say what an arch does with the weight above it.",
+        "Choose any two of these buildings: Rajarajeshvara temple, Qutb Minar, Buland Darwaza, Taj Mahal. For each, write who built it, where it is, and one reason a ruler would want to build it.",
+        "Write a short paragraph explaining why rulers built grand temples, mosques and tombs, and who actually did the work of building them."
+      ]
+    },
+    "environment": {
+      "title": "Environment, chapter check",
+      "instructions": "Answer these three questions in your notebook in your own words, and add a neat labelled drawing where it helps.",
+      "written": [
+        "Name the four domains of the earth. For each one, write what it contains and give one example.",
+        "Draw a simple picture of a pond ecosystem. Label two biotic and two abiotic components and explain in two or three sentences how they depend on each other.",
+        "Write four or five sentences on how any two human activities (such as farming, building cities or burning waste) can harm the environment, and what we can do to reduce the harm."
+      ]
+    },
+    "inside-our-earth": {
+      "title": "Inside Our Earth, chapter check",
+      "instructions": "Write your answers neatly in your notebook, and use a pencil for your diagram so you can fix it if you need to.",
+      "written": [
+        "Draw a neat diagram of the inside of the Earth and label the crust, mantle, outer core and inner core. Write one line about the state (solid or liquid) or the material of each layer.",
+        "Name the three main kinds of rocks and say how each one is formed, giving one example of each. Then explain in a few sentences how limestone can become marble.",
+        "Explain the difference between the focus and the epicentre of an earthquake, and say what a seismograph does. Also write the difference between magma and lava."
+      ]
+    },
+    "on-equality": {
+      "title": "On Equality, chapter check",
+      "instructions": "Write your answers neatly in your notebook in your own words, and give an example from daily life wherever you can.",
+      "written": [
+        "Explain what \"equality in a democracy\" means. Give two examples from the chapter, one about voting and one about dignity.",
+        "A domestic worker is given her food in a separate plate and is not allowed to sit on a chair. Explain, in a few sentences, why this is unequal treatment and which Fundamental Rights, with Article numbers, speak against it.",
+        "Describe two ways in which the government tries to promote equality (for example the mid-day meal scheme and the Persons with Disabilities Act). Say whom each one helps and how."
+      ]
+    },
+    "markets-around-us": {
+      "title": "Markets Around Us, chapter check",
+      "instructions": "Answer the three questions in your notebook in your own words, and draw neat labelled diagrams where asked.",
+      "written": [
+        "Explain three reasons why prices in a weekly market are usually lower than in a mall. Then give one reason why some people still prefer to shop in a mall.",
+        "Draw a market chain for a cotton shirt or for vegetables, showing at least four steps from the producer to the consumer, and label each person. Then write a few sentences on who may earn more in the chain and why a small farmer may earn little.",
+        "A shopkeeper asks Rs 30 for a packet that has an MRP of Rs 25 printed on it. Write three things an aware consumer should check before buying packed goods, and explain in a few sentences why rules are needed to protect ordinary buyers."
+      ]
+    }
+  }
+}
